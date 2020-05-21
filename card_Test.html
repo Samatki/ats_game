@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<head>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="card_styles.css"> 
+	<link rel="stylesheet" type="text/css" href="game_area_styles.css"> 
+	<script type="text/javascript" src="cardlibrary.js"></script>
+	<script type="text/javascript" src="cardPrinter.js"></script>
+	
+	<script>
+		document.addEventListener("DOMContentLoaded", function(){
+		console.log("GGGG")
+			setTimeout(function(){
+				document.getElementsByTagName("body")[0].style.opacity = 1;		
+			},100);
+		});
+	</script>
+	
+
+</head>
+<body style="opacity:0;">
+<div id="game_background"></div>
+<div id="topBar">
+	<div id="gameTitle">Among The Stars - Game ID</div>
+	<div id="gameID">43564352342</div>
+	<div class="topBarButtonContainer">
+		<button id="gameResign" class="topBarButtons">Resign</button>	
+		<button id="gameDiscard" class="topBarButtons">Discard</button>
+	</div>
+	<div class="topBarButtonContainer">
+		<button id="gameUndo" class="topBarButtons">Undo</button>
+		<button id="gameCardlist" class="topBarButtons">Card List</button>
+	</div>
+	<div class="topBarButtonContainer">
+		<button id="gameObjs" class="topBarButtons">Objectives</button>
+		<button id="gameLog" class="topBarButtons">Game Log</button>	
+	</div>
+</div>
+<div id="rCModal"></div>
+<div id="infoArea" >INFO BOX</div>
+<div id="objArea" >OBJ BOX</div>
+<div id="gameArea" class="gameMat">
+<div id="otherPlayerArea">
+	<div class="playerXDiv">
+		<div class="playerXIcon"></div>
+		<div class="playerName"></div>
+		<div class="playerXScore"></div>
+		<div class="playerXLastAction"></div>
+		<div class="playerXStationMat"></div>
+	</div>
+	<div id="reduceAreaButton"></div>
+</div>
+<div id="playerStationMat">
+
+</div>
+
+<div id="optionArea">
+	<div class="turnOptions"></div>
+	<div class="turnOptions"></div>
+	<div class="turnOptions"></div>
+</div>
+
+<div id="playerHandModal"></div>
+</div>
+<div id="cardListArea" class="gameMat"></div>
+<div id="discardArea" class="gameMat"></div>
+<div id="cardListArea" class="gameMat"></div>
+</body>
+<script type="text/javascript" src="gameAreaButtons.js"></script>
+<script type="text/javascript" src="gameCardAreaPrinters.js"></script>
+<script type="text/javascript" src="gameCoreScript.js"></script>
+</html>
