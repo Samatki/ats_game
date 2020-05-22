@@ -2,7 +2,7 @@ var cardList = {
     cards: {
         basic_locations: [{
             cardTitle: "Figher Launch Bay",
-            cardImage: "Fighter_Launch_Bay.png",
+            cardImage: "fighter_launch_bay.png",
             cardColour: "R",
             type: "basic",
             cardDeck: "Base",
@@ -21,7 +21,7 @@ var cardList = {
             cardDescription: "Cannot be placed with <span class='distanceModifier'> 3  </span> of the <i>Main Reactor</i>"
         }, {
             cardTitle: "Shield Generator",
-            cardImage: "Shield_Generator.png",
+            cardImage: "shield_generator.png",
             cardColour: "R",
             type: "basic",
             cardDeck: "Base",
@@ -40,7 +40,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+2</span> for each additional power spent when playing <i>Shield Generator</i>"
         }, {
             cardTitle: "Turret",
-            cardImage: "Turret.png",
+            cardImage: "turret.png",
             cardColour: "R",
             type: "basic",
             cardDeck: "Base",
@@ -59,7 +59,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+1</span> for each <i>Turret</i> on the Station"
         }, {
             cardTitle: "Alien Bazaar",
-            cardImage: "Alien_Bazaar.png",
+            cardImage: "alien_bazaar.png",
             cardColour: "Y",
             type: "basic",
             cardDeck: "Base",
@@ -78,7 +78,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+2</span> if there are 3 more Green locations within <span class='distanceModifier'> 2  </span>"
         }, {
             cardTitle: "Customs",
-            cardImage: "Customs.png",
+            cardImage: "customs.png",
             cardColour: "Y",
             type: "basic",
             cardDeck: "Base",
@@ -97,7 +97,7 @@ var cardList = {
             cardDescription: "<span class='creditModifier'>+1</span> for each adjacent Yellow location"
         }, {
             cardTitle: "Energy Market",
-            cardImage: "Energy_Market.png",
+            cardImage: "energy_market.png",
             cardColour: "Y",
             type: "basic",
             cardDeck: "Base",
@@ -116,7 +116,7 @@ var cardList = {
             cardDescription: "<span class='creditModifier'>+1</span> for each <i>Power Reactor</i> in the Station (Max <span class='creditModifier'>+3</span>)"
         }, {
             cardTitle: "Garden",
-            cardImage: "Garden.png",
+            cardImage: "garden.png",
             cardColour: "P",
             type: "basic",
             cardDeck: "Base",
@@ -135,7 +135,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+1</span> if there is no Red location within <span class='distanceModifier'> 3  </span>  <br><span class='pointModifier'>+1</span> if there is no <i>Power Station</i> within <span class='distanceModifier'> 2  </span>"
         }, {
             cardTitle: "Holographic Display Area",
-            cardImage: "Casino.png",
+            cardImage: "holographic_display_area.png",
             cardColour: "P",
             type: "basic",
             cardDeck: "Base",
@@ -154,7 +154,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+1</span> for every adjacent location"
         }, {
             cardTitle: "Restaurant",
-            cardImage: "Restaurant.png",
+            cardImage: "restaurant.png",
             cardColour: "P",
             type: "basic",
             cardDeck: "Base",
@@ -192,7 +192,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+1</span> if placed adjacent to a Green location<br><span class='midSpacer'>OR</span><br><span class='pointModifier'>+2</span> if placed adjacent to <i>Embassy Offices</i>"
         }, {
             cardTitle: "Council Room",
-            cardImage: "Council_Room.png",
+            cardImage: "council_room.png",
             cardColour: "G",
             type: "basic",
             cardDeck: "Base",
@@ -211,7 +211,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+1</span> for each other station that does not contain a <i>Council Room</i>"
         }, {
             cardTitle: "Embassy Offices",
-            cardImage: "Embassy_Offices.png",
+            cardImage: "embassy_offices.png",
             cardColour: "G",
             type: "basic",
             cardDeck: "Base",
@@ -230,7 +230,7 @@ var cardList = {
             cardDescription: "You may choose another player when you build this location. They gain <span class='pointModifier'>+1</span> and you gain <span class='pointModifier'>+2</span>"
         }, {
             cardTitle: "Command Centre",
-            cardImage: "Command_Centre.png",
+            cardImage: "command_centre.png",
             cardColour: "B",
             type: "basic",
             cardDeck: "Base",
@@ -249,7 +249,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+1</span> for each Blue location on the Station"
         }, {
             cardTitle: "Crew Quarters",
-            cardImage: "Crew_Quarters.png",
+            cardImage: "crew_quarters.png",
             cardColour: "B",
             type: "basic",
             cardDeck: "Base",
@@ -268,7 +268,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+2</span> if placed adjacent to another <i>Crew Quarters</i>"
         }, {
             cardTitle: "Docking Bay",
-            cardImage: "Docking_bay.png",
+            cardImage: "docking_bay.png",
             cardColour: "B",
             type: "basic",
             cardDeck: "Base",
@@ -325,7 +325,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+1</span> if <i>Security Station</i> has 4 adjacent locations"
         }, {
             cardTitle: "Transportation Platform",
-            cardImage: "Transportation_Platform.png",
+            cardImage: "transportation_platform.png",
             cardColour: "B",
             type: "basic",
             cardDeck: "Base",
@@ -345,7 +345,7 @@ var cardList = {
         }],
         s_locations: [{
             cardTitle: "Alliance Fleet Base",
-            cardImage: "Alliance_Fleet_Base.png",
+            cardImage: "alliance_fleet_base.png",
             cardColour: "R",
             type: "S",
             cardDeck: "Base",
@@ -393,7 +393,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+1</span>if placed adjacent to a Red location<br><span class='midSpacer'>OR</span><br><span class='pointModifier'>+2</span>if placed adjacent to <i>Fighter Launch Bay</i>"
         }, {
             cardTitle: "Turret",
-            cardImage: "Turret.png",
+            cardImage: "turret.png",
             cardColour: "R",
             type: "S",
             cardDeck: "Base",
@@ -425,7 +425,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+1</span> for each Red location on the Station"
         }, {
             cardTitle: "Business Offices",
-            cardImage: "Business_Offices.png",
+            cardImage: "business_offices.png",
             cardColour: "Y",
             type: "S",
             cardDeck: "Base",
@@ -457,7 +457,7 @@ var cardList = {
             cardDescription: "At the beginning of every remaining year, you receive <span class='creditModifier'>+1</span>"
         }, {
             cardTitle: "Market Place",
-            cardImage: "Market_Place.png",
+            cardImage: "market_place.png",
             cardColour: "Y",
             type: "S",
             cardDeck: "Base",
@@ -489,7 +489,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+1</span> for each Yellow location on the Station"
         }, {
             cardTitle: "Galactic Resort",
-            cardImage: "Galactic_Resort.png",
+            cardImage: "galactic_resort.png",
             cardColour: "P",
             type: "S",
             cardDeck: "Base",
@@ -521,7 +521,7 @@ var cardList = {
             cardDescription: "You may not place other locations adjacent to <i>Observation Dome</i>"
         }, {
             cardTitle: "Opera House",
-            cardImage: "Opera_House.png",
+            cardImage: "opera_house.png",
             cardColour: "P",
             type: "S",
             cardDeck: "Base",
@@ -537,7 +537,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+1</span> for each different adjacent location type"
         }, {
             cardTitle: "Sports Arena",
-            cardImage: "Sports_Arena.png",
+            cardImage: "sports_arena.png",
             cardColour: "P",
             type: "S",
             cardDeck: "Base",
@@ -553,7 +553,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+1</span> for every year remaining"
         }, {
             cardTitle: "Alien Temple",
-            cardImage: "Alien_Temple.png",
+            cardImage: "alien_temple.png",
             cardColour: "G",
             type: "S",
             cardDeck: "Base",
@@ -601,7 +601,7 @@ var cardList = {
             cardDescription: "Each <b>other</b> player secretly chooses up to <span class='creditModifier2'>3</span> to pay and gains that amount in <span class='pointModifier2'>  </span><br>You gain <span class='pointModifier2'>  </span> equal to the highest amount paid, plus one"
         }, {
             cardTitle: "School of Alien Culture",
-            cardImage: "School_of_Alien_Cultures.png",
+            cardImage: "school_of_alien_cultures.png",
             cardColour: "G",
             type: "S",
             cardDeck: "Base",
@@ -617,7 +617,7 @@ var cardList = {
             cardDescription: "Each other player secretly chooses to either pay <span class='creditModifier2'>1</span> or lose <span class='pointModifier'> 2 </span>.  You get <span class='pointModifier'>+2</span> for each <span class='creditModifier2'>1</span> paid"
         }, {
             cardTitle: "Backup Reactor",
-            cardImage: "Backup_reactor.png",
+            cardImage: "backup_reactor.png",
             cardColour: "B",
             type: "S",
             cardDeck: "Base",
@@ -633,7 +633,7 @@ var cardList = {
             cardDescription: "Add one energy to <i>Main Reactor</i><br><span class='pointModifier'>+1</span> if placed adjacent to <i>Main Reactor</i>"
         }, {
             cardTitle: "Cargo Hold",
-            cardImage: "Cargo_Hold.png",
+            cardImage: "cargo_hold.png",
             cardColour: "B",
             type: "S",
             cardDeck: "Base",
@@ -665,7 +665,7 @@ var cardList = {
             cardDescription: "<span class='pointModifier'>+2</span> if <i>Communications Beacon</i> is the location furthest from the <i>Main Reactor</i>"
         }, {
             cardTitle: "Life Support Systems",
-            cardImage: "Life_Support.png",
+            cardImage: "life_support.png",
             cardColour: "B",
             type: "S",
             cardDeck: "Base",
@@ -697,7 +697,7 @@ var cardList = {
             cardDescription: "May only be built adjacent to a <i>Power Reactor</i>. Add a power cube to that Reactor"
         }, {
             cardTitle: "Transportation Platform",
-            cardImage: "Transportation_Platform.png",
+            cardImage: "transportation_platform.png",
             cardColour: "B",
             type: "S",
             cardDeck: "Base",
@@ -720,7 +720,7 @@ var cardList = {
 var discardList = {
     cards: [{
         cardTitle: "Figher Launch Bay",
-        cardImage: "Fighter_Launch_Bay.png",
+        cardImage: "fighter_launch_bay.png",
         cardColour: "R",
         type: "basic",
         cardDeck: "Base",
@@ -739,7 +739,7 @@ var discardList = {
         cardDescription: "Cannot be placed with <span class='distanceModifier'> 3  </span> of the <i>Main Reactor</i>"
     }, {
         cardTitle: "Shield Generator",
-        cardImage: "Shield_Generator.png",
+        cardImage: "shield_generator.png",
         cardColour: "R",
         type: "basic",
         cardDeck: "Base",
@@ -758,7 +758,7 @@ var discardList = {
         cardDescription: "<span class='pointModifier'>+2</span> for each additional power spent when playing <i>Shield Generator</i>"
     }, {
         cardTitle: "Turret",
-        cardImage: "Turret.png",
+        cardImage: "turret.png",
         cardColour: "R",
         type: "basic",
         cardDeck: "Base",
@@ -777,7 +777,7 @@ var discardList = {
         cardDescription: "<span class='pointModifier'>+1</span> for each <i>Turret</i> on the Station"
     }, {
         cardTitle: "Alien Bazaar",
-        cardImage: "Alien_Bazaar.png",
+        cardImage: "alien_bazaar.png",
         cardColour: "Y",
         type: "basic",
         cardDeck: "Base",
@@ -796,7 +796,7 @@ var discardList = {
         cardDescription: "<span class='pointModifier'>+2</span> if there are 3 more Green locations within <span class='distanceModifier'> 2  </span>"
     }, {
         cardTitle: "Customs",
-        cardImage: "Customs.png",
+        cardImage: "customs.png",
         cardColour: "Y",
         type: "basic",
         cardDeck: "Base",
@@ -815,7 +815,7 @@ var discardList = {
         cardDescription: "<span class='creditModifier'>+1</span> for each adjacent Yellow location"
     }, {
         cardTitle: "Energy Market",
-        cardImage: "Energy_Market.png",
+        cardImage: "energy_market.png",
         cardColour: "Y",
         type: "basic",
         cardDeck: "Base",
@@ -834,7 +834,7 @@ var discardList = {
         cardDescription: "<span class='creditModifier'>+1</span> for each <i>Power Reactor</i> in the Station (Max <span class='creditModifier'>+3</span>)"
     }, {
         cardTitle: "Garden",
-        cardImage: "Garden.png",
+        cardImage: "garden.png",
         cardColour: "P",
         type: "basic",
         cardDeck: "Base",
@@ -853,7 +853,7 @@ var discardList = {
         cardDescription: "<span class='pointModifier'>+1</span> if there is no Red location within <span class='distanceModifier'> 3  </span>  <br><span class='pointModifier'>+1</span> if there is no <i>Power Station</i> within <span class='distanceModifier'> 2  </span>"
     }, {
         cardTitle: "Holographic Display Area",
-        cardImage: "Casino.png",
+        cardImage: "holographic_display_area.png",
         cardColour: "P",
         type: "basic",
         cardDeck: "Base",
@@ -872,7 +872,7 @@ var discardList = {
         cardDescription: "<span class='pointModifier'>+1</span> for every adjacent location"
     }, {
         cardTitle: "Restaurant",
-        cardImage: "Restaurant.png",
+        cardImage: "restaurant.png",
         cardColour: "P",
         type: "basic",
         cardDeck: "Base",
@@ -910,7 +910,7 @@ var discardList = {
         cardDescription: "<span class='pointModifier'>+1</span> if placed adjacent to a Green location<br><span class='midSpacer'>OR</span><br><span class='pointModifier'>+2</span> if placed adjacent to <i>Embassy Offices</i>"
     }, {
         cardTitle: "Council Room",
-        cardImage: "Council_Room.png",
+        cardImage: "council_room.png",
         cardColour: "G",
         type: "basic",
         cardDeck: "Base",
@@ -929,7 +929,7 @@ var discardList = {
         cardDescription: "<span class='pointModifier'>+1</span> for each other station that does not contain a <i>Council Room</i>"
     }, {
         cardTitle: "Embassy Offices",
-        cardImage: "Embassy_Offices.png",
+        cardImage: "embassy_offices.png",
         cardColour: "G",
         type: "basic",
         cardDeck: "Base",
@@ -948,7 +948,7 @@ var discardList = {
         cardDescription: "You may choose another player when you build this location. They gain <span class='pointModifier'>+1</span> and you gain <span class='pointModifier'>+2</span>"
     }, {
         cardTitle: "Command Centre",
-        cardImage: "Command_Centre.png",
+        cardImage: "command_centre.png",
         cardColour: "B",
         type: "basic",
         cardDeck: "Base",
@@ -967,7 +967,7 @@ var discardList = {
         cardDescription: "<span class='pointModifier'>+1</span> for each Blue location on the Station"
     }, {
         cardTitle: "Crew Quarters",
-        cardImage: "Crew_Quarters.png",
+        cardImage: "crew_quarters.png",
         cardColour: "B",
         type: "basic",
         cardDeck: "Base",
@@ -986,7 +986,7 @@ var discardList = {
         cardDescription: "<span class='pointModifier'>+2</span> if placed adjacent to another <i>Crew Quarters</i>"
     }, {
         cardTitle: "Docking Bay",
-        cardImage: "Docking_bay.png",
+        cardImage: "docking_bay.png",
         cardColour: "B",
         type: "basic",
         cardDeck: "Base",
@@ -1043,7 +1043,7 @@ var discardList = {
         cardDescription: "<span class='pointModifier'>+1</span> if <i>Security Station</i> has 4 adjacent locations"
     }, {
         cardTitle: "Transportation Platform",
-        cardImage: "Transportation_Platform.png",
+        cardImage: "transportation_platform.png",
         cardColour: "B",
         type: "basic",
         cardDeck: "Base",
