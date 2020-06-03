@@ -1,14 +1,21 @@
-*{
-	font-family: roboto;
-	user-select:none;
+.loadingContainer{
+  background-color:black;
+  height:100vh;
+  width:100vw;
+  position:fixed;
+  top:0;
+  left:0;
+  animation-name: loadingCover;
+  animation-duration: 3s;
+  animation-delay: 3s;
+  animation-fill-mode: forwards;
+  pointer-events:none;
+  z-index:999;
 }
 
-body{
-	white-space: nowrap;
-	transition:0.5s;
-	margin:0;
-	padding:0;
-	height:calc(100vh)
+@keyframes loadingCover{
+  0%{opacity:1;}
+  100%{opacity:0; display:none;}
 }
 
 #topBar{
@@ -47,18 +54,6 @@ body{
 	top:0;
 	width: 100vw;
 	height:100vh;
-}
-
-#gameCardlist{
-}
-
-#gameUndo{
-}
-
-#gameOptions{
-}
-
-#gameResign{
 }
 
 .topBarButtonContainer{

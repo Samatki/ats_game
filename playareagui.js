@@ -167,8 +167,8 @@ window.addEventListener('resize', function(){
 */
 
 document.getElementById("playGridroot").addEventListener('mousedown',function(e){
-  console.log("GGG");
   
+  document.getElementById("gridContainer").style.cursor = "grabbing";
   var gridPositionXStore = document.getElementById("gridContainer").style.left;
   var gridPositionYStore = document.getElementById("gridContainer").style.top;
   document.getElementById("gridContainer").style.left = 0
@@ -182,16 +182,17 @@ document.getElementById("playGridroot").addEventListener('mousedown',function(e)
   initialPositionY = e.clientY;
   gridPositionX = document.getElementById("gridContainer").getBoundingClientRect().left;
   gridPositionY = document.getElementById("gridContainer").getBoundingClientRect().top;
-  console.log(gridPositionY);
   mouseDown = true;
 });
 
 document.body.addEventListener('mouseup',function(e){
   mouseDown = false;
+  document.getElementById("gridContainer").style.cursor = "";
 });
 
 document.body.addEventListener('mouseleave',function(e){
   mouseDown = false;
+  document.getElementById("gridContainer").style.cursor = "";
 });
 
 document.getElementById("playGridroot").addEventListener('mousemove',function(e){

@@ -3,7 +3,7 @@ document.addEventListener("contextmenu", function(e){
     e.preventDefault();
 }, false);
 
-//Viewer Load
+//Viewer Unload
 document.addEventListener("click", function(e){
     if(window.getComputedStyle(document.getElementById("rCModal"),null).getPropertyValue("display") == "block"){
 		document.getElementById("rCModal").style.display = "";
@@ -19,7 +19,6 @@ for (var i=0; i<document.getElementsByClassName("game_card_list").length; i++){
 		var closestElement = e.target.closest(".game_card_list").cloneNode(true);
 		closestElement.style.transform = "scale(1.33)";
 		document.getElementById("rCModal").appendChild(closestElement);
-			console.log(closestElement);
 	}, false);
 }
 
@@ -33,7 +32,6 @@ for (var i=0; i<document.getElementsByClassName("game_card_hand").length; i++){
 		document.getElementById("rCModal").innerHTML = "";		
 		closestElement.style.transform = "scale(1.33)";
 		document.getElementById("rCModal").appendChild(closestElement);
-			console.log(closestElement);
 	}, false);
 }
 
@@ -47,19 +45,16 @@ for (var i=0; i<document.getElementsByClassName("game_card_board").length; i++){
 		document.getElementById("rCModal").innerHTML = "";		
 		closestElement.style.transform = "scale(1.33)";
 		document.getElementById("rCModal").appendChild(closestElement);
-			console.log(closestElement);
 	}, false);
 }
 
 //Other Player Character Mat Expander
 for (var i=0; i<document.getElementsByClassName("playerBoxCharacterBox").length; i++){
 	document.getElementsByClassName("playerBoxCharacterBox")[i].addEventListener("contextmenu", function(e){
-		console.log(e.target.dataset.character);
 		document.getElementById("rCModal").style.display = "block";
 		document.getElementById("rCModal").innerHTML = `
 			<div id="displayedPlayerMat" style="background-image:url(${'ATS_Images/Character_Mats/cs_'+e.target.dataset.character+'.png'})"></div>	
-		`;
-		
+		`;		
 	}, false);
 }
 // End
