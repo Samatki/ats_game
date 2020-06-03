@@ -1,0 +1,59 @@
+.objective{
+	width: 230px;
+	position:relative;
+	margin-left:25px;
+	margin-right:25px;
+	margin-top:20px;
+	word-wrap:normal;
+	white-space: normal;
+	background-color:rgba(249,249,249,0.75);
+	padding:10px;
+	text-align:justify;
+	border: thin rgba(249,249,249,0.75) solid;
+	margin-bottom:50px;
+}
+
+.objDescription{
+	clear:left;
+	font-weight: 400;
+	font-size: x-small;
+	position:relative;
+	padding-top:5px;
+}
+
+.objTitle{
+	float:left;
+	font-weight:900;
+	font-size: small;
+	position:relative;
+	left:15px;
+	top:-3px;
+}
+
+.objPoints{
+	height:50px;
+	width:50px;
+	position:absolute;
+	border-radius:15px;
+	background-image : url("ATS_Images/Card_Details/vp.png");
+	background-size: cover;	
+	box-sizing:border-box;
+	padding-top:11px;
+	padding-left:20px;
+	font-size: 18px;
+	color:white;
+	font-weight:800;
+	text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+	animation: glow 5s ease-in-out infinite;
+	transform: scale(0.75);
+	top:-20px;
+	left:-25px;
+}
+
+.objective:hover{
+	border: thin cyan solid;
+}
+
+.objective:hover .objTitle{
+	color: darkBlue;
+}

@@ -28,10 +28,7 @@ function cardPrinter(cardData, cardSet){
 	}
 	
 	var maxBoxHTML = ""
-/*
-					<div class="max_cards"></div>
-					<div class="max_vpgain"></div>
-*/	
+	
 	if (cardData.cardMaxAdditionalPoints || cardData.cardMaxPlayable){
 		maxBoxHTML = '<div class="maxbox"><div class="maxBoxInner ' + cardMode + '"></div><b>MAX</b>'
 		if (cardData.cardMaxAdditionalPoints){
@@ -48,9 +45,10 @@ function cardPrinter(cardData, cardSet){
 		category_HTML = '<div class="card_category">'+cardData.type+'</div>'
 	}
 
+	var draggable_status = (cardSet == "game_card_hand")?"true":"false";
 	
 	var cardHTML =  `	
-		<div class="${cardSet}" tabindex="-1">
+		<div class="${cardSet}" tabindex="-1" draggable=${draggable_status} data-cardId=${cardData.cardId} >
 			<div class="${cardColour}_card" ></div>
 			<div class="card_classification ${cardColour}_class"></div>
 			<div class="card_title"><b>${cardData.cardTitle}</b></div>
