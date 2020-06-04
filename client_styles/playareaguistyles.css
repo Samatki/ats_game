@@ -6,7 +6,7 @@
 }
 
 body{
-  background-color:lightblue;
+  background-color:black;
   white-space: nowrap;
 /*  transition:0.5s; */
   margin:0;
@@ -206,7 +206,7 @@ body{
   height:40%;
   left:67%;
   background-color:rgba(0,0,0,0.1);
-  background-image : url("ATS_Images/Card_Details/vp.png");
+  background-image : url("../ATS_Images/Card_Details/vp.png");
   background-size: 35% auto;
   background-repeat:no-repeat;
   background-position: 10% 5%;
@@ -219,7 +219,7 @@ body{
   height:40%;
   left:67%;
   background-color:rgba(0,0,0,0.1);
-  background-image : url("ATS_Images/Card_Details/coin2.png");
+  background-image : url("../ATS_Images/Card_Details/coin2.png");
   background-size: 35% auto;
   background-repeat:no-repeat;
   background-position: 10% 5%;
@@ -256,19 +256,19 @@ body{
 }
 
 #objArea{
-	background-image: url("ATS_Images/Artwork/Cards/FullSize/objective.jpg");
+	background-image: url("../ATS_Images/Artwork/Cards/FullSize/objective.jpg");
 	background-size: auto 100%;
 	background-position: 45% center;
 }
 
 #turnOrderIcon{
-	background-image: url("ATS_Images/Game_Icons/spin_icon.png");
+	background-image: url("../ATS_Images/Game_Icons/spin_icon.png");
 	background-size:cover;
 	transform: scaleX(-1);
 }
 
 #ownPlayerBoxMoney{
-	background-image : url("ATS_Images/Card_Details/coin2.png");
+	background-image : url("../ATS_Images/Card_Details/coin2.png");
 	background-size: 40% auto;
 	background-repeat:no-repeat;
 }
@@ -282,7 +282,7 @@ body{
 }
 
 #ownPlayerBoxScore{
-	background-image : url("ATS_Images/Card_Details/vp.png");
+	background-image : url("../ATS_Images/Card_Details/vp.png");
 	background-size: 40% auto;
 	background-repeat:no-repeat;
 }
@@ -369,6 +369,7 @@ body{
  height:100vh;
  align-items: center;
   overflow:hidden;
+
 }
 
 #gridContainer{
@@ -379,7 +380,6 @@ body{
   cursor:grab;
   padding:10px;
   transition: background-color 0.5s, border 0.5s, transform 0.5s;
-  
 }
 
 #gridContainer:hover{

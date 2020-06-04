@@ -48,7 +48,7 @@ function cardPrinter(cardData, cardSet){
 	var draggable_status = (cardSet == "game_card_hand")?"true":"false";
 	
 	var cardHTML =  `	
-		<div class="${cardSet}" tabindex="-1" draggable=${draggable_status} data-cardId=${cardData.cardId} >
+		<div class="${cardSet}" tabindex="-1" draggable=${draggable_status} data-cardId="${cardData.cardId}" >
 			<div class="${cardColour}_card" ></div>
 			<div class="card_classification ${cardColour}_class"></div>
 			<div class="card_title"><b>${cardData.cardTitle}</b></div>

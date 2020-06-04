@@ -91,9 +91,10 @@ class PlayGrid extends React.Component {
 
     var testm = this.state.playerStationArray.grid.map(function (item, index) {
 	   var newRowStyle = (index % gridX) == 0 ? "newRowStyle" : "";
-
+		
       if (item) {
-        return React.createElement("div", { className: "stationCardSpace gameCardBoard " + newRowStyle, "data-index": index }, index);
+		var xx  = {__html : cardPrinter(cardList.cards.basic_locations[0],"game_card_board")}
+        return React.createElement("div", { className: "stationCardSpace stationCardPlaced " + newRowStyle, "data-index": index, dangerouslySetInnerHTML : xx});
       }
 
       var placeable = neighbourCheck(index, gridX, gridSize);
@@ -138,6 +139,8 @@ class GameReactHandler extends React.Component {
 ReactDOM.render(React.createElement(GameReactHandler, null), document.getElementById('reactContainer'));
 
 document.getElementById("playGridroot").addEventListener('wheel',function(e){
+  mouseDown = false;
+  document.getElementById("gridContainer").style.cursor = ""
   e.preventDefault();
   var containerZoom = document.getElementById("gridContainer");
   m = containerZoom.style.transform.split('').slice(6,-1).join('');

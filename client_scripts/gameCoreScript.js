@@ -36,8 +36,8 @@ for (var i=0; i<document.getElementsByClassName("game_card_hand").length; i++){
 }
 
 //Board Card Viewer
-for (var i=0; i<document.getElementsByClassName("game_card_board").length; i++){
-	document.getElementsByClassName("game_card_hand")[i].addEventListener("contextmenu", function(e){
+for (var i=0; i<document.getElementsByClassName("stationCardPlaced").length; i++){
+	document.getElementsByClassName("stationCardPlaced")[i].addEventListener("contextmenu", function(e){
 		var closestElement = e.target.closest(".game_card_board").cloneNode(true);
 		document.getElementById("rCModal").style.display = "block";
 		closestElement.classList.remove("game_card_board");

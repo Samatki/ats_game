@@ -45,7 +45,7 @@
 }
 
 #game_background{
-	background-image: url("ATS_Images/Artwork/Splash/sp2.jpg");
+	background-image: url("../ATS_Images/Artwork/Splash/sp2.jpg");
 	background-size:cover;
 	background-repeat:no-repeat;
 	z-index:0;

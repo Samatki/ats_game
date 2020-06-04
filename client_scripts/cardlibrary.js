@@ -1,7 +1,7 @@
 var cardList = {
     cards: {
         basic_locations: [{
-            "cardTitle": "Figher Launch Bay",
+            "cardTitle": "Fighter Launch Bay",
             "cardImage": "fighter_launch_bay.png",
             "cardColour": "R",
             "type": "basic",
