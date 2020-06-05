@@ -78,5 +78,12 @@ document.getElementsByClassName("topBarButtons")[1].addEventListener('click',fun
 document.getElementById("gridReset").addEventListener('click',function(){
 	document.getElementById("gridContainer").style.top = 0;
 	document.getElementById("gridContainer").style.left = 0;
-	document.getElementById("gridContainer").style.transform = "scale(1)";	
+	document.getElementById("gridContainer").style.transform = "scale(1)";
+	for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+		if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
+			document.getElementsByClassName("otherGridContainer")[i].style.top = 0;
+			document.getElementsByClassName("otherGridContainer")[i].style.left = 0;
+			document.getElementsByClassName("otherGridContainer")[i].style.transform = "scale(1)";				
+		}
+	}	
 });

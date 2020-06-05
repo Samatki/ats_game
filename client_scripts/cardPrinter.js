@@ -29,12 +29,12 @@ function cardPrinter(cardData, cardSet){
 	
 	var maxBoxHTML = ""
 	
-	if (cardData.cardMaxAdditionalPoints || cardData.cardMaxPlayable){
+	if (cardData.cardMaxAdditionalPoints != Infinity || cardData.cardMaxPlayable != Infinity){
 		maxBoxHTML = '<div class="maxbox"><div class="maxBoxInner ' + cardMode + '"></div><b>MAX</b>'
-		if (cardData.cardMaxAdditionalPoints){
+		if (cardData.cardMaxAdditionalPoints != Infinity){
 			maxBoxHTML = maxBoxHTML + '<div class="maxPoints">+' + cardData.cardMaxAdditionalPoints + '</div>' 
 		}
-		if (cardData.cardMaxPlayable){
+		if (cardData.cardMaxPlayable != Infinity){
 			maxBoxHTML = maxBoxHTML + '<div class="maxPlayable">' + cardData.cardMaxPlayable + '</div>'			
 		}
 		maxBoxHTML = maxBoxHTML + '</div>'

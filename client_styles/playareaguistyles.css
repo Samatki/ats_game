@@ -378,6 +378,22 @@ body{
  overflow:hidden;
 }
 
+.otherGridContainer{
+  transform:scale(1);
+  transition: transform 0.5s;
+  overflow:hidden;
+  position:relative;
+  cursor:grab;
+  padding:10px;
+  transition: background-color 0.5s, border 0.5s, transform 0.5s;
+  	border: rgba(255,255,255,0) thin solid;
+}
+
+.otherGridContainer:hover{
+	background-color : rgba(1,1,1,0.3);
+	border: rgba(255,255,255,0.3) thin solid;
+}
+
 #gridContainer{
   transform:scale(1);
   transition: transform 0.5s;
@@ -386,12 +402,13 @@ body{
   cursor:grab;
   padding:10px;
   transition: background-color 0.5s, border 0.5s, transform 0.5s;
+  	border: rgba(255,255,255,0) thin solid;
 }
 
 #gridContainer:hover{
 	background-color : rgba(1,1,1,0.3);
 	border: rgba(255,255,255,0.3) thin solid;
-	}
+}
 
 .stationCardInvisible{
   opacity:0;

@@ -17,26 +17,90 @@ var playerDataObj = {
         secret_obj: null,
         ability_available: null,
         player_race: "qualeen",
-		color : "lime"
+		color : "lime",
+		main_reactor_color : "blue"
     },
     playerHand: ["B0S_B_CB","B0S_B_CB"],
     playerStationArray: {
         parameters: {
-            x: 3,
+            x: 6,
 //           y: 3,
             infinite: true,
 			grid_transform_string : null
         },
         grid: [
             false,
+            "B0B_R_FLB",
             false,
-            false,
-            false, 
+            "B0B_R_FLB", 
 			"B0S_B_CB",
+			"B0S_P_OD",
+            false,
+            false,
+            false,
+			false,
+            "B0B_R_FLB",
+            false,
+            "B0B_R_FLB", 
 			"B0S_B_CB",
+			"B0S_P_OD",
             false,
             false,
-            false
+            false,
+			false,
+            "B0B_R_FLB",
+            false,
+            "B0B_R_FLB", 
+			"B0S_B_CB",
+			"B0S_P_OD",
+            false,
+            false,
+            false,
+			false,
+            "B0B_R_FLB",
+            false,
+            "B0B_R_FLB", 
+			"B0S_B_CB",
+			"B0S_P_OD",
+            false,
+            false,
+            false,
+            false,
+            "B0B_R_FLB",
+            false,
+            "B0B_R_FLB", 
+			"B0S_B_CB",
+			"B0S_P_OD",
+            false,
+            false,
+            false,
+			false,
+            "B0B_R_FLB",
+            false,
+            "B0B_R_FLB", 
+			"B0S_B_CB",
+			"B0S_P_OD",
+            false,
+            false,
+            false,
+			false,
+            "B0B_R_FLB",
+            false,
+            "B0B_R_FLB", 
+			"B0S_B_CB",
+			"B0S_P_OD",
+            false,
+            false,
+            false,
+			false,
+            "B0B_R_FLB",
+            false,
+            "B0B_R_FLB", 
+			"B0S_B_CB",
+			"B0S_P_OD",
+            false,
+            false,
+            false,			
         ],
         gridSchema: {
             cardPresence: false,
@@ -54,8 +118,28 @@ var playerDataObj = {
 				eg_score : 0,
 				ability_available : null,
 				player_race : "zehuti",
-				color : "red"
-			} , 
+				color : "red",
+				main_reactor_color : "red",
+				playerStationArray: {
+					parameters: {
+						x: 3,
+//           			y: 3,
+						infinite: true,
+						grid_transform_string : null
+					},
+					grid: [
+						false,
+						"B0B_R_FLB",
+						false,
+						"B0B_R_FLB", 
+						"B0S_B_CB",
+						"B0S_P_OD",
+						false,
+						false,
+						false
+					]
+				}
+			}, 
 			{
 				playerNo : 3,
 				playerName : "b",
@@ -64,7 +148,27 @@ var playerDataObj = {
 				currency:0,
 				ability_available : null,
 				player_race : "vak",
-				color : "cyan"
+				color : "cyan",
+				main_reactor_color : "vak",
+				playerStationArray: {
+					parameters: {
+						x: 3,
+//           			y: 3,
+						infinite: true,
+						grid_transform_string : null
+					},
+					grid: [
+						false,
+						"B0B_R_FLB",
+						false,
+						"B0B_R_FLB", 
+						"B0S_B_CB",
+						"B0S_P_OD",
+						false,
+						false,
+						false
+					]
+				}
 			} , 
 			{
 				playerNo : 4,
@@ -74,7 +178,27 @@ var playerDataObj = {
 				currency:0,
 				ability_available : null,
 				player_race : "humareen",
-				color : "SeaShell"
+				color : "SeaShell",
+				main_reactor_color : "green",
+				playerStationArray: {
+					parameters: {
+						x: 3,
+//           			y: 3,
+						infinite: true,
+						grid_transform_string : null
+					},
+					grid: [
+						false,
+						"B0B_R_FLB",
+						false,
+						"B0B_R_FLB", 
+						"B0S_B_CB",
+						"B0S_P_OD",
+						false,
+						false,
+						false
+					]
+				}
 			}
 		
 		]
@@ -89,7 +213,7 @@ function PlayerMat(props) {
   var playerMatHTML = [];
   for (var i = 0; i < props.otherPlayers.length; i++) {
     playerMatHTML.push(
-    React.createElement("div", { className: "playerBox", id: "other_player_box_" + (i + 1) },
+    React.createElement("div", { className: "playerBox", id: "other_player_box_" + (i + 1), 'data-player' : props.otherPlayers[i].playerNo },
     React.createElement("div", { className: "playerBoxLeft" },
     React.createElement("div", { className: "playerBoxName" }, React.createElement("p", { Style : "color : " +props.otherPlayers[i].color, className: "playerBoxNameInner" }, props.otherPlayers[i].playerName)),
     React.createElement("div", { className: "playerBoxMoney" },
@@ -135,6 +259,62 @@ render(){
 }
 }
 
+class OtherPlayGrid extends React.Component {
+
+  render() {
+    var gridX = this.props.parameters.x;
+//    var gridY = this.state.parameters.y;
+    var gridSize = this.props.grid.length;
+    var gridStorage = this.props.grid;
+
+    var testm = this.props.grid.map(function (card, index) {
+	   var newRowStyle = (index % gridX) == 0 ? "newRowStyle" : "";
+		
+      if (card) {
+		 var cardObj = {};
+		 if(card[2] == "B"){
+			cardObj = cardList.cards.basic_locations.find(x => x.cardId === card);
+		} else if (card[2] == "S"){
+			cardObj = cardList.cards.s_locations.find(x => x.cardId === card);			
+		} else if (card[2] == "R") {
+			cardObj = cardList.cards.reactors.find(x => x.cardId === card);	
+		}
+		  
+		var xx  = {__html : cardPrinter(cardObj,"game_card_board")}
+        return React.createElement("div", { className: "stationCardSpace stationCardPlaced " + newRowStyle, "data-index": index, dangerouslySetInnerHTML : xx});
+      }
+
+/*      var placeable = neighbourCheck(index, gridX, gridSize);
+      var visibility = false;
+	  var observationDomeCheck = true;
+
+      for (var z = 0; z < placeable.length; z++) {
+        if (gridStorage[placeable[z]] == "B0S_P_OD") {
+		  observationDomeCheck = false;
+          break;
+        }
+	  }
+	  
+      for (var z = 0; z < placeable.length; z++) {
+        if (gridStorage[placeable[z]] && observationDomeCheck) {
+          visibility = true;
+          break;
+        }
+      }
+
+      if (visibility) {
+        return React.createElement("div", { className: "stationCardSpace stationCardPlaceable "+ newRowStyle, "data-index": index }, index);
+      } else {
+        return React.createElement("div", { className: "stationCardSpace stationCardInvisible "+ newRowStyle, "data-index": index }, index);
+      }
+*/
+    });
+    return (
+ //     React.createElement("div", { id: "playGridroot", className: "gameMat" } ,
+      React.createElement("div", { className: "otherGridContainer", Style: "transform:scale(1); display:none;", "data-player":this.props.playerNo},
+      testm))//);
+}}
+
 class PlayGrid extends React.Component {
 
   render() {
@@ -153,11 +333,8 @@ class PlayGrid extends React.Component {
 		} else if (card[2] == "S"){
 			cardObj = cardList.cards.s_locations.find(x => x.cardId === card);			
 		} else if (card[2] == "R") {
-			return null;
-		} else if (card[2] == "C") {
-			return null;
+			cardObj = cardList.cards.reactors.find(x => x.cardId === card);	
 		}
-		  
 		  
 		var xx  = {__html : cardPrinter(cardObj,"game_card_board")}
         return React.createElement("div", { className: "stationCardSpace stationCardPlaced " + newRowStyle, "data-index": index, dangerouslySetInnerHTML : xx});
@@ -165,9 +342,17 @@ class PlayGrid extends React.Component {
 
       var placeable = neighbourCheck(index, gridX, gridSize);
       var visibility = false;
+	  var observationDomeCheck = true;
 
       for (var z = 0; z < placeable.length; z++) {
-        if (gridStorage[placeable[z]]) {
+        if (gridStorage[placeable[z]] == "B0S_P_OD") {
+		  observationDomeCheck = false;
+          break;
+        }
+	  }
+	  
+      for (var z = 0; z < placeable.length; z++) {
+        if (gridStorage[placeable[z]] && observationDomeCheck) {
           visibility = true;
           break;
         }
@@ -181,12 +366,10 @@ class PlayGrid extends React.Component {
 
     });
     return (
-      React.createElement("div", { id: "playGridroot", className: "gameMat" } ,
+ //     React.createElement("div", { id: "playGridroot", className: "gameMat" } ,
       React.createElement("div", { id: "gridContainer", Style: "transform:scale(1);" },
-      testm)));
-
+      testm))//);
 }}
-
 
 class GameReactHandler extends React.Component {
 	
@@ -205,7 +388,13 @@ class GameReactHandler extends React.Component {
 		console.log("TEST2");
 	}
 
+	
+
 	render() {
+		var other_player_stations = this.state.otherPlayersData.otherPlayers.map(function(playerItem){
+			return React.createElement(OtherPlayGrid, {...playerItem.playerStationArray, playerNo : playerItem.playerNo}, null)
+		});
+		
 		return React.createElement("div", null,
 	
 		React.createElement("div", { id: "topBarFlexContainer" },
@@ -213,21 +402,37 @@ class GameReactHandler extends React.Component {
 	
 		React.createElement("div", { id: "gridReset" },"Reset Grid"),
 		React.createElement(OwnPlayerMat, {...this.state.playerData, turnOrder : playerDataObj.gameData.turnOrder}),
-		React.createElement(PlayGrid, {...this.state.playerStationArray}));
+		React.createElement("div", { id: "playGridroot", className: "gameMat" }, 
+		React.createElement(PlayGrid, {...this.state.playerStationArray}), 
+		other_player_stations),
+		
+		React.createElement("div", { id: "playerHandModal" }, null)
+//		React.createElement(PlayGrid, {...this.state.playerStationArray})
+		);
   }}
 
 ReactDOM.render(React.createElement(GameReactHandler, null), document.getElementById('reactContainer'));
 
+var displayedArea = 0;
+
 document.getElementById("playGridroot").addEventListener('wheel',function(e){
+	if(displayedArea){
+		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+			if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
+				var elementS = document.getElementsByClassName("otherGridContainer")[i];	
+			}
+		}	    
+	}else{
+		var elementS = document.getElementById("gridContainer");
+	}		
   mouseDown = false;
-  document.getElementById("gridContainer").style.cursor = ""
-  e.preventDefault();
-  var containerZoom = document.getElementById("gridContainer");
-  m = containerZoom.style.transform.split('').slice(6,-1).join('');
+  elementS.style.cursor = ""
+  e.preventDefault();;
+  m = elementS.style.transform.split('').slice(6,-1).join('');
   var newScale = ((m/1 - Math.sign(e.deltaY)*0.2) < 0.2)? 0.2:(m/1 - Math.sign(e.deltaY)*0.2);
-  containerZoom.style.transform = "scale("+ (newScale).toString() +")";
-  initialgridPositionX = document.getElementById("gridContainer").getBoundingClientRect().left;
-  initialgridPositionY = document.getElementById("gridContainer").getBoundingClientRect().top;
+  elementS.style.transform = "scale("+ (newScale).toString() +")";
+  initialgridPositionX = elementS.getBoundingClientRect().left;
+  initialgridPositionY = elementS.getBoundingClientRect().top;
 })
 
 var mouseDown;
@@ -250,38 +455,96 @@ window.addEventListener('resize', function(){
 */
 
 document.getElementById("playGridroot").addEventListener('mousedown',function(e){
-  
-  document.getElementById("gridContainer").style.cursor = "grabbing";
-  var gridPositionXStore = document.getElementById("gridContainer").style.left;
-  var gridPositionYStore = document.getElementById("gridContainer").style.top;
-  document.getElementById("gridContainer").style.left = 0
-  document.getElementById("gridContainer").style.top = 0;
-  initialgridPositionX = document.getElementById("gridContainer").getBoundingClientRect().left;
-  initialgridPositionY = document.getElementById("gridContainer").getBoundingClientRect().top;
-  document.getElementById("gridContainer").style.left = gridPositionXStore;
-  document.getElementById("gridContainer").style.top = gridPositionYStore;
+	if(displayedArea){
+		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+			if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
+				var elementS = document.getElementsByClassName("otherGridContainer")[i];	
+			}
+		}	    
+	}else{
+		var elementS = document.getElementById("gridContainer");
+	}	
+  elementS.style.cursor = "grabbing";
+  var gridPositionXStore = elementS.style.left;
+  var gridPositionYStore = elementS.style.top;
+  elementS.style.left = 0
+  elementS.style.top = 0;
+  initialgridPositionX = elementS.getBoundingClientRect().left;
+  initialgridPositionY = elementS.getBoundingClientRect().top;
+  elementS.style.left = gridPositionXStore;
+  elementS.style.top = gridPositionYStore;
   
   initialPositionX = e.clientX;
   initialPositionY = e.clientY;
-  gridPositionX = document.getElementById("gridContainer").getBoundingClientRect().left;
-  gridPositionY = document.getElementById("gridContainer").getBoundingClientRect().top;
+  gridPositionX = elementS.getBoundingClientRect().left;
+  gridPositionY = elementS.getBoundingClientRect().top;
+
   mouseDown = true;
 });
 
 document.body.addEventListener('mouseup',function(e){
   mouseDown = false;
-  document.getElementById("gridContainer").style.cursor = "";
+  if(displayedArea){
+		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+			if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
+				document.getElementsByClassName("otherGridContainer")[i].style.cursor = "";	
+			}
+		}	  
+  } else {
+	document.getElementById("gridContainer").style.cursor = "";
+  }
 });
 
 document.body.addEventListener('mouseleave',function(e){
   mouseDown = false;
-  document.getElementById("gridContainer").style.cursor = "";
+  if(displayedArea){
+		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+			if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
+				document.getElementsByClassName("otherGridContainer")[i].style.cursor = "";			
+			}
+		}	  
+  } else {
+	document.getElementById("gridContainer").style.cursor = "";
+  }
 });
 
 document.getElementById("playGridroot").addEventListener('mousemove',function(e){
   if(mouseDown){
+	if(displayedArea){
+		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+			if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
+				document.getElementsByClassName("otherGridContainer")[i].style.left = ((gridPositionX - initialgridPositionX) + (e.clientX - initialPositionX)).toString() + "px";
+				document.getElementsByClassName("otherGridContainer")[i].style.top = ((gridPositionY - initialgridPositionY) + (e.clientY - initialPositionY)).toString() + "px";				
+			}
+		}
+	} else {
     document.getElementById("gridContainer").style.left = ((gridPositionX - initialgridPositionX) + (e.clientX - initialPositionX)).toString() + "px";
     document.getElementById("gridContainer").style.top = ((gridPositionY - initialgridPositionY) + (e.clientY - initialPositionY)).toString() + "px";
+	}
   }
   e.preventDefault();
 })
+
+for (var l=0; l<document.getElementsByClassName("playerBox").length; l++){
+	document.getElementsByClassName("playerBox")[l].addEventListener("click", function(e){
+	for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+		document.getElementsByClassName("otherGridContainer")[i].style.display = "none";		
+	}
+	var gameFind = e.target.closest('.playerBox').dataset.player;
+	document.getElementById("gridContainer").style.display = "none";
+	for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+		if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == gameFind){
+			document.getElementsByClassName("otherGridContainer")[i].style.display = "block";
+			displayedArea = gameFind;
+		}
+	}	
+	}, false);
+}
+
+document.getElementById("ownPlayerBoxCharacterBox").addEventListener("click", function(e){
+	for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+		document.getElementsByClassName("otherGridContainer")[i].style.display = "none";		
+	}
+	document.getElementById("gridContainer").style.display = "block";
+	displayedArea = 0;
+	}, false);
