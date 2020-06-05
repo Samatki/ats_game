@@ -28,12 +28,12 @@ i{
 	background-color:black;
 	transform:scale(0.1833);
 /*    margin-right: -60px;*/
-	position:absolute;
+	position:relative;
 	margin-bottom:0;
 	pointer-events: auto;
 	outline:none;
-	top:-50px;
-	left:-50px;
+	top:-130px;
+	left:-132px;
 }
 
 

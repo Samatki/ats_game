@@ -1,42 +1,106 @@
-var styles = [{ color: "red" }, { color: "cyan" }, { color: "Magenta" }, { color: "SeaShell" }, { color: "Coral" }, { color: "Lime" }];
+var playerColourStyles = [{ color: "red" }, { color: "cyan" }, { color: "Magenta" }, { color: "SeaShell" }, { color: "Coral" }, { color: "Lime" }];
 const OtherPlayersObj = {OtherPlayers : [{character:"zehuti"},{character:"humareen"},{character:"vak"}]}
+var tempGrid;
 
 var playerDataObj = {
-  playerStationArray: {
-    parameters: {
-      x: 3,
-      y: 3,
-      infinite: true },
-
-    grid: [
-    false,
-    false,
-    false,
-    false,
-    { card_obj: {}, a: "Finish" },
-    false,
-    false,
-    false,
-    false],
-
-    gridSchema: { cardPresence: false, card_obj: {} } } };
+    gameData: {
+        round: 1,
+        turn: 1,
+		turnOrder : false
+    },
+    playerData: {
+		playerName: "Sam00",
+		playerNo : 1,
+        curr_score: 0,
+        eg_score: 0,
+        currency: 0,
+        secret_obj: null,
+        ability_available: null,
+        player_race: "qualeen",
+		color : "lime"
+    },
+    playerHand: ["B0S_B_CB","B0S_B_CB"],
+    playerStationArray: {
+        parameters: {
+            x: 3,
+//           y: 3,
+            infinite: true,
+			grid_transform_string : null
+        },
+        grid: [
+            false,
+            false,
+            false,
+            false, 
+			"B0S_B_CB",
+			"B0S_B_CB",
+            false,
+            false,
+            false
+        ],
+        gridSchema: {
+            cardPresence: false,
+            card_obj: {}
+        }
+    },
+	otherPlayersData : {
+		numberOther : 3,
+		otherPlayers : [
+			{
+				playerNo : 2,
+				playerName : "a",
+				playerScore : 0,
+				currency:0,
+				eg_score : 0,
+				ability_available : null,
+				player_race : "zehuti",
+				color : "red"
+			} , 
+			{
+				playerNo : 3,
+				playerName : "b",
+				playerScore : 0,
+				eg_score : 0,
+				currency:0,
+				ability_available : null,
+				player_race : "vak",
+				color : "cyan"
+			} , 
+			{
+				playerNo : 4,
+				playerName : "c",
+				playerScore : 0,
+				eg_score : 0,
+				currency:0,
+				ability_available : null,
+				player_race : "humareen",
+				color : "SeaShell"
+			}
+		
+		]
+	},
+	discardPile : {
+		    cards: ["B0S_B_CB","B0S_B_CB"]
+		
+	}
+};
 
 function PlayerMat(props) {
   var playerMatHTML = [];
-  for (var i = 0; i < props.OtherPlayers.length; i++) {
+  for (var i = 0; i < props.otherPlayers.length; i++) {
     playerMatHTML.push(
     React.createElement("div", { className: "playerBox", id: "other_player_box_" + (i + 1) },
     React.createElement("div", { className: "playerBoxLeft" },
-    React.createElement("div", { className: "playerBoxName" }, React.createElement("p", { style: styles[i], className: "playerBoxNameInner" }, "SAM00")),
+    React.createElement("div", { className: "playerBoxName" }, React.createElement("p", { Style : "color : " +props.otherPlayers[i].color, className: "playerBoxNameInner" }, props.otherPlayers[i].playerName)),
     React.createElement("div", { className: "playerBoxMoney" },
-    React.createElement("div", { className: "playerBoxMoneyCount" }, "5")),
+    React.createElement("div", { className: "playerBoxMoneyCount" }, props.otherPlayers[i].currency)),
 
     React.createElement("div", { className: "playerBoxScore" },
-    React.createElement("div", { className: "playerBoxScoreCount" }, "5"))),
+    React.createElement("div", { className: "playerBoxScoreCount" }, props.otherPlayers[i].playerScore))),
 
 
     React.createElement("div", { className: "playerBoxRight" },
-    React.createElement("div", { className: "playerBoxCharacterBox", 'data-character': props.OtherPlayers[i].character, Style:"background-image:url('ATS_Images/Character_Mats/cs_"+props.OtherPlayers[i].character+"_reduced.png')"}),
+    React.createElement("div", { className: "playerBoxCharacterBox", 'data-character': props.otherPlayers[i].player_race, Style:"background-image:url('ATS_Images/Character_Mats/cs_"+props.otherPlayers[i].player_race+"_reduced.png')"}),
     React.createElement("div", { className: "playerBoxCharacterActionStatus"})),
 
     React.createElement("div", { className: "playerStation" })));
@@ -45,55 +109,57 @@ function PlayerMat(props) {
   return playerMatHTML;
 }
 
-function OwnPlayerMat(props) {
+class OwnPlayerMat extends React.Component {
+render(){
   var returnedHTML = [];
   returnedHTML.push(
   React.createElement("div", { id: "playerScoreArea" },
   React.createElement("div", { id: "ownPlayerBox" },
-  React.createElement("div", { id: "turnOrderIcon" }),
+  React.createElement("div", { id: "turnOrderIcon", className : this.props.turnOrder ? "flipped" : ""}),
   React.createElement("div", { id: "ownPlayerNameBox" },
-  React.createElement("div", { id: "ownPlayerName" }, "Sam00")),
+  React.createElement("div", { id: "ownPlayerName", Style : "color:" + this.props.color }, this.props.playerName )),
 
   React.createElement("div", { id: "ownPlayerBoxTop" },
   React.createElement("div", { id: "ownPlayerBoxMoney" },
-  React.createElement("div", { id: "ownPlayerBoxMoneyCount" }, "5")),
+  React.createElement("div", { id: "ownPlayerBoxMoneyCount" }, this.props.currency )),
 
   React.createElement("div", { id: "ownPlayerBoxScore" },
-  React.createElement("div", { id: "ownPlayerBoxScoreCount" }, "5"))),
+  React.createElement("div", { id: "ownPlayerBoxScoreCount" }, this.props.curr_score))),
 
 
   React.createElement("div", { id: "ownPlayerBoxBottom" },
-  React.createElement("div", { id: "ownPlayerBoxCharacterBox" }),
+  React.createElement("div", { id: "ownPlayerBoxCharacterBox", 'data-character': this.props.player_race, Style: "background-image:url('ATS_Images/Character_Mats/cs_"+this.props.player_race+"_reduced.png')"}),
   React.createElement("div", { id: "ownPlayerBoxCharacterActionStatus" })))));
 
   return returnedHTML;
 }
+}
 
 class PlayGrid extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = playerDataObj;
-  }
-
-  componentDidMount() {
-    console.log("TEST1");
-  }
-
-  componentWillUnmount() {
-    console.log("TEST2");
-  }
 
   render() {
-    var gridX = this.state.playerStationArray.parameters.x;
-    var gridY = this.state.playerStationArray.parameters.y;
-    var gridSize = this.state.playerStationArray.grid.length;
-    var gridStorage = this.state.playerStationArray.grid;
+    var gridX = this.props.parameters.x;
+//    var gridY = this.state.parameters.y;
+    var gridSize = this.props.grid.length;
+    var gridStorage = this.props.grid;
 
-    var testm = this.state.playerStationArray.grid.map(function (item, index) {
+    var testm = this.props.grid.map(function (card, index) {
 	   var newRowStyle = (index % gridX) == 0 ? "newRowStyle" : "";
 		
-      if (item) {
-		var xx  = {__html : cardPrinter(cardList.cards.basic_locations[0],"game_card_board")}
+      if (card) {
+		 var cardObj = {};
+		 if(card[2] == "B"){
+			cardObj = cardList.cards.basic_locations.find(x => x.cardId === card);
+		} else if (card[2] == "S"){
+			cardObj = cardList.cards.s_locations.find(x => x.cardId === card);			
+		} else if (card[2] == "R") {
+			return null;
+		} else if (card[2] == "C") {
+			return null;
+		}
+		  
+		  
+		var xx  = {__html : cardPrinter(cardObj,"game_card_board")}
         return React.createElement("div", { className: "stationCardSpace stationCardPlaced " + newRowStyle, "data-index": index, dangerouslySetInnerHTML : xx});
       }
 
@@ -123,17 +189,31 @@ class PlayGrid extends React.Component {
 
 
 class GameReactHandler extends React.Component {
-
-  render() {
-    return React.createElement("div", null,
 	
-    React.createElement("div", { id: "topBarFlexContainer" },
-    React.createElement(PlayerMat,  OtherPlayersObj )),
-	
-	React.createElement("div", { id: "gridReset" },"Reset Grid"),
-    React.createElement(OwnPlayerMat, null),
-    React.createElement(PlayGrid, null));
+	constructor(props) {
+		super(props);
+		this.state = playerDataObj;
+	}
 
+	componentDidMount() {
+		tempGrid = this.state;
+		discardListGen(this.state.discardPile.cards);
+		handGen(this.state.playerHand);
+	}
+
+	componentWillUnmount() {
+		console.log("TEST2");
+	}
+
+	render() {
+		return React.createElement("div", null,
+	
+		React.createElement("div", { id: "topBarFlexContainer" },
+		React.createElement(PlayerMat,  {...this.state.otherPlayersData} )),
+	
+		React.createElement("div", { id: "gridReset" },"Reset Grid"),
+		React.createElement(OwnPlayerMat, {...this.state.playerData, turnOrder : playerDataObj.gameData.turnOrder}),
+		React.createElement(PlayGrid, {...this.state.playerStationArray}));
   }}
 
 ReactDOM.render(React.createElement(GameReactHandler, null), document.getElementById('reactContainer'));

@@ -9,13 +9,12 @@
   animation-duration: 3s;
   animation-delay: 3s;
   animation-fill-mode: forwards;
-  pointer-events:none;
   z-index:999;
 }
 
 @keyframes loadingCover{
   0%{opacity:1;}
-  100%{opacity:0; display:none;}
+  100%{opacity:0; display:none;  pointer-events:none;}
 }
 
 #topBar{
@@ -157,6 +156,8 @@
 	flex-wrap:wrap;
 	overflow-y: auto;
 	justify-content: center;
+	align-content :flex-start;
+
 }
 
 .gameMat{

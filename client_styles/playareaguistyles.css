@@ -139,14 +139,20 @@ body{
 
 #ownPlayerBoxCharacterBox{
   background-color:rgba(0,0,0,0.1);
+  background-size:auto 100%;
+  background-repeat:no-repeat;
   position:absolute;
   top:4%;
   left:3%;
   height:90%;
   width:94%;
   cursor:pointer;
+  filter:brightness(1.25);
 }
 
+#ownPlayerBoxCharacterBox:hover{
+	filter:brightness(1.5);
+}
 
 #ownPlayerBoxCharacterActionStatus{
   position:absolute;
@@ -264,8 +270,9 @@ body{
 #turnOrderIcon{
 	background-image: url("../ATS_Images/Game_Icons/spin_icon.png");
 	background-size:cover;
-	transform: scaleX(-1);
 }
+
+.flipped{transform: scaleX(-1);}
 
 #ownPlayerBoxMoney{
 	background-image : url("../ATS_Images/Card_Details/coin2.png");
@@ -368,8 +375,7 @@ body{
  justify-content: center;
  height:100vh;
  align-items: center;
-  overflow:hidden;
-
+ overflow:hidden;
 }
 
 #gridContainer{

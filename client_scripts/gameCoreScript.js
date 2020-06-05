@@ -59,6 +59,16 @@ for (var i=0; i<document.getElementsByClassName("playerBoxCharacterBox").length;
 }
 // End
 
+//Own Player Character Mat Expander
+document.getElementById("ownPlayerBoxCharacterBox").addEventListener("contextmenu", function(e){
+		document.getElementById("rCModal").style.display = "block";
+		document.getElementById("rCModal").innerHTML = `
+			<div id="displayedPlayerMat" style="background-image:url(${'ATS_Images/Character_Mats/cs_'+e.target.dataset.character+'.png'})"></div>	
+		`;		
+}, false);
+
+// End
+
 // Artwork Only Toggle
 var artworktoggle = false;
 
