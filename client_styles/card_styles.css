@@ -492,6 +492,9 @@ i{
         0.05em 0.05em #adadad;
 }
 
-
-
-
+#draggableCardArea{
+	display:none;
+	height:50px;
+	width:50px;
+	position:fixed;
+}

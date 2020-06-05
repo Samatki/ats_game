@@ -45,10 +45,11 @@ function cardPrinter(cardData, cardSet){
 		category_HTML = '<div class="card_category">'+cardData.type+'</div>'
 	}
 
-	var draggable_status = (cardSet == "game_card_hand")?"true":"false";
+//	var draggable_status = (cardSet == "game_card_hand")?"true":"false";
+// draggable=${draggable_status} 
 	
 	var cardHTML =  `	
-		<div class="${cardSet}" tabindex="-1" draggable=${draggable_status} data-cardId="${cardData.cardId}" >
+		<div class="${cardSet}" tabindex="-1" data-cardId="${cardData.cardId}" >
 			<div class="${cardColour}_card" ></div>
 			<div class="card_classification ${cardColour}_class"></div>
 			<div class="card_title"><b>${cardData.cardTitle}</b></div>

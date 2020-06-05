@@ -1,6 +1,8 @@
 var playerColourStyles = [{ color: "red" }, { color: "cyan" }, { color: "Magenta" }, { color: "SeaShell" }, { color: "Coral" }, { color: "Lime" }];
 const OtherPlayersObj = {OtherPlayers : [{character:"zehuti"},{character:"humareen"},{character:"vak"}]}
 var tempGrid;
+var handMouseDown = false;
+var copiedElement;
 
 var playerDataObj = {
     gameData: {
@@ -548,3 +550,4 @@ document.getElementById("ownPlayerBoxCharacterBox").addEventListener("click", fu
 	document.getElementById("gridContainer").style.display = "block";
 	displayedArea = 0;
 	}, false);
+

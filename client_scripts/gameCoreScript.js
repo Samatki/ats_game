@@ -89,6 +89,53 @@ document.addEventListener('keydown', function(event) {
   }
 });
 
-
-
 //End
+
+//Player Hand Drag
+var handMouseDown = false;	
+for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
+	document.getElementsByClassName("game_card_hand")[l].addEventListener("mousedown", function(e){
+		handMouseDown = true;
+			var closestCopiedElement = e.target.closest(".game_card_hand").cloneNode(true);
+			var copiedElement = e.target.closest(".game_card_hand");
+			copiedElement.style.display = "none";
+			closestCopiedElement.classList.remove("game_card_hand");
+			closestCopiedElement.classList.add("game_card_list") ;
+			document.getElementById("draggableCardArea").innerHTML = "";		
+			closestCopiedElement.style.transform = "scale(0.5)";
+			document.getElementById("draggableCardArea").appendChild(closestCopiedElement);
+			document.getElementById("draggableCardArea").style.bottom = "-100vh";
+			document.getElementById("draggableCardArea").style.right = "-100vw;"
+			
+		console.log("down")
+	}, false);
+}
+/*
+for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
+	document.getElementsByClassName("game_card_hand")[l].addEventListener("mousemove", function(e){
+		if(handMouseDown){
+			
+			document.getElementById("draggableCardArea").style.top = e.clientY + 75 +"px";
+			document.getElementById("draggableCardArea").style.left = e.clientX + 75 +"px";
+		  }
+	}, false);
+}
+*/
+
+document.getElementsByTagName("body")[0].addEventListener('mousemove',function(e){
+	if(handMouseDown){
+		document.getElementById("draggableCardArea").style.display = "block";
+		document.getElementById("draggableCardArea").style.top = e.clientY -75 +"px";
+		document.getElementById("draggableCardArea").style.left = e.clientX -75 +"px";
+	}
+});
+
+document.getElementsByTagName("body")[0].addEventListener('mouseup',function(e){
+	if(handMouseDown){
+		handMouseDown = false;
+		document.getElementById("draggableCardArea").style.display = "none";
+	    for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
+			document.getElementsByClassName("game_card_hand")[l].style.display = "block";
+		}
+	}
+});
