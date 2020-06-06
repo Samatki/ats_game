@@ -14,18 +14,15 @@ for(var i = 0; i < cardList.cards.conflict.length; i++){
 	cardPrint = cardPrint + cardPrinter(cardList.cards.conflict[i], "game_card_list");
 }
 document.getElementById("cardListArea").innerHTML = cardPrint; 
-
 // End
 
 // Discard List Generator
-
 function discardListGen(cardDiscardList){
 	cardPrint = ""
 	cardPrint = cardPrint + "<div style='width:100%; text-align:center; margin-top:30px; margin-bottom:30px;'><span class='cardListHeader'>Discard Pile</span></div>";
 	
 	var cardDiscardObjList = [];
 	cardDiscardList.forEach(function(card){
-		console.log(card[2]);
 		if(card[2] == "B"){
 			cardDiscardObjList.push(cardList.cards.basic_locations.find(function(x){
 				if(x.cardId === card){return x}
@@ -45,23 +42,10 @@ function discardListGen(cardDiscardList){
 	document.getElementById("discardArea").innerHTML = cardPrint; 
 }
 // End
-/*
-// Player Hand Generator
-function handGen(cardList){
-	var counter = 0;
-	var cardPrint = "";
-	while (counter < 6){
-		cardPrint = cardPrint + cardPrinter(cardList.cards.basic_locations[counter], "game_card_hand");
-		counter++;
-	}			
-	document.getElementById("playerHandModal").innerHTML = cardPrint; 
-}
-*/
+
 function handGen(cardHandList){
-	console.log(cardHandList)
 	var cardHandObjList = [];
 	cardHandList.forEach(function(card){
-		console.log(card[2]);
 		if(card[2] == "B"){
 			cardHandObjList.push(cardList.cards.basic_locations.find(function(x){
 				if(x.cardId === card){return x}

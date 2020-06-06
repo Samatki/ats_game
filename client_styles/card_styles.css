@@ -497,4 +497,5 @@ i{
 	height:50px;
 	width:50px;
 	position:fixed;
+	pointer-events:none;
 }

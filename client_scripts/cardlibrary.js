@@ -17,7 +17,7 @@ var cardList = {
             "cardMaxAdditionalPoints": Infinity,
             "cardMaxPlayable": Infinity,
             "cardFunction": false,
-			"cardLocationRestriction": [["MR",3],["VR",3]],
+			"cardLocationRestriction": [["B0R_X_MR4",3],["B0R_X_MR3",3],["B0R_X_MR2",3],["B0R_X_MR1",3],["B0R_X_MR0",3],["B0R_X_PR4",3],["B0R_X_PR3",3],["B0R_X_PR2",3],["B0R_X_PR1",3],["B0R_X_PR0",3]],
             "cardDescription": "Cannot be placed with <span class='distanceModifier'> 3  </span> of the <i>Main Reactor</i>",
             "cardId": "B0B_R_FLB"
         }, {
@@ -732,7 +732,7 @@ var cardList = {
             "cardMaxAdditionalPoints": Infinity,
             "cardMaxPlayable": Infinity,
             "cardFunction": true,
-            "cardLocationRestriction": [["MR",1],["PR",1],["VR",1],["ER",1]],
+            "cardLocationRestriction": [["B0R_X_MR4",3],["B0R_X_MR3",3],["B0R_X_MR2",3],["B0R_X_MR1",3],["B0R_X_MR0",3],["B0R_X_PR4",3],["B0R_X_PR3",3],["B0R_X_PR2",3],["B0R_X_PR1",3],["B0R_X_PR0",3],["B0R_X_PR4",3],["B0R_X_PR3",3],["B0R_X_PR2",3],["B0R_X_PR1",3],["B0R_X_PR0",3],["B0R_X_ER4",3],["B0R_X_ER3",3],["B0R_X_ER2",3],["B0R_X_ER1",3],["B0R_X_ER0",3]],
             "cardDescription": "May only be built adjacent to a <i>Power Reactor</i>. Add a power cube to that Reactor",
             "cardId": "B0S_B_SP"
         }, {

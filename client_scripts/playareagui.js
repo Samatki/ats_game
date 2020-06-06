@@ -15,18 +15,17 @@ var playerDataObj = {
 		playerNo : 1,
         curr_score: 0,
         eg_score: 0,
-        currency: 0,
+        currency: 10,
         secret_obj: null,
         ability_available: null,
         player_race: "qualeen",
 		color : "lime",
 		main_reactor_color : "blue"
     },
-    playerHand: ["B0S_B_CB","B0S_B_CB"],
+    playerHand: ["B0S_B_CB","B0B_R_FLB"],
     playerStationArray: {
         parameters: {
             x: 6,
-//           y: 3,
             infinite: true,
 			grid_transform_string : null
         },
@@ -125,7 +124,6 @@ var playerDataObj = {
 				playerStationArray: {
 					parameters: {
 						x: 3,
-//           			y: 3,
 						infinite: true,
 						grid_transform_string : null
 					},
@@ -155,7 +153,6 @@ var playerDataObj = {
 				playerStationArray: {
 					parameters: {
 						x: 3,
-//           			y: 3,
 						infinite: true,
 						grid_transform_string : null
 					},
@@ -185,7 +182,6 @@ var playerDataObj = {
 				playerStationArray: {
 					parameters: {
 						x: 3,
-//           			y: 3,
 						infinite: true,
 						grid_transform_string : null
 					},
@@ -265,7 +261,6 @@ class OtherPlayGrid extends React.Component {
 
   render() {
     var gridX = this.props.parameters.x;
-//    var gridY = this.state.parameters.y;
     var gridSize = this.props.grid.length;
     var gridStorage = this.props.grid;
 
@@ -285,34 +280,8 @@ class OtherPlayGrid extends React.Component {
 		var xx  = {__html : cardPrinter(cardObj,"game_card_board")}
         return React.createElement("div", { className: "stationCardSpace stationCardPlaced " + newRowStyle, "data-index": index, dangerouslySetInnerHTML : xx});
       }
-
-/*      var placeable = neighbourCheck(index, gridX, gridSize);
-      var visibility = false;
-	  var observationDomeCheck = true;
-
-      for (var z = 0; z < placeable.length; z++) {
-        if (gridStorage[placeable[z]] == "B0S_P_OD") {
-		  observationDomeCheck = false;
-          break;
-        }
-	  }
-	  
-      for (var z = 0; z < placeable.length; z++) {
-        if (gridStorage[placeable[z]] && observationDomeCheck) {
-          visibility = true;
-          break;
-        }
-      }
-
-      if (visibility) {
-        return React.createElement("div", { className: "stationCardSpace stationCardPlaceable "+ newRowStyle, "data-index": index }, index);
-      } else {
-        return React.createElement("div", { className: "stationCardSpace stationCardInvisible "+ newRowStyle, "data-index": index }, index);
-      }
-*/
     });
     return (
- //     React.createElement("div", { id: "playGridroot", className: "gameMat" } ,
       React.createElement("div", { className: "otherGridContainer", Style: "transform:scale(1); display:none;", "data-player":this.props.playerNo},
       testm))//);
 }}
@@ -321,13 +290,11 @@ class PlayGrid extends React.Component {
 
   render() {
     var gridX = this.props.parameters.x;
-//    var gridY = this.state.parameters.y;
     var gridSize = this.props.grid.length;
     var gridStorage = this.props.grid;
 
     var testm = this.props.grid.map(function (card, index) {
-	   var newRowStyle = (index % gridX) == 0 ? "newRowStyle" : "";
-		
+    var newRowStyle = (index % gridX) == 0 ? "newRowStyle" : "";
       if (card) {
 		 var cardObj = {};
 		 if(card[2] == "B"){
@@ -368,7 +335,6 @@ class PlayGrid extends React.Component {
 
     });
     return (
- //     React.createElement("div", { id: "playGridroot", className: "gameMat" } ,
       React.createElement("div", { id: "gridContainer", Style: "transform:scale(1);" },
       testm))//);
 }}
@@ -390,8 +356,6 @@ class GameReactHandler extends React.Component {
 		console.log("TEST2");
 	}
 
-	
-
 	render() {
 		var other_player_stations = this.state.otherPlayersData.otherPlayers.map(function(playerItem){
 			return React.createElement(OtherPlayGrid, {...playerItem.playerStationArray, playerNo : playerItem.playerNo}, null)
@@ -409,7 +373,6 @@ class GameReactHandler extends React.Component {
 		other_player_stations),
 		
 		React.createElement("div", { id: "playerHandModal" }, null)
-//		React.createElement(PlayGrid, {...this.state.playerStationArray})
 		);
   }}
 
@@ -441,20 +404,6 @@ var mouseDown;
 var gridPositionX;
 var initialgridPositionX = document.getElementById("gridContainer").getBoundingClientRect().left;
 var initialgridPositionY = document.getElementById("gridContainer").getBoundingClientRect().top;
-
-/*
-window.addEventListener('resize', function(){
-  console.log("GG"+Math.random());
-  var gridPositionXStore = document.getElementById("gridContainer").style.left;
-  var gridPositionYStore = document.getElementById("gridContainer").style.top;
-  document.getElementById("gridContainer").style.left = 0
-  document.getElementById("gridContainer").style.top = 0;
-  initialgridPositionX = document.getElementById("gridContainer").getBoundingClientRect().left;
-  initialgridPositionY = document.getElementById("gridContainer").getBoundingClientRect().top;
-  document.getElementById("gridContainer").style.left = gridPositionXStore;
-  document.getElementById("gridContainer").style.top = gridPositionYStore;
-});
-*/
 
 document.getElementById("playGridroot").addEventListener('mousedown',function(e){
 	if(displayedArea){
@@ -508,6 +457,16 @@ document.body.addEventListener('mouseleave',function(e){
   } else {
 	document.getElementById("gridContainer").style.cursor = "";
   }
+  if(handMouseDown){
+	transferredCard = "";
+	document.getElementById("draggableCardArea").style.top = "200vh";
+	document.getElementById("draggableCardArea").style.left = "200vw;"
+	document.body.style.cursor = "";
+	for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
+		document.getElementsByClassName("game_card_hand")[l].style.display = "block";
+	}
+  }
+  handMouseDown = false;
 });
 
 document.getElementById("playGridroot").addEventListener('mousemove',function(e){
@@ -523,6 +482,11 @@ document.getElementById("playGridroot").addEventListener('mousemove',function(e)
     document.getElementById("gridContainer").style.left = ((gridPositionX - initialgridPositionX) + (e.clientX - initialPositionX)).toString() + "px";
     document.getElementById("gridContainer").style.top = ((gridPositionY - initialgridPositionY) + (e.clientY - initialPositionY)).toString() + "px";
 	}
+  }
+  if(handMouseDown){
+	document.getElementById("gridContainer").style.cursor = "none";  
+  } else {
+	document.getElementById("gridContainer").style.cursor = ""; 	  
   }
   e.preventDefault();
 })
@@ -550,4 +514,3 @@ document.getElementById("ownPlayerBoxCharacterBox").addEventListener("click", fu
 	document.getElementById("gridContainer").style.display = "block";
 	displayedArea = 0;
 	}, false);
-
