@@ -1,3 +1,5 @@
+var powerArray = ["B0R_X_MR4","B0R_X_MR3","B0R_X_MR2","B0R_X_MR1","B0R_X_PR4","B0R_X_PR3","B0R_X_PR2","B0R_X_PR1","B0R_X_VR4","B0R_X_VR3","B0R_X_VR2","B0R_X_VR1","B0R_X_ER4","B0R_X_ER3","B0R_X_ER2","B0R_X_ER1"];
+
 var cardList = {
     cards: {
         basic_locations: [{

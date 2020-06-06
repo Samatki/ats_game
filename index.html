@@ -22,6 +22,9 @@ function playSound(){
 		var dummySetup = {gameId:53455}
 		document.addEventListener("DOMContentLoaded", function(){
 			document.getElementById("gameLogTitle").innerHTML = "Among The Stars<br>Game #" + dummySetup.gameId.toString();
+			var initialgridPositionX = document.getElementById("gridContainer").getBoundingClientRect().left;
+			var initialgridPositionY = document.getElementById("gridContainer").getBoundingClientRect().top;
+
 			});
 		/*
 		document.addEventListener("DOMContentLoaded", function(){
@@ -31,6 +34,21 @@ function playSound(){
 			},100);
 		});
 		*/
+		//Initiator Flags;
+		var transferredCard = "";
+		var artworktoggle = false;
+		var cardPlaced = false;
+		var handMouseDown = false;
+		var tilePlaceHelper = true;
+		var tempGrid;
+		var copiedElement;
+		var mouseDown;
+		var gridPositionX;
+
+		
+
+		
+		
 	</script>
 	
 

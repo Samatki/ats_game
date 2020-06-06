@@ -1,5 +1,3 @@
-var transferredCard = "";
-
 // RightClick Zoom Functions
 document.addEventListener("contextmenu", function(e){
     e.preventDefault();
@@ -70,7 +68,6 @@ document.getElementById("ownPlayerBoxCharacterBox").addEventListener("contextmen
 // End
 
 // Artwork Only Toggle
-var artworktoggle = false;
 
 document.addEventListener('keydown', function(event) {
   if (event.ctrlKey && event.key === 'm') {
@@ -90,9 +87,8 @@ document.addEventListener('keydown', function(event) {
 });
 
 //End
-var cardPlaced = false;
+
 //Player Hand Drag
-var handMouseDown = false;	
 for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
 	document.getElementsByClassName("game_card_hand")[l].addEventListener("mousedown", function(e){
 		if(!displayedArea && !cardPlaced){
@@ -116,7 +112,7 @@ for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
 	}, false);
 
 }
-var tilePlaceHelper = true;
+
 document.body.addEventListener('mousemove',function(e){
 	if(handMouseDown){
 		document.getElementById("draggableCardArea").style.top = e.clientY -75 +"px";
@@ -150,6 +146,15 @@ document.body.addEventListener('mouseup',function(e){
 				cardObj = cardList.cards.reactors.find(x => x.cardId === transferredCard);	
 			}
 			e.target.innerHTML = cardPrinter(cardObj,"game_card_board");
+			e.target.addEventListener("contextmenu", function(e){
+				var closestElement = e.target.closest(".game_card_board").cloneNode(true);
+				document.getElementById("rCModal").style.display = "block";
+				closestElement.classList.remove("game_card_board");
+				closestElement.classList.add("game_card_list") ;
+				document.getElementById("rCModal").innerHTML = "";		
+				closestElement.style.transform = "scale(1.33)";
+				document.getElementById("rCModal").appendChild(closestElement);
+			}, false);
 			cardPlaced = true;
 		} else {
 			document.getElementById("draggableCardArea").style.display = "none";
@@ -161,10 +166,7 @@ document.body.addEventListener('mouseup',function(e){
 	}
 });
 
-var powerArray = ["B0R_X_MR4","B0R_X_MR3","B0R_X_MR2","B0R_X_MR1","B0R_X_PR4","B0R_X_PR3","B0R_X_PR2","B0R_X_PR1","B0R_X_VR4","B0R_X_VR3","B0R_X_VR2","B0R_X_VR1","B0R_X_ER4","B0R_X_ER3","B0R_X_ER2","B0R_X_ER1"];
-
-function positionCheck(cardid,placedIndex,playerObj){
-	
+function positionCheck(cardid,placedIndex,playerObj){	
 	var result = false;
 	
     var cardObj = {};

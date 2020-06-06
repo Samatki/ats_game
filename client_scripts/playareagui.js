@@ -1,8 +1,4 @@
 var playerColourStyles = [{ color: "red" }, { color: "cyan" }, { color: "Magenta" }, { color: "SeaShell" }, { color: "Coral" }, { color: "Lime" }];
-const OtherPlayersObj = {OtherPlayers : [{character:"zehuti"},{character:"humareen"},{character:"vak"}]}
-var tempGrid;
-var handMouseDown = false;
-var copiedElement;
 
 var playerDataObj = {
     gameData: {
@@ -355,6 +351,10 @@ class GameReactHandler extends React.Component {
 	componentWillUnmount() {
 		console.log("TEST2");
 	}
+	
+	processPlacement(e){
+		
+	}
 
 	render() {
 		var other_player_stations = this.state.otherPlayersData.otherPlayers.map(function(playerItem){
@@ -368,7 +368,7 @@ class GameReactHandler extends React.Component {
 	
 		React.createElement("div", { id: "gridReset" },"Reset Grid"),
 		React.createElement(OwnPlayerMat, {...this.state.playerData, turnOrder : playerDataObj.gameData.turnOrder}),
-		React.createElement("div", { id: "playGridroot", className: "gameMat" }, 
+		React.createElement("div", { id: "playGridroot", className: "gameMat", onMouseUp : this.processPlacement }, 
 		React.createElement(PlayGrid, {...this.state.playerStationArray}), 
 		other_player_stations),
 		
@@ -400,10 +400,6 @@ document.getElementById("playGridroot").addEventListener('wheel',function(e){
   initialgridPositionY = elementS.getBoundingClientRect().top;
 })
 
-var mouseDown;
-var gridPositionX;
-var initialgridPositionX = document.getElementById("gridContainer").getBoundingClientRect().left;
-var initialgridPositionY = document.getElementById("gridContainer").getBoundingClientRect().top;
 
 document.getElementById("playGridroot").addEventListener('mousedown',function(e){
 	if(displayedArea){
