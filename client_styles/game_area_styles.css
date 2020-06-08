@@ -6,8 +6,8 @@
   top:0;
   left:0;
   animation-name: loadingCover;
-  animation-duration: 0.5s;
-  animation-delay: 0s;
+  animation-duration: 3s;
+  animation-delay: 1s;
   animation-fill-mode: forwards;
   z-index:999;
 }

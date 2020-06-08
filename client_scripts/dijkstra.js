@@ -20,13 +20,13 @@ function dijkstraAlgo(gridA,startIndex,finishIndex){
 	}));
 */
 
-console.log("Finish Index is " + finishIndex.toString());
+// console.log("Finish Index is " + finishIndex.toString());
 
 	var dijkstraGrid = gridA.grid.map(function(x, i){
 			return (x.a) ? [i,false,Infinity] : [i,true,Infinity]
 		});
-	console.log("Dijkstra Grid is ");
-	console.log(dijkstraGrid);
+//	console.log("Dijkstra Grid is ");
+//	console.log(dijkstraGrid);
 
 	var pathLength = 1;
 	dijkstraGrid[startIndex][2] = 0;

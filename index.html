@@ -24,7 +24,7 @@ function playSound(){
 			document.getElementById("gameLogTitle").innerHTML = "Among The Stars<br>Game #" + dummySetup.gameId.toString();
 			var initialgridPositionX = document.getElementById("gridContainer").getBoundingClientRect().left;
 			var initialgridPositionY = document.getElementById("gridContainer").getBoundingClientRect().top;
-
+			generateListeners()
 			});
 		/*
 		document.addEventListener("DOMContentLoaded", function(){
@@ -41,13 +41,10 @@ function playSound(){
 		var handMouseDown = false;
 		var tilePlaceHelper = true;
 		var tempGrid;
-		var copiedElement;
+		var copiedElement = null;
 		var mouseDown;
 		var gridPositionX;
-
-		
-
-		
+		var displayedArea = 0;		
 		
 	</script>
 	

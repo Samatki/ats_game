@@ -21,51 +21,176 @@ for (var i=0; i<document.getElementsByClassName("game_card_list").length; i++){
 	}, false);
 }
 
+
+function generateListeners(){
 //Hand Card Viewer
-for (var i=0; i<document.getElementsByClassName("game_card_hand").length; i++){
-	document.getElementsByClassName("game_card_hand")[i].addEventListener("contextmenu", function(e){
-		var closestElement = e.target.closest(".game_card_hand").cloneNode(true);
-		document.getElementById("rCModal").style.display = "block";
-		closestElement.classList.remove("game_card_hand");
-		closestElement.classList.add("game_card_list") ;
-		document.getElementById("rCModal").innerHTML = "";		
-		closestElement.style.transform = "scale(1.33)";
-		document.getElementById("rCModal").appendChild(closestElement);
-	}, false);
-}
+	for (var i=0; i<document.getElementsByClassName("game_card_hand").length; i++){
+//		console.log("Hand Card " + i);
+		document.getElementsByClassName("game_card_hand")[i].addEventListener("contextmenu", function(e){
+			var closestElement = e.target.closest(".game_card_hand").cloneNode(true);
+			document.getElementById("rCModal").style.display = "block";
+			closestElement.classList.remove("game_card_hand");
+			closestElement.classList.add("game_card_list") ;
+			document.getElementById("rCModal").innerHTML = "";		
+			closestElement.style.transform = "scale(1.33)";
+			document.getElementById("rCModal").appendChild(closestElement);
+		}, false);
+	}
 
 //Board Card Viewer
-for (var i=0; i<document.getElementsByClassName("stationCardPlaced").length; i++){
-	document.getElementsByClassName("stationCardPlaced")[i].addEventListener("contextmenu", function(e){
-		var closestElement = e.target.closest(".game_card_board").cloneNode(true);
-		document.getElementById("rCModal").style.display = "block";
-		closestElement.classList.remove("game_card_board");
-		closestElement.classList.add("game_card_list") ;
-		document.getElementById("rCModal").innerHTML = "";		
-		closestElement.style.transform = "scale(1.33)";
-		document.getElementById("rCModal").appendChild(closestElement);
-	}, false);
-}
+	for (var i=0; i<document.getElementsByClassName("stationCardPlaced").length; i++){
+//		console.log("Station Card Placed " + i);
+		document.getElementsByClassName("stationCardPlaced")[i].addEventListener("contextmenu", function(e){
+			var closestElement = e.target.closest(".game_card_board").cloneNode(true);
+			document.getElementById("rCModal").style.display = "block";
+			closestElement.classList.remove("game_card_board");
+			closestElement.classList.add("game_card_list") ;
+			document.getElementById("rCModal").innerHTML = "";		
+			closestElement.style.transform = "scale(1.33)";
+			document.getElementById("rCModal").appendChild(closestElement);
+		}, false);
+	}
 
 //Other Player Character Mat Expander
-for (var i=0; i<document.getElementsByClassName("playerBoxCharacterBox").length; i++){
-	document.getElementsByClassName("playerBoxCharacterBox")[i].addEventListener("contextmenu", function(e){
-		document.getElementById("rCModal").style.display = "block";
-		document.getElementById("rCModal").innerHTML = `
-			<div id="displayedPlayerMat" style="background-image:url(${'ATS_Images/Character_Mats/cs_'+e.target.dataset.character+'.png'})"></div>	
-		`;		
-	}, false);
-}
+	for (var i=0; i<document.getElementsByClassName("playerBoxCharacterBox").length; i++){
+		document.getElementsByClassName("playerBoxCharacterBox")[i].addEventListener("contextmenu", function(e){
+			document.getElementById("rCModal").style.display = "block";
+			document.getElementById("rCModal").innerHTML = `
+				<div id="displayedPlayerMat" style="background-image:url(${'ATS_Images/Character_Mats/cs_'+e.target.dataset.character+'.png'})"></div>	
+			`;		
+		}, false);
+	}
 // End
 
 //Own Player Character Mat Expander
-document.getElementById("ownPlayerBoxCharacterBox").addEventListener("contextmenu", function(e){
-		document.getElementById("rCModal").style.display = "block";
-		document.getElementById("rCModal").innerHTML = `
-			<div id="displayedPlayerMat" style="background-image:url(${'ATS_Images/Character_Mats/cs_'+e.target.dataset.character+'.png'})"></div>	
-		`;		
-}, false);
+	document.getElementById("ownPlayerBoxCharacterBox").addEventListener("contextmenu", function(e){
+			document.getElementById("rCModal").style.display = "block";
+			document.getElementById("rCModal").innerHTML = `
+				<div id="displayedPlayerMat" style="background-image:url(${'ATS_Images/Character_Mats/cs_'+e.target.dataset.character+'.png'})"></div>	
+			`;		
+	}, false);
 // End
+
+//Player Hand Drag
+	for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
+		document.getElementsByClassName("game_card_hand")[l].addEventListener("mousedown", function(e){
+			if(!displayedArea && !cardPlaced && e.button == 0){
+//				console.log("ping")
+				handMouseDown = true;
+				var closestCopiedElement = e.target.closest(".game_card_hand").cloneNode(true);
+				copiedElement = e.target.closest(".game_card_hand");
+				transferredCard = e.target.closest(".game_card_hand").dataset.cardid;
+				copiedElement.style.display = "none";
+				closestCopiedElement.classList.remove("game_card_hand");
+				closestCopiedElement.classList.add("game_card_list") ;
+				document.getElementById("draggableCardArea").innerHTML = "";		
+				closestCopiedElement.style.transform = "scale(0.5)";
+				document.getElementById("draggableCardArea").appendChild(closestCopiedElement);
+				document.getElementById("draggableCardArea").style.top = "200vh";
+				document.getElementById("draggableCardArea").style.left = "200vw;"
+				document.getElementById("draggableCardArea").style.display = "block";
+				document.body.style.cursor = "none";
+				document.getElementById("draggableCardArea").style.top = e.clientY -75 +"px";
+				document.getElementById("draggableCardArea").style.left = e.clientX -75 +"px";
+			}
+		}, false);
+	}
+
+	document.getElementById("playGridroot").addEventListener('wheel',function(e){
+		if(displayedArea){
+			for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+				if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
+					var elementS = document.getElementsByClassName("otherGridContainer")[i];	
+				}
+			}	    
+		}else{
+			var elementS = document.getElementById("gridContainer");
+		}		
+	  mouseDown = false;
+	  elementS.style.cursor = ""
+	  e.preventDefault();;
+	  m = elementS.style.transform.split('').slice(6,-1).join('');
+	  var newScale = ((m/1 - Math.sign(e.deltaY)*0.2) < 0.2)? 0.2:(m/1 - Math.sign(e.deltaY)*0.2);
+	  elementS.style.transform = "scale("+ (newScale).toString() +")";
+	  initialgridPositionX = elementS.getBoundingClientRect().left;
+	  initialgridPositionY = elementS.getBoundingClientRect().top;
+	})
+
+
+	document.querySelector("#playGridroot").addEventListener('mousedown',function(e){
+		if(displayedArea){
+			for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+				if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
+					var elementS = document.getElementsByClassName("otherGridContainer")[i];	
+				}
+			}	    
+		}else{
+			var elementS = document.getElementById("gridContainer");
+		}	
+	  elementS.style.cursor = "grabbing";
+	  var gridPositionXStore = elementS.style.left;
+	  var gridPositionYStore = elementS.style.top;
+	  elementS.style.left = 0
+	  elementS.style.top = 0;
+	  initialgridPositionX = elementS.getBoundingClientRect().left;
+	  initialgridPositionY = elementS.getBoundingClientRect().top;
+	  elementS.style.left = gridPositionXStore;
+	  elementS.style.top = gridPositionYStore;
+	  
+	  initialPositionX = e.clientX;
+	  initialPositionY = e.clientY;
+	  gridPositionX = elementS.getBoundingClientRect().left;
+	  gridPositionY = elementS.getBoundingClientRect().top;
+
+	  mouseDown = true;
+	});
+
+	document.getElementById("playGridroot").addEventListener('mousemove',function(e){
+	  if(mouseDown){
+		if(displayedArea){
+			for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+				if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
+					document.getElementsByClassName("otherGridContainer")[i].style.left = ((gridPositionX - initialgridPositionX) + (e.clientX - initialPositionX)).toString() + "px";
+					document.getElementsByClassName("otherGridContainer")[i].style.top = ((gridPositionY - initialgridPositionY) + (e.clientY - initialPositionY)).toString() + "px";				
+				}
+			}
+		} else {
+		document.getElementById("gridContainer").style.left = ((gridPositionX - initialgridPositionX) + (e.clientX - initialPositionX)).toString() + "px";
+		document.getElementById("gridContainer").style.top = ((gridPositionY - initialgridPositionY) + (e.clientY - initialPositionY)).toString() + "px";
+		}
+	  }
+	  if(handMouseDown){
+		document.getElementById("gridContainer").style.cursor = "none";  
+	  } else {
+	//	document.getElementById("gridContainer").style.cursor = ""; 	  
+	  }
+	  e.preventDefault();
+	})
+
+	for (var l=0; l<document.getElementsByClassName("playerBox").length; l++){
+		document.getElementsByClassName("playerBox")[l].addEventListener("click", function(e){
+		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+			document.getElementsByClassName("otherGridContainer")[i].style.display = "none";		
+		}
+		var gameFind = e.target.closest('.playerBox').dataset.player;
+		document.getElementById("gridContainer").style.display = "none";
+		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+			if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == gameFind){
+				document.getElementsByClassName("otherGridContainer")[i].style.display = "block";
+				displayedArea = gameFind;
+			}
+		}	
+		}, false);
+	}
+
+	document.getElementById("ownPlayerBoxCharacterBox").addEventListener("click", function(e){
+		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+			document.getElementsByClassName("otherGridContainer")[i].style.display = "none";		
+		}
+		document.getElementById("gridContainer").style.display = "block";
+		displayedArea = 0;
+		}, false);	
+}
 
 // Artwork Only Toggle
 
@@ -87,32 +212,6 @@ document.addEventListener('keydown', function(event) {
 });
 
 //End
-
-//Player Hand Drag
-for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
-	document.getElementsByClassName("game_card_hand")[l].addEventListener("mousedown", function(e){
-		if(!displayedArea && !cardPlaced){
-		handMouseDown = true;
-			var closestCopiedElement = e.target.closest(".game_card_hand").cloneNode(true);
-			var copiedElement = e.target.closest(".game_card_hand");
-			transferredCard = e.target.closest(".game_card_hand").dataset.cardid;
-			copiedElement.style.display = "none";
-			closestCopiedElement.classList.remove("game_card_hand");
-			closestCopiedElement.classList.add("game_card_list") ;
-			document.getElementById("draggableCardArea").innerHTML = "";		
-			closestCopiedElement.style.transform = "scale(0.5)";
-			document.getElementById("draggableCardArea").appendChild(closestCopiedElement);
-			document.getElementById("draggableCardArea").style.top = "200vh";
-			document.getElementById("draggableCardArea").style.left = "200vw;"
-			document.getElementById("draggableCardArea").style.display = "block";
-			document.body.style.cursor = "none";
-			document.getElementById("draggableCardArea").style.top = e.clientY -75 +"px";
-			document.getElementById("draggableCardArea").style.left = e.clientX -75 +"px";
-		}
-	}, false);
-
-}
-
 document.body.addEventListener('mousemove',function(e){
 	if(handMouseDown){
 		document.getElementById("draggableCardArea").style.top = e.clientY -75 +"px";
@@ -164,6 +263,42 @@ document.body.addEventListener('mouseup',function(e){
 			}
 		}
 	}
+});
+
+document.body.addEventListener('mouseup',function(e){
+  mouseDown = false;
+  if(displayedArea){
+		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+			if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
+				document.getElementsByClassName("otherGridContainer")[i].style.cursor = "";	
+			}
+		}	  
+  } else {
+	document.getElementById("gridContainer").style.cursor = "";
+  }
+});
+
+document.body.addEventListener('mouseleave',function(e){
+  mouseDown = false;
+  if(displayedArea){
+		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+			if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
+				document.getElementsByClassName("otherGridContainer")[i].style.cursor = "";			
+			}
+		}	  
+  } else {
+	document.getElementById("gridContainer").style.cursor = "";
+  }
+  if(handMouseDown){
+	transferredCard = "";
+	document.getElementById("draggableCardArea").style.top = "200vh";
+	document.getElementById("draggableCardArea").style.left = "200vw;"
+	document.body.style.cursor = "";
+	for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
+		document.getElementsByClassName("game_card_hand")[l].style.display = "block";
+	}
+  }
+  handMouseDown = false;
 });
 
 function positionCheck(cardid,placedIndex,playerObj){	

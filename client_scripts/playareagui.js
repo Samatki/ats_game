@@ -1,5 +1,145 @@
 var playerColourStyles = [{ color: "red" }, { color: "cyan" }, { color: "Magenta" }, { color: "SeaShell" }, { color: "Coral" }, { color: "Lime" }];
 
+var playerDataObj2 = {
+    gameData: {
+        round: 1,
+        turn: 1,
+		turnOrder : false
+    },
+    playerData: {
+		playerName: "Sam00",
+		playerNo : 1,
+        curr_score: 0,
+        eg_score: 0,
+        currency: 5,
+        secret_obj: null,
+        ability_available: null,
+        player_race: "qualeen",
+		color : "lime",
+		main_reactor_color : "blue"
+    },
+    playerHand: ["B0S_B_CB","B0B_R_FLB","B0S_P_OD"],
+    playerStationArray: {
+        parameters: {
+            x: 3,
+            infinite: true,
+			grid_transform_string : null
+        },
+        grid: [
+            false,
+            "B0B_R_FLB",
+            false,
+            "B0B_R_FLB", 
+			"B0S_B_CB",
+			"B0S_P_OD",
+            false,
+            false,
+            false			
+        ],
+        gridSchema: {
+            cardPresence: false,
+            card_obj: {}
+        }
+    },
+	otherPlayersData : {
+		numberOther : 3,
+		otherPlayers : [
+			{
+				playerNo : 2,
+				playerName : "a",
+				playerScore : 0,
+				currency:0,
+				eg_score : 0,
+				ability_available : null,
+				player_race : "zehuti",
+				color : "red",
+				main_reactor_color : "red",
+				playerStationArray: {
+					parameters: {
+						x: 3,
+						infinite: true,
+						grid_transform_string : null
+					},
+					grid: [
+						false,
+						"B0B_R_FLB",
+						false,
+						"B0B_R_FLB", 
+						"B0S_B_CB",
+						"B0S_P_OD",
+						false,
+						false,
+						false
+					]
+				}
+			}, 
+			{
+				playerNo : 3,
+				playerName : "b",
+				playerScore : 0,
+				eg_score : 0,
+				currency:0,
+				ability_available : null,
+				player_race : "vak",
+				color : "cyan",
+				main_reactor_color : "vak",
+				playerStationArray: {
+					parameters: {
+						x: 3,
+						infinite: true,
+						grid_transform_string : null
+					},
+					grid: [
+						false,
+						"B0B_R_FLB",
+						false,
+						"B0B_R_FLB", 
+						"B0S_B_CB",
+						"B0S_P_OD",
+						false,
+						false,
+						false
+					]
+				}
+			} , 
+			{
+				playerNo : 4,
+				playerName : "c",
+				playerScore : 0,
+				eg_score : 0,
+				currency:0,
+				ability_available : null,
+				player_race : "humareen",
+				color : "SeaShell",
+				main_reactor_color : "green",
+				playerStationArray: {
+					parameters: {
+						x: 3,
+						infinite: true,
+						grid_transform_string : null
+					},
+					grid: [
+						false,
+						"B0B_R_FLB",
+						false,
+						"B0B_R_FLB", 
+						"B0S_B_CB",
+						"B0S_P_OD",
+						"B0B_R_FLB",
+						false,
+						false
+					]
+				}
+			}
+		
+		]
+	},
+	discardPile : {
+		    cards: ["B0S_B_CB","B0S_B_CB"]
+		
+	}
+};
+
 var playerDataObj = {
     gameData: {
         round: 1,
@@ -198,8 +338,7 @@ var playerDataObj = {
 		]
 	},
 	discardPile : {
-		    cards: ["B0S_B_CB","B0S_B_CB"]
-		
+		    cards: ["B0S_B_CB","B0S_B_CB","B0S_P_OD"]
 	}
 };
 
@@ -283,7 +422,7 @@ class OtherPlayGrid extends React.Component {
 }}
 
 class PlayGrid extends React.Component {
-
+	
   render() {
     var gridX = this.props.parameters.x;
     var gridSize = this.props.grid.length;
@@ -302,7 +441,7 @@ class PlayGrid extends React.Component {
 		}
 		  
 		var xx  = {__html : cardPrinter(cardObj,"game_card_board")}
-        return React.createElement("div", { className: "stationCardSpace stationCardPlaced " + newRowStyle, "data-index": index, dangerouslySetInnerHTML : xx});
+        return React.createElement("div", { className: "stationCardSpace stationCardPlaced " + newRowStyle, "data-index": index, dangerouslySetInnerHTML : xx})
       }
 
       var placeable = neighbourCheck(index, gridX, gridSize);
@@ -340,6 +479,7 @@ class GameReactHandler extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = playerDataObj;
+		this.state.checkBoxFlag = false;
 	}
 
 	componentDidMount() {
@@ -353,13 +493,29 @@ class GameReactHandler extends React.Component {
 	}
 	
 	processPlacement(e){
-		
+//		console.log("test2");
+//		console.log(document.getElementById("playGridRoot"));
+		if(cardPlaced){
+			console.log(this.state.checkBoxFlag);
+		    this.setState(playerDataObj2);
+			mouseDown = false;
+			cardPlaced = false;
+			handMouseDown = false;			
+		}
+		copiedElement = null;
+	}
+	
+	componentDidUpdate(){
+		handGen(this.state.playerHand);
+		generateListeners();		
 	}
 
 	render() {
+
 		var other_player_stations = this.state.otherPlayersData.otherPlayers.map(function(playerItem){
 			return React.createElement(OtherPlayGrid, {...playerItem.playerStationArray, playerNo : playerItem.playerNo}, null)
 		});
+//		console.log("Rendered")
 		
 		return React.createElement("div", null,
 	
@@ -368,7 +524,7 @@ class GameReactHandler extends React.Component {
 	
 		React.createElement("div", { id: "gridReset" },"Reset Grid"),
 		React.createElement(OwnPlayerMat, {...this.state.playerData, turnOrder : playerDataObj.gameData.turnOrder}),
-		React.createElement("div", { id: "playGridroot", className: "gameMat", onMouseUp : this.processPlacement }, 
+		React.createElement("div", { key : (parseInt(Math.random()*1000000000)).toString(), id: "playGridroot", className: "gameMat", onMouseUp : this.processPlacement.bind(this) }, 
 		React.createElement(PlayGrid, {...this.state.playerStationArray}), 
 		other_player_stations),
 		
@@ -377,136 +533,3 @@ class GameReactHandler extends React.Component {
   }}
 
 ReactDOM.render(React.createElement(GameReactHandler, null), document.getElementById('reactContainer'));
-
-var displayedArea = 0;
-
-document.getElementById("playGridroot").addEventListener('wheel',function(e){
-	if(displayedArea){
-		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
-			if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
-				var elementS = document.getElementsByClassName("otherGridContainer")[i];	
-			}
-		}	    
-	}else{
-		var elementS = document.getElementById("gridContainer");
-	}		
-  mouseDown = false;
-  elementS.style.cursor = ""
-  e.preventDefault();;
-  m = elementS.style.transform.split('').slice(6,-1).join('');
-  var newScale = ((m/1 - Math.sign(e.deltaY)*0.2) < 0.2)? 0.2:(m/1 - Math.sign(e.deltaY)*0.2);
-  elementS.style.transform = "scale("+ (newScale).toString() +")";
-  initialgridPositionX = elementS.getBoundingClientRect().left;
-  initialgridPositionY = elementS.getBoundingClientRect().top;
-})
-
-
-document.getElementById("playGridroot").addEventListener('mousedown',function(e){
-	if(displayedArea){
-		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
-			if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
-				var elementS = document.getElementsByClassName("otherGridContainer")[i];	
-			}
-		}	    
-	}else{
-		var elementS = document.getElementById("gridContainer");
-	}	
-  elementS.style.cursor = "grabbing";
-  var gridPositionXStore = elementS.style.left;
-  var gridPositionYStore = elementS.style.top;
-  elementS.style.left = 0
-  elementS.style.top = 0;
-  initialgridPositionX = elementS.getBoundingClientRect().left;
-  initialgridPositionY = elementS.getBoundingClientRect().top;
-  elementS.style.left = gridPositionXStore;
-  elementS.style.top = gridPositionYStore;
-  
-  initialPositionX = e.clientX;
-  initialPositionY = e.clientY;
-  gridPositionX = elementS.getBoundingClientRect().left;
-  gridPositionY = elementS.getBoundingClientRect().top;
-
-  mouseDown = true;
-});
-
-document.body.addEventListener('mouseup',function(e){
-  mouseDown = false;
-  if(displayedArea){
-		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
-			if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
-				document.getElementsByClassName("otherGridContainer")[i].style.cursor = "";	
-			}
-		}	  
-  } else {
-	document.getElementById("gridContainer").style.cursor = "";
-  }
-});
-
-document.body.addEventListener('mouseleave',function(e){
-  mouseDown = false;
-  if(displayedArea){
-		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
-			if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
-				document.getElementsByClassName("otherGridContainer")[i].style.cursor = "";			
-			}
-		}	  
-  } else {
-	document.getElementById("gridContainer").style.cursor = "";
-  }
-  if(handMouseDown){
-	transferredCard = "";
-	document.getElementById("draggableCardArea").style.top = "200vh";
-	document.getElementById("draggableCardArea").style.left = "200vw;"
-	document.body.style.cursor = "";
-	for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
-		document.getElementsByClassName("game_card_hand")[l].style.display = "block";
-	}
-  }
-  handMouseDown = false;
-});
-
-document.getElementById("playGridroot").addEventListener('mousemove',function(e){
-  if(mouseDown){
-	if(displayedArea){
-		for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
-			if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
-				document.getElementsByClassName("otherGridContainer")[i].style.left = ((gridPositionX - initialgridPositionX) + (e.clientX - initialPositionX)).toString() + "px";
-				document.getElementsByClassName("otherGridContainer")[i].style.top = ((gridPositionY - initialgridPositionY) + (e.clientY - initialPositionY)).toString() + "px";				
-			}
-		}
-	} else {
-    document.getElementById("gridContainer").style.left = ((gridPositionX - initialgridPositionX) + (e.clientX - initialPositionX)).toString() + "px";
-    document.getElementById("gridContainer").style.top = ((gridPositionY - initialgridPositionY) + (e.clientY - initialPositionY)).toString() + "px";
-	}
-  }
-  if(handMouseDown){
-	document.getElementById("gridContainer").style.cursor = "none";  
-  } else {
-	document.getElementById("gridContainer").style.cursor = ""; 	  
-  }
-  e.preventDefault();
-})
-
-for (var l=0; l<document.getElementsByClassName("playerBox").length; l++){
-	document.getElementsByClassName("playerBox")[l].addEventListener("click", function(e){
-	for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
-		document.getElementsByClassName("otherGridContainer")[i].style.display = "none";		
-	}
-	var gameFind = e.target.closest('.playerBox').dataset.player;
-	document.getElementById("gridContainer").style.display = "none";
-	for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
-		if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == gameFind){
-			document.getElementsByClassName("otherGridContainer")[i].style.display = "block";
-			displayedArea = gameFind;
-		}
-	}	
-	}, false);
-}
-
-document.getElementById("ownPlayerBoxCharacterBox").addEventListener("click", function(e){
-	for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
-		document.getElementsByClassName("otherGridContainer")[i].style.display = "none";		
-	}
-	document.getElementById("gridContainer").style.display = "block";
-	displayedArea = 0;
-	}, false);
