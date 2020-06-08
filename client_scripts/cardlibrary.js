@@ -19,7 +19,7 @@ var cardList = {
             "cardMaxAdditionalPoints": Infinity,
             "cardMaxPlayable": Infinity,
             "cardFunction": false,
-			"cardLocationRestriction": [["B0R_X_MR4",3],["B0R_X_MR3",3],["B0R_X_MR2",3],["B0R_X_MR1",3],["B0R_X_MR0",3],["B0R_X_PR4",3],["B0R_X_PR3",3],["B0R_X_PR2",3],["B0R_X_PR1",3],["B0R_X_PR0",3]],
+			"cardLocationRestriction": [["B0R_X_MR4",3],["B0R_X_MR3",3],["B0R_X_MR2",3],["B0R_X_MR1",3],["B0R_X_MR0",3],["B0R_X_VR4",3],["B0R_X_VR3",3],["B0R_X_VR2",3],["B0R_X_VR1",3],["B0R_X_VR0",3]],
             "cardDescription": "Cannot be placed with <span class='distanceModifier'> 3  </span> of the <i>Main Reactor</i>",
             "cardId": "B0B_R_FLB"
         }, {
@@ -755,6 +755,55 @@ var cardList = {
             "cardDescription": "<span class='pointModifier'>+1</span> for each <i>Transportation Plaform</i> in the Station",
             "cardId": "B0S_B_TP"
         }],
+		reactors: [{
+		    "cardTitle": "Power Reactor",
+            "cardImage": "power_generator.png",
+            "type": "R",
+            "cardDeck": "Base",
+            "cardQuantity": 20,
+            "cardEndGame": false,
+            "im_score": 0,
+            "cardCreditCost": 1,
+            "cardPowerCost": 0,
+            "cardMaxAdditionalPoints": Infinity,
+            "cardMaxPlayable": Infinity,
+            "cardFunction": false,
+            "cardLocationRestriction": [],
+            "cardDescription": "Provides two Power<br>",
+            "cardId": "B0R_X_PR"
+		},{
+		    "cardTitle": "Main Reactor",
+            "cardImage": "main_reactor.png",
+            "type": "R",
+            "cardDeck": "Base",
+            "cardQuantity": 20,
+            "cardEndGame": false,
+            "im_score": 0,
+            "cardCreditCost": 0,
+            "cardPowerCost": 0,
+            "cardMaxAdditionalPoints": Infinity,
+            "cardMaxPlayable": Infinity,
+            "cardFunction": false,
+            "cardLocationRestriction": [],
+            "cardDescription": "Provides two Power<br>Counts as <i>Power Reactor</i>",
+            "cardId": "B0R_X_MR"
+		},{
+		    "cardTitle": "Vak Main Reactor",
+            "cardImage": "main_reactor.png",
+            "type": "R",
+            "cardDeck": "Base",
+            "cardQuantity": 20,
+            "cardEndGame": false,
+            "im_score": 0,
+            "cardCreditCost": 0,
+            "cardPowerCost": 0,
+            "cardMaxAdditionalPoints": Infinity,
+            "cardMaxPlayable": Infinity,
+            "cardFunction": false,
+            "cardLocationRestriction": [],
+            "cardDescription": "Provides two Power<br>Counts as <i>Power Reactor</i><br>Counts as a location of every colour type",
+            "cardId": "B0R_X_VR"
+		}],
         conflict: [],
         objectives: []
     }

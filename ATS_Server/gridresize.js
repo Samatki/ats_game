@@ -1,6 +1,6 @@
 var arrayObj = {
-	arrayX :3,
-	arrayGrid : [
+.parameters.x :3,
+	grid : [
 		false,
 		false,
 		false,
@@ -13,11 +13,8 @@ var arrayObj = {
 	]
 }
 
-var x = arrayObj.arrayGrid;
-var arrayX = arrayObj.arrayX;
-
-function leftCheck(arrayObj){ return Boolean(arrayObj.arrayGrid.reduce(function(a,b,c,d){
-    if(c%arrayObj.arrayX == 0){
+function leftCheck(arrayObj){ return Boolean(arrayObj.grid.reduce(function(a,b,c,d){
+    if(c%arrayObj.parameters.x == 0){
         return Boolean(a) + Boolean(b);
 	}else{
 		return Boolean(a);
@@ -25,8 +22,8 @@ function leftCheck(arrayObj){ return Boolean(arrayObj.arrayGrid.reduce(function(
 	},0))
 };
 	
-function rightCheck(arrayObj) {return Boolean(arrayObj.arrayGrid.reduce(function(a,b,c,d){
-    if(c%arrayObj.arrayX == (arrayObj.arrayX - 1)){
+function rightCheck(arrayObj) {return Boolean(arrayObj.grid.reduce(function(a,b,c,d){
+    if(c%arrayObj.parameters.x == (arrayObj.parameters.x - 1)){
         return Boolean(a) + Boolean(b);
 	}else{
 		return (Boolean(a));
@@ -34,7 +31,7 @@ function rightCheck(arrayObj) {return Boolean(arrayObj.arrayGrid.reduce(function
 	},0));
 };
 
-function topCheck(arrayObj) { return Boolean(arrayObj.arrayGrid.slice(0,arrayObj.arrayX).reduce(function(a,b,c,d){
+function topCheck(arrayObj) { return Boolean(arrayObj.grid.slice(0,arrayObj.parameters.x).reduce(function(a,b,c,d){
     if(Boolean(b)  == true){
         return Boolean(a) + Boolean(b);
 	}else{
@@ -43,7 +40,7 @@ function topCheck(arrayObj) { return Boolean(arrayObj.arrayGrid.slice(0,arrayObj
 },0));
 };
 	
-function bottomCheck(arrayObj) { return Boolean(arrayObj.arrayGrid.slice(arrayObj.arrayGrid.length - arrayObj.arrayX - 1,arrayObj.arrayGrid.length - 1).reduce(function(a,b,c,d){
+function bottomCheck(arrayObj) { return Boolean(arrayObj.grid.slice(arrayObj.grid.length - arrayObj.parameters.x - 1,arrayObj.grid.length - 1).reduce(function(a,b,c,d){
     if(Boolean(b)  == true){
         return Boolean(a) + Boolean(b);
 	}else{
@@ -54,33 +51,33 @@ function bottomCheck(arrayObj) { return Boolean(arrayObj.arrayGrid.slice(arrayOb
 
 function GridResizer(arrayObj){
 	if(leftCheck(arrayObj)){
-		var arrLength = arrayObj.arrayGrid.length;
-		var yval = arrLength / arrayObj.arrayX;
+		var arrLength = arrayObj.grid.length;
+		var yval = arrLength / arrayObj.parameters.x;
 		console.log("ping1")
 		for(var i = 1; i <= yval; i++){
-			arrayObj.arrayGrid.splice(arrLength - i * (arrayObj.arrayX),0,false)
+			arrayObj.grid.splice(arrLength - i * (arrayObj.parameters.x),0,false)
 		}
-		arrayObj.arrayX = arrayObj.arrayX + 1;
+		arrayObj.parameters.x = arrayObj.parameters.x + 1;
 	}	
 	if(rightCheck(arrayObj)){
-		var arrLength = arrayObj.arrayGrid.length;
-		var yval = arrLength / arrayObj.arrayX;
+		var arrLength = arrayObj.grid.length;
+		var yval = arrLength / arrayObj.parameters.x;
 		console.log("ping2")
 		for(var i = 0; i < yval; i++){
-			arrayObj.arrayGrid.splice(arrLength - i * (arrayObj.arrayX),0,false)
+			arrayObj.grid.splice(arrLength - i * (arrayObj.parameters.x),0,false)
 		}
-		arrayObj.arrayX = arrayObj.arrayX + 1;
+		arrayObj.parameters.x = arrayObj.parameters.x + 1;
 	}
 	if (bottomCheck(arrayObj)){
 		console.log("ping3")
-		for(var i = 0; i < arrayObj.arrayX; i++){
-			arrayObj.arrayGrid.push(false);
+		for(var i = 0; i < arrayObj.parameters.x; i++){
+			arrayObj.grid.push(false);
 		}
 	}
 	if (topCheck(arrayObj)){
 		console.log("ping4")
-		for(var i = 0; i < arrayObj.arrayX; i++){
-			arrayObj.arrayGrid.unshift(false);
+		for(var i = 0; i < arrayObj.parameters.x; i++){
+			arrayObj.grid.unshift(false);
 		}
 	}
 	return arrayObj;

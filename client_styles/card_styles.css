@@ -2,6 +2,24 @@ i{
 	font-weight:bolder;
 }
 
+.game_card_discard{
+	height:300px;
+	width:300px;
+	border-radius:18px;
+	border: 7px black solid;
+	border-right: 9px black solid;
+	display:block;
+	background-color:black;
+	transform:scale(0.2);
+/*    margin-right: -60px;*/
+	position:absolute !important;
+	top: 0px;
+	margin-bottom:0;
+	pointer-events: auto;
+	outline:none;
+}
+
+
 .game_card_list{
 	height:300px;
 	width:300px;
@@ -132,6 +150,24 @@ i{
 	z-index:4;
 }
 
+.grey_card{
+	background-image:url("../ATS_Images/Card_Details/grey_card_border.png");
+	background-size:cover;
+	height:300px;
+	width:300px;
+	position:absolute;
+	z-index:4;
+}
+
+.multi_card{
+	background-image:url("../ATS_Images/Card_Details/multi_card_border.png");
+	background-size:cover;
+	height:300px;
+	width:300px;
+	position:absolute;
+	z-index:4;
+}
+
 .blue_class{
 	background-image:url("../ATS_Images/Card_Details/blue_category.png");
 	background-size:cover;
@@ -173,7 +209,7 @@ i{
 	width:calc(100% - 40px);
 	border-radius:15px;
 	position:absolute;
-	width:260px;
+	width:265px;
 	top:11px;
 	left:20px;
 	background-color:lightgrey;
@@ -492,10 +528,78 @@ i{
         0.05em 0.05em #adadad;
 }
 
+.power_description{
+	position:absolute;
+	left: 30px;
+	top:230px;
+	width:240px;
+	height:55px;
+	z-index:6;
+	word-wrap: break-all;
+	white-space:normal;
+	font-size: 10px;
+	line-height:15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    text-shadow:
+        0.05em 0 #adadad,
+        0 0.05em #adadad,
+        -0.05em 0 #adadad,
+        0 -0.05em #adadad,
+        -0.05em -0.05em #adadad,
+        -0.05em 0.05em #adadad,
+        0.05em -0.05em #adadad,
+        0.05em 0.05em #adadad;
+}
+
+.power_description div{
+	text-align:center;
+}
+
 #draggableCardArea{
 	display:none;
 	height:50px;
 	width:50px;
 	position:fixed;
 	pointer-events:none;
+}
+
+div[data-cardid*="B0R_X_VR"] .card_image{
+	animation: vakAnimation 10s linear infinite
+}
+
+.multi_class{
+	background-image:url("../ATS_Images/Card_Details/multi_category.png");
+	background-size:cover;
+	animation: vakAnimation 10s linear infinite
+}
+
+@keyframes vakAnimation{
+    0%   {filter: hue-rotate(0deg);}
+    100% {filter: hue-rotate(360deg);}
+}
+
+.availPower{
+	height:50px;
+	width:50px;
+	position:relative;
+	display:inline-block;
+	border-radius:10px;
+	background-image:url("../ATS_Images/Card_Details/cube2.png");	
+	background-size: cover;
+	animation: glow 2.5s ease-in-out infinite;
+}
+
+
+.powerElements{
+	position:absolute;
+	display:flex;
+	justify-content:center;
+	flex-wrap:wrap;
+    z-index:3;
+	top:175px;
+	left: 25px;
+	width:255px;
+	height:50px;
 }

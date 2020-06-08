@@ -202,3 +202,53 @@
 	opacity:1;
 	color:cyan;
 	}
+
+#discardForCurrencyBox{
+/*	display:none; */
+	bottom:350px;
+}
+
+#discardForPowerBox{
+/*	display:none; */
+	bottom:235px;
+}
+
+.discardBox{
+	height:100px;
+	width:100px;
+	position:absolute;
+	left:10px;
+	background-color:rgba(255,255,255,0.6);
+	border: rgba(255,255,255,0.3) thin solid;
+	text-align:center;
+	display:inline-block;
+	word-break: break-word;
+	white-space: pre-wrap;
+	padding: 5px; 
+	box-sizing:border-box;
+	padding-top:30px; 
+	display:none;
+}
+
+.discardBoxPlaced{
+	padding:0;
+	white-space:initial;
+	word-break:initial;
+}
+
+.discardBox:hover{
+	background-color:rgba(0,255,255,0.6);
+}
+
+@media only screen and (max-height: 520px) {
+	#discardForCurrencyBox{
+		bottom: 235px;
+		left: 100px;
+	}
+	.discardBox{
+		padding-top:25px;
+		font-size: small;
+		height:80px;
+		width:80px;
+	}
+}

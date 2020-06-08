@@ -56,7 +56,6 @@ function GridResizer(arrayObj){
 	if(leftCheck(arrayObj)){
 		var arrLength = arrayObj.arrayGrid.length;
 		var yval = arrLength / arrayObj.arrayX;
-		console.log("ping1")
 		for(var i = 1; i <= yval; i++){
 			arrayObj.arrayGrid.splice(arrLength - i * (arrayObj.arrayX),0,false)
 		}
@@ -65,20 +64,17 @@ function GridResizer(arrayObj){
 	if(rightCheck(arrayObj)){
 		var arrLength = arrayObj.arrayGrid.length;
 		var yval = arrLength / arrayObj.arrayX;
-		console.log("ping2")
 		for(var i = 0; i < yval; i++){
 			arrayObj.arrayGrid.splice(arrLength - i * (arrayObj.arrayX),0,false)
 		}
 		arrayObj.arrayX = arrayObj.arrayX + 1;
 	}
 	if (bottomCheck(arrayObj)){
-		console.log("ping3")
 		for(var i = 0; i < arrayObj.arrayX; i++){
 			arrayObj.arrayGrid.push(false);
 		}
 	}
 	if (topCheck(arrayObj)){
-		console.log("ping4")
 		for(var i = 0; i < arrayObj.arrayX; i++){
 			arrayObj.arrayGrid.unshift(false);
 		}

@@ -18,7 +18,7 @@ var playerDataObj2 = {
 		color : "lime",
 		main_reactor_color : "blue"
     },
-    playerHand: ["B0S_B_CB","B0B_R_FLB","B0S_P_OD"],
+    playerHand: ["B0S_B_CB","B0B_R_FLB","B0R_X_MR2"],
     playerStationArray: {
         parameters: {
             x: 3,
@@ -161,83 +161,29 @@ var playerDataObj = {
     playerHand: ["B0S_B_CB","B0B_R_FLB"],
     playerStationArray: {
         parameters: {
-            x: 6,
+            x: 3,
             infinite: true,
 			grid_transform_string : null
         },
         grid: [
             false,
-            "B0B_R_FLB",
-            false,
-            "B0B_R_FLB", 
-			"B0S_B_CB",
-			"B0S_P_OD",
             false,
             false,
-            false,
+            false, 
+			"B0R_X_MR2",
 			false,
-            "B0B_R_FLB",
-            false,
-            "B0B_R_FLB", 
-			"B0S_B_CB",
-			"B0S_P_OD",
-            false,
-            false,
-            false,
+			false, 
+			"B0R_X_PR3",
 			false,
-            "B0B_R_FLB",
-            false,
-            "B0B_R_FLB", 
-			"B0S_B_CB",
-			"B0S_P_OD",
-            false,
-            false,
-            false,
+			false, 
+			"B0R_X_PR0",
 			false,
-            "B0B_R_FLB",
-            false,
-            "B0B_R_FLB", 
-			"B0S_B_CB",
-			"B0S_P_OD",
-            false,
-            false,
-            false,
-            false,
-            "B0B_R_FLB",
-            false,
-            "B0B_R_FLB", 
-			"B0S_B_CB",
-			"B0S_P_OD",
-            false,
-            false,
-            false,
+			false, 
+			"B0R_X_PR0",
 			false,
-            "B0B_R_FLB",
-            false,
-            "B0B_R_FLB", 
-			"B0S_B_CB",
-			"B0S_P_OD",
-            false,
-            false,
-            false,
-			false,
-            "B0B_R_FLB",
-            false,
-            "B0B_R_FLB", 
-			"B0S_B_CB",
-			"B0S_P_OD",
-            false,
-            false,
-            false,
-			false,
-            "B0B_R_FLB",
-            false,
-            "B0B_R_FLB", 
-			"B0S_B_CB",
-			"B0S_P_OD",
-            false,
-            false,
-            false,			
+			false, 
+			"B0R_X_PR1",
+			false,			
         ],
         gridSchema: {
             cardPresence: false,
@@ -403,16 +349,19 @@ class OtherPlayGrid extends React.Component {
 	   var newRowStyle = (index % gridX) == 0 ? "newRowStyle" : "";
 		
       if (card) {
+		 var powerAvail = null;
 		 var cardObj = {};
+//		 console.log(card.slice(0,8))
 		 if(card[2] == "B"){
 			cardObj = cardList.cards.basic_locations.find(x => x.cardId === card);
 		} else if (card[2] == "S"){
 			cardObj = cardList.cards.s_locations.find(x => x.cardId === card);			
 		} else if (card[2] == "R") {
-			cardObj = cardList.cards.reactors.find(x => x.cardId === card);	
+			cardObj = cardList.cards.reactors.find(x => x.cardId === card.slice(0,8));
+			powerAvail = parseInt(card[card.length - 1]);
 		}
 		  
-		var xx  = {__html : cardPrinter(cardObj,"game_card_board")}
+		var xx  = {__html : cardPrinter(cardObj,"game_card_board",powerAvail)}
         return React.createElement("div", { className: "stationCardSpace stationCardPlaced " + newRowStyle, "data-index": index, dangerouslySetInnerHTML : xx});
       }
     });
@@ -430,6 +379,7 @@ class PlayGrid extends React.Component {
 
     var testm = this.props.grid.map(function (card, index) {
     var newRowStyle = (index % gridX) == 0 ? "newRowStyle" : "";
+	var powerAvail = 0;
       if (card) {
 		 var cardObj = {};
 		 if(card[2] == "B"){
@@ -437,10 +387,11 @@ class PlayGrid extends React.Component {
 		} else if (card[2] == "S"){
 			cardObj = cardList.cards.s_locations.find(x => x.cardId === card);			
 		} else if (card[2] == "R") {
-			cardObj = cardList.cards.reactors.find(x => x.cardId === card);	
+			cardObj = cardList.cards.reactors.find(x => x.cardId === card.slice(0,8));
+			powerAvail = parseInt(card[card.length - 1]);	
 		}
 		  
-		var xx  = {__html : cardPrinter(cardObj,"game_card_board")}
+		var xx  = {__html : cardPrinter(cardObj,"game_card_board",powerAvail)}
         return React.createElement("div", { className: "stationCardSpace stationCardPlaced " + newRowStyle, "data-index": index, dangerouslySetInnerHTML : xx})
       }
 
@@ -479,7 +430,7 @@ class GameReactHandler extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = playerDataObj;
-		this.state.checkBoxFlag = false;
+//		this.state.checkBoxFlag = false;
 	}
 
 	componentDidMount() {
@@ -505,6 +456,21 @@ class GameReactHandler extends React.Component {
 		copiedElement = null;
 	}
 	
+	powerDiscard(e){
+		if(cardDiscarded){
+			console.log("Discarded for power")
+			cardDiscarded = false;
+		}
+	}
+
+	currencyDiscard(e){
+		if(cardDiscarded){
+			console.log("Discarded for currency")
+			cardDiscarded = false;
+		}
+	}
+
+	
 	componentDidUpdate(){
 		handGen(this.state.playerHand);
 		generateListeners();		
@@ -527,6 +493,9 @@ class GameReactHandler extends React.Component {
 		React.createElement("div", { key : (parseInt(Math.random()*1000000000)).toString(), id: "playGridroot", className: "gameMat", onMouseUp : this.processPlacement.bind(this) }, 
 		React.createElement(PlayGrid, {...this.state.playerStationArray}), 
 		other_player_stations),
+
+		React.createElement("div", { id : "discardForPowerBox", className : "discardBox", onMouseUp : this.powerDiscard.bind(this)}, "Discard for Reactor"),
+		React.createElement("div", { id : "discardForCurrencyBox", className : "discardBox", onMouseUp : this.currencyDiscard.bind(this)}, "Discard for Currency"),
 		
 		React.createElement("div", { id: "playerHandModal" }, null)
 		);

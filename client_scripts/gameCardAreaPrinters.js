@@ -9,6 +9,12 @@ cardPrint = cardPrint + "<div style='width:100%; text-align:center; margin-top:3
 for(var i = 0; i < cardList.cards.s_locations.length; i++){
 	cardPrint = cardPrint + cardPrinter(cardList.cards.s_locations[i], "game_card_list");
 }
+
+cardPrint = cardPrint + "<div style='width:100%; text-align:center; margin-top:30px; margin-bottom:30px;'><span class='cardListHeader'>Reactor Cards</span></div>"
+for(var i = 0; i < cardList.cards.reactors.length; i++){
+	cardPrint = cardPrint + cardPrinter(cardList.cards.reactors[i], "game_card_list");
+}
+
 (cardList.cards.conflict.length !=0)? cardList = cardList + "<div style='width:100%; text-align:center; margin-top:30px; margin-bottom:30px;'><span class='cardListHeader'>Conflict Cards</span></div>":""
 for(var i = 0; i < cardList.cards.conflict.length; i++){
 	cardPrint = cardPrint + cardPrinter(cardList.cards.conflict[i], "game_card_list");
@@ -30,7 +36,7 @@ function discardListGen(cardDiscardList){
 		} else if (card[2] == "S"){
 			cardDiscardObjList.push(cardList.cards.s_locations.find(x => x.cardId === card));			
 		} else if (card[2] == "R") {
-			return null;
+			cardDiscardObjList.push(cardList.cards.reactors.find(x => x.cardId === card));	
 		} else if (card[2] == "C") {
 			return null;
 		}
@@ -53,7 +59,7 @@ function handGen(cardHandList){
 		} else if (card[2] == "S"){
 			cardHandObjList.push(cardList.cards.s_locations.find(x => x.cardId === card));			
 		} else if (card[2] == "R") {
-			return null;
+			cardHandObjList.push(cardList.cards.reactors.find(x => x.cardId === card.slice(0,8)));	
 		} else if (card[2] == "C") {
 			return null;
 		}

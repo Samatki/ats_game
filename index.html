@@ -26,15 +26,6 @@ function playSound(){
 			var initialgridPositionY = document.getElementById("gridContainer").getBoundingClientRect().top;
 			generateListeners()
 			});
-		/*
-		document.addEventListener("DOMContentLoaded", function(){
-			setTimeout(function(){
-				document.getElementsByTagName("body")[0].style.opacity = 1;
-				document.getElementById("gameLogTitle").innerHTML = "Among The Stars<br>Game #" + dummySetup.gameId.toString();
-			},100);
-		});
-		*/
-		//Initiator Flags;
 		var transferredCard = "";
 		var artworktoggle = false;
 		var cardPlaced = false;
@@ -44,8 +35,8 @@ function playSound(){
 		var copiedElement = null;
 		var mouseDown;
 		var gridPositionX;
-		var displayedArea = 0;		
-		
+		var cardDiscarded = false;
+		var displayedArea = 0;			
 	</script>
 	
 
@@ -118,8 +109,6 @@ Sed euismod, mauris id consectetur consequat, metus lorem rutrum arcu, vehicula 
 		<div class="turnOptions"></div>
 		<div class="turnOptions"></div>
 	</div>
-
-<!--	<div id="playerHandModal"></div> -->
 </div>
 <div id="draggableCardArea"></div>
 <div id="cardListArea" class="gameMat"></div>

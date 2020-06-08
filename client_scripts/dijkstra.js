@@ -5,6 +5,10 @@
 function dijkstraAlgo(gridA,startIndex,finishIndex){
 	var visitedFlag = true;
 	var reachedFlag = true;
+//	console.log("Grid to be analysed is : ")
+//	console.log(gridA)
+//	console.log("Start position is : " + startIndex)
+//	console.log("Finish position is : " + finishIndex)
 /*	
 	var startIndex = (gridA.grid.findIndex(function(item, index) {
 		if (item.a == "Start") {
@@ -23,17 +27,27 @@ function dijkstraAlgo(gridA,startIndex,finishIndex){
 // console.log("Finish Index is " + finishIndex.toString());
 
 	var dijkstraGrid = gridA.grid.map(function(x, i){
-			return (x.a) ? [i,false,Infinity] : [i,true,Infinity]
+			if(x){
+//				console.log(x + " is truthy");
+				return [i,false,Infinity]
+			} else {
+				return [i,true,Infinity]
+			}
+//			return (x) ? [i,false,Infinity] : [i,true,Infinity]
 		});
+		
+	var pathLength = 1;
+	
+	dijkstraGrid[startIndex][2] = 0;
+	dijkstraGrid[startIndex][1] = false;
 //	console.log("Dijkstra Grid is ");
 //	console.log(dijkstraGrid);
-
-	var pathLength = 1;
-	dijkstraGrid[startIndex][2] = 0;
 	
 	while (visitedFlag && reachedFlag){
 
 		var currentCell = findNextMinCell(dijkstraGrid);
+//		console.log(currentCell);
+		
 		if(currentCell == null){return Infinity}
 		dijkstraGrid[currentCell][1] = true;
 		
@@ -60,6 +74,7 @@ function dijkstraAlgo(gridA,startIndex,finishIndex){
 }
 
 function findNextMinCell(arr) {
+//	console.log(arr);
 	var filteredArr = arr.filter(function(item){if(item[1] != true){return item}});
 	if(filteredArr.length == 0){return null};
 	var kArray = filteredArr.map(function(item2){return item2[2]});

@@ -92,6 +92,8 @@ function generateListeners(){
 				document.body.style.cursor = "none";
 				document.getElementById("draggableCardArea").style.top = e.clientY -75 +"px";
 				document.getElementById("draggableCardArea").style.left = e.clientX -75 +"px";
+				document.getElementById("discardForPowerBox").style.display = "inline-block";
+				document.getElementById("discardForCurrencyBox").style.display = "inline-block";
 			}
 		}, false);
 	}
@@ -230,21 +232,23 @@ document.body.addEventListener('mousemove',function(e){
 document.body.addEventListener('mouseup',function(e){
 	if(handMouseDown){
 		handMouseDown = false;
-		document.getElementById("draggableCardArea").style.display = "none";
+		document.getElementById("draggableCardArea").style.display = "";
 		document.body.style.cursor = "";
 		for (var l=0; l<document.getElementsByClassName("stationCardPlaceable").length; l++){
 			document.getElementsByClassName("stationCardPlaceable")[l].style.backgroundColor = "";	
 		};
 		if(e.target.classList.contains("stationCardPlaceable")&&positionCheck(transferredCard,e.target.dataset.index,playerDataObj)){
 			var cardObj = {};
-			 if(transferredCard[2] == "B"){
+			var powerTransferred = 0;
+			if(transferredCard[2] == "B"){
 				cardObj = cardList.cards.basic_locations.find(x => x.cardId === transferredCard);
 			} else if (transferredCard[2] == "S"){
 				cardObj = cardList.cards.s_locations.find(x => x.cardId === transferredCard);			
 			} else if (transferredCard[2] == "R") {
-				cardObj = cardList.cards.reactors.find(x => x.cardId === transferredCard);	
+				cardObj = cardList.cards.reactors.find(x => x.cardId === transferredCard.slice(0,8));
+				powerTransferred = parseInt(transferredCard[transferredCard.length - 1]);
 			}
-			e.target.innerHTML = cardPrinter(cardObj,"game_card_board");
+			e.target.innerHTML = cardPrinter(cardObj,"game_card_board",powerTransferred);
 			e.target.addEventListener("contextmenu", function(e){
 				var closestElement = e.target.closest(".game_card_board").cloneNode(true);
 				document.getElementById("rCModal").style.display = "block";
@@ -255,8 +259,39 @@ document.body.addEventListener('mouseup',function(e){
 				document.getElementById("rCModal").appendChild(closestElement);
 			}, false);
 			cardPlaced = true;
+		} else if (e.target.classList.contains("discardBox")){
+			var cardObj = {};
+			var powerTransferred = 0;
+			if(transferredCard[2] == "B"){
+				cardObj = cardList.cards.basic_locations.find(x => x.cardId === transferredCard);
+			} else if (transferredCard[2] == "S"){
+				cardObj = cardList.cards.s_locations.find(x => x.cardId === transferredCard);			
+			} else if (transferredCard[2] == "R") {
+				cardObj = cardList.cards.reactors.find(x => x.cardId === transferredCard.slice(0,8));
+				powerTransferred = parseInt(transferredCard[transferredCard.length - 1]);
+			}
+			e.target.innerHTML = cardPrinter(cardObj,"game_card_discard",powerTransferred);
+			e.target.classList.add("discardBoxPlaced");
+			e.target.addEventListener("contextmenu", function(e){
+				var closestElement = e.target.closest(".game_card_discard").cloneNode(true);
+				document.getElementById("rCModal").style.display = "block";
+				closestElement.classList.remove("game_card_board");
+				closestElement.classList.add("game_card_list") ;
+				document.getElementById("rCModal").innerHTML = "";		
+				closestElement.style.transform = "scale(1.33)";
+				document.getElementById("rCModal").appendChild(closestElement);
+			}, false)
+			if(e.target.id == "discardForCurrencyBox"){
+				cardDiscarded = true;
+				console.log("discarding for currency")
+			} else if (e.target.id == "discardForPowerBox"){
+				cardDiscarded = true;
+				console.log("discarding for power");				
+			}
 		} else {
-			document.getElementById("draggableCardArea").style.display = "none";
+			document.getElementById("discardForCurrencyBox").style.display = "";
+			document.getElementById("discardForPowerBox").style.display = "";
+			document.getElementById("draggableCardArea").style.display = "";
 			document.getElementById("draggableCardArea").innerHTML = "";
 		    for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
 				document.getElementsByClassName("game_card_hand")[l].style.display = "block";
@@ -303,26 +338,29 @@ document.body.addEventListener('mouseleave',function(e){
 
 function positionCheck(cardid,placedIndex,playerObj){	
 	var result = false;
-	
+	var powerTransferred = 0;
     var cardObj = {};
+//	console.log(cardid[2])
 	 if(cardid[2] == "B"){
 		cardObj = cardList.cards.basic_locations.find(x => x.cardId === cardid);
 	} else if (cardid[2] == "S"){
 		cardObj = cardList.cards.s_locations.find(x => x.cardId === cardid);			
 	} else if (cardid[2] == "R") {
-		cardObj = cardList.cards.reactors.find(x => x.cardId === cardid);	
+		cardObj = cardList.cards.reactors.find(x => x.cardId === transferredCard.slice(0,8));
+		powerTransferred = parseInt(transferredCard[transferredCard.length - 1]);
 	}
-	var cardEndGame = cardObj.cardEndGame;
-	var cardImScore = cardObj.im_score; 
 	var cardCreditCost = cardObj.cardCreditCost; //
 	var cardPowerCost = cardObj.cardPowerCost; //
 	var cardMaxPlayable = cardObj.cardMaxPlayable; //
 	var cardLocationRestriction = cardObj.cardLocationRestriction;
 	var currPlayerCredits = playerObj.playerData.currency; //
 	var cardArray = playerObj.playerStationArray.grid;
+	var cardArrayDijkstra = playerObj.playerStationArray;
 
 	if(arrayCounter(cardArray, cardid) < cardMaxPlayable){
+//		console.log("Max Playable Passed")
 		if(cardCreditCost <= currPlayerCredits){
+//			console.log("Available Currency Passed")
 			var powerCount = 0;
 			var powerPlacedArray = [];
 			for(var i = 0; i < powerArray.length; i++){
@@ -332,20 +370,32 @@ function positionCheck(cardid,placedIndex,playerObj){
 					}
 				}
 			}
+//			console.log(cardArray)
+//			console.log(placedIndex)
+//			console.log(powerPlacedArray)
+//			console.log(powerPlacedArray)
 			for(var i = 0; i<powerPlacedArray.length; i++){
-				if(dijkstraAlgo(cardArray,placedIndex,powerPlacedArray[i]) < 3){
-					powerCount = powerCount + parseInt(cardArray.powerPlacedArray[i].slice(-1));
+//				console.log(dijkstraAlgo(cardArrayDijkstra,placedIndex,powerPlacedArray[i]));
+				if(dijkstraAlgo(cardArrayDijkstra,placedIndex,powerPlacedArray[i]) < 3){
+//					console.log("****")
+//					console.log(powerPlacedArray)
+//					console.log(dijkstraAlgo(cardArrayDijkstra,placedIndex,powerPlacedArray[i]));
+					powerCount = powerCount + parseInt(cardArray[powerPlacedArray[i]].slice(-1));
 				}
 			}
 			if(powerCount >= cardPowerCost){
+//			console.log("Available Power Passed")				
 				if(cardLocationRestriction.length == 0){
 					result = true;
-				}
-				for(var i = 0; i < cardLocationRestriction.length; i++){
-					for(var j=0; j<cardArray.length; j++){
-						if(cardArray[j] == cardLocationRestriction[i][0]){
-							if(dijkstraAlgo(cardArray,placedIndex,j) >= cardLocationRestriction[i][1]){
-								result = true;
+//					console.log("No restrictions")
+				} else {
+					for(var i = 0; i < cardLocationRestriction.length; i++){
+						for(var j=0; j<cardArray.length; j++){
+							if(cardArray[j] == cardLocationRestriction[i][0]){
+								if(dijkstraAlgo(cardArrayDijkstra,placedIndex,j) > cardLocationRestriction[i][1]){
+									result = true;
+//									console.log("Restrictions passed")
+								}
 							}
 						}
 					}
