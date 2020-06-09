@@ -156,9 +156,11 @@ var playerDataObj = {
         ability_available: null,
         player_race: "qualeen",
 		color : "lime",
-		main_reactor_color : "blue"
+		main_reactor_color : "blue",
+		player_currency_turn_increase: 10,
+		player_currency_discard_value: 3
     },
-    playerHand: ["B0S_B_CB","B0B_R_FLB"],
+    playerHand: ["B0S_B_CB","B0S_R_HIC"],
     playerStationArray: {
         parameters: {
             x: 3,
@@ -167,22 +169,25 @@ var playerDataObj = {
         },
         grid: [
             false,
+            "B0R_X_MR3",
             false,
-            false,
+			false,
+			false,
+			false,
             false, 
-			"B0R_X_MR2",
+			"B0R_X_MR0",
+			"B0B_B_TP",
+			false, 
+			false,
+			"B0B_B_TP",
+			false, 
+			false,
+			"B0B_B_TP",
+			false, 
+			"B0R_X_PR2",
 			false,
 			false, 
 			"B0R_X_PR3",
-			false,
-			false, 
-			"B0R_X_PR0",
-			false,
-			false, 
-			"B0R_X_PR0",
-			false,
-			false, 
-			"B0R_X_PR1",
 			false,			
         ],
         gridSchema: {
@@ -345,29 +350,28 @@ class OtherPlayGrid extends React.Component {
     var gridSize = this.props.grid.length;
     var gridStorage = this.props.grid;
 
-    var testm = this.props.grid.map(function (card, index) {
-	   var newRowStyle = (index % gridX) == 0 ? "newRowStyle" : "";
-		
-      if (card) {
+    var cardMap = this.props.grid.map(function (card, index) {
+		var newRowStyle = (index % gridX) == 0 ? "newRowStyle" : "";
+			
+		if (card) {
 		 var powerAvail = null;
 		 var cardObj = {};
-//		 console.log(card.slice(0,8))
 		 if(card[2] == "B"){
 			cardObj = cardList.cards.basic_locations.find(x => x.cardId === card);
-		} else if (card[2] == "S"){
+		 } else if (card[2] == "S"){
 			cardObj = cardList.cards.s_locations.find(x => x.cardId === card);			
-		} else if (card[2] == "R") {
+		 } else if (card[2] == "R") {
 			cardObj = cardList.cards.reactors.find(x => x.cardId === card.slice(0,8));
 			powerAvail = parseInt(card[card.length - 1]);
+		 }
+			  
+		 var xx  = {__html : cardPrinter(cardObj,"game_card_board",powerAvail)}
+		 return React.createElement("div", { className: "stationCardSpace stationCardPlaced " + newRowStyle, "data-index": index, dangerouslySetInnerHTML : xx});
 		}
-		  
-		var xx  = {__html : cardPrinter(cardObj,"game_card_board",powerAvail)}
-        return React.createElement("div", { className: "stationCardSpace stationCardPlaced " + newRowStyle, "data-index": index, dangerouslySetInnerHTML : xx});
-      }
     });
     return (
       React.createElement("div", { className: "otherGridContainer", Style: "transform:scale(1); display:none;", "data-player":this.props.playerNo},
-      testm))//);
+      cardMap));
 }}
 
 class PlayGrid extends React.Component {
@@ -377,7 +381,7 @@ class PlayGrid extends React.Component {
     var gridSize = this.props.grid.length;
     var gridStorage = this.props.grid;
 
-    var testm = this.props.grid.map(function (card, index) {
+    var cardMap = this.props.grid.map(function (card, index) {
     var newRowStyle = (index % gridX) == 0 ? "newRowStyle" : "";
 	var powerAvail = 0;
       if (card) {
@@ -422,7 +426,7 @@ class PlayGrid extends React.Component {
     });
     return (
       React.createElement("div", { id: "gridContainer", Style: "transform:scale(1);" },
-      testm))//);
+      cardMap));
 }}
 
 class GameReactHandler extends React.Component {
@@ -430,11 +434,11 @@ class GameReactHandler extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = playerDataObj;
-//		this.state.checkBoxFlag = false;
+		this.state.render = 0;
 	}
 
 	componentDidMount() {
-		tempGrid = this.state;
+		playerDataObj = this.state;
 		discardListGen(this.state.discardPile.cards);
 		handGen(this.state.playerHand);
 	}
@@ -444,36 +448,92 @@ class GameReactHandler extends React.Component {
 	}
 	
 	processPlacement(e){
-//		console.log("test2");
-//		console.log(document.getElementById("playGridRoot"));
 		if(cardPlaced){
-			console.log(this.state.checkBoxFlag);
-		    this.setState(playerDataObj2);
-			mouseDown = false;
+			var cardObj = getCardObj(transferredCard);
+			accessiblePowerArray = getAvailablePowerIndeces(playerDataObj.playerStationArray, e.target.closest(".stationCardPlaceable").dataset.index);
+			requiredPowerSpend = cardObj.cardPowerCost;
+			console.log(cardObj);
+			console.log(transferredCard);
+			console.log(e.target.closest(".stationCardPlaceable").dataset.index);
+			if(requiredPowerSpend != 0){
+				for(var i = 0; i < accessiblePowerArray.length; i++){
+					document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].addEventListener('click',removePower,true);
+					document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].style.outline = "lime thick solid";
+
+				}
+			} else {
+				optionMode = 1;
+				confirmationBoxFlag = true;
+				confirmationBoxLoader();
+			}
+			if(transferredCard[2] == "R"){
+				optionMode = 3;
+				confirmationBoxFlag = true;
+				confirmationBoxLoader();
+			}
 			cardPlaced = false;
-			handMouseDown = false;			
+			handLock = true;
 		}
 		copiedElement = null;
 	}
 	
 	powerDiscard(e){
-		if(cardDiscarded){
-			console.log("Discarded for power")
-			cardDiscarded = false;
+		transferredCard2 = transferredCard;
+		if(cardPowerDiscard && transferredCard[2] != "R" && e.button == 0){		
+			if(this.state.playerData.currency <= 1){
+				console.log("Not enough money");
+				document.getElementById("discardForPowerBox").innerHTML = "";
+				handGen(this.state.playerHand,"game_card_hand");
+				generateListeners();
+			} else {
+				console.log("Discarded card "+transferredCard+ " for power");
+				cardForDiscard = transferredCard;
+				cardPlaced = false;
+				handMouseDown = false;	
+				handGen(["B0R_X_PR"],"game_card_hand")
+				generateListeners();
+			}
 		}
 	}
 
 	currencyDiscard(e){
-		if(cardDiscarded){
-			console.log("Discarded for currency")
-			cardDiscarded = false;
+		if(cardCurrencyDiscard && transferredCard[2] != "R" && e.button == 0){
+			console.log("Discarded card " + transferredCard +  " for currency")
+			handMouseDown = false;
+			handLock = true;
+			cardForDiscard = transferredCard;
+			optionMode = 2;
+			confirmationBoxFlag = true;
+			confirmationBoxLoader();
 		}
 	}
 
+	cancelButton(e){
+		this.setState({render: this.state.render + 1});
+		confirmationBoxFlag = false;
+		confirmationBoxLoader();
+	}
 	
 	componentDidUpdate(){
+		playerDataObj = this.state;
 		handGen(this.state.playerHand);
-		generateListeners();		
+		discardListGen(this.state.discardPile.cards);
+		generateListeners();
+		confirmationBoxLoader();
+		playerDataObj = this.state;
+		cardForDiscard = null;
+		cardPlaced = false;
+		cardPowerDiscard = false;
+		cardCurrencyDiscard = false;
+		transferredCard = "";
+		handMouseDown = false;
+		copiedElement = null;
+		displayedArea = 0;
+		handLock = false;
+		requiredPowerSpend = 0;
+		powerSpendArray = [];
+		accessiblePowerArray = [];
+		confirmationBoxFlag = false;
 	}
 
 	render() {
@@ -481,9 +541,15 @@ class GameReactHandler extends React.Component {
 		var other_player_stations = this.state.otherPlayersData.otherPlayers.map(function(playerItem){
 			return React.createElement(OtherPlayGrid, {...playerItem.playerStationArray, playerNo : playerItem.playerNo}, null)
 		});
-//		console.log("Rendered")
 		
 		return React.createElement("div", null,
+
+		React.createElement("div", { id : "turnConfirmationScreen" },		
+		React.createElement("div", { id : "turnConfirmationBox" }, 
+		React.createElement("div", { id : "turnConfirmationBoxInnerText" }, "Placeholder" ),
+		React.createElement("button", { id : "turnConfirmationBoxConfirmation", className : "confirmationBox" }, "Confirm" ),
+		React.createElement("button", { id : "turnConfirmationBoxCancel", onClick : this.cancelButton.bind(this), className : "confirmationBox"}, "Cancel" )
+		),),
 	
 		React.createElement("div", { id: "topBarFlexContainer" },
 		React.createElement(PlayerMat,  {...this.state.otherPlayersData} )),
@@ -494,9 +560,9 @@ class GameReactHandler extends React.Component {
 		React.createElement(PlayGrid, {...this.state.playerStationArray}), 
 		other_player_stations),
 
-		React.createElement("div", { id : "discardForPowerBox", className : "discardBox", onMouseUp : this.powerDiscard.bind(this)}, "Discard for Reactor"),
-		React.createElement("div", { id : "discardForCurrencyBox", className : "discardBox", onMouseUp : this.currencyDiscard.bind(this)}, "Discard for Currency"),
-		
+		React.createElement("div", { key : (parseInt(Math.random()*1000000000)), id : "discardForPowerBox", className : "discardBox", onMouseUp : this.powerDiscard.bind(this)}, "Discard for Reactor"),
+		React.createElement("div", { key : (parseInt(Math.random()*1000000000)), id : "discardForCurrencyBox", className : "discardBox", onMouseUp : this.currencyDiscard.bind(this)}, "Discard for Currency"),
+
 		React.createElement("div", { id: "playerHandModal" }, null)
 		);
   }}

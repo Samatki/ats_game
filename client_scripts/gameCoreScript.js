@@ -25,7 +25,6 @@ for (var i=0; i<document.getElementsByClassName("game_card_list").length; i++){
 function generateListeners(){
 //Hand Card Viewer
 	for (var i=0; i<document.getElementsByClassName("game_card_hand").length; i++){
-//		console.log("Hand Card " + i);
 		document.getElementsByClassName("game_card_hand")[i].addEventListener("contextmenu", function(e){
 			var closestElement = e.target.closest(".game_card_hand").cloneNode(true);
 			document.getElementById("rCModal").style.display = "block";
@@ -39,7 +38,6 @@ function generateListeners(){
 
 //Board Card Viewer
 	for (var i=0; i<document.getElementsByClassName("stationCardPlaced").length; i++){
-//		console.log("Station Card Placed " + i);
 		document.getElementsByClassName("stationCardPlaced")[i].addEventListener("contextmenu", function(e){
 			var closestElement = e.target.closest(".game_card_board").cloneNode(true);
 			document.getElementById("rCModal").style.display = "block";
@@ -74,7 +72,7 @@ function generateListeners(){
 //Player Hand Drag
 	for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
 		document.getElementsByClassName("game_card_hand")[l].addEventListener("mousedown", function(e){
-			if(!displayedArea && !cardPlaced && e.button == 0){
+			if(!displayedArea && !cardPlaced && e.button == 0 && !handLock){
 //				console.log("ping")
 				handMouseDown = true;
 				var closestCopiedElement = e.target.closest(".game_card_hand").cloneNode(true);
@@ -92,8 +90,14 @@ function generateListeners(){
 				document.body.style.cursor = "none";
 				document.getElementById("draggableCardArea").style.top = e.clientY -75 +"px";
 				document.getElementById("draggableCardArea").style.left = e.clientX -75 +"px";
-				document.getElementById("discardForPowerBox").style.display = "inline-block";
-				document.getElementById("discardForCurrencyBox").style.display = "inline-block";
+				if(cardPowerDiscard){
+					document.getElementById("discardForPowerBox").style.display = "inline-block";
+				} else if (cardCurrencyDiscard){	
+					document.getElementById("discardForCurrencyBox").style.display = "inline-block";
+				} else {
+					document.getElementById("discardForPowerBox").style.display = "inline-block";
+					document.getElementById("discardForCurrencyBox").style.display = "inline-block";
+				}
 			}
 		}, false);
 	}
@@ -162,7 +166,7 @@ function generateListeners(){
 		}
 	  }
 	  if(handMouseDown){
-		document.getElementById("gridContainer").style.cursor = "none";  
+		document.getElementById("gridContainer").style.cursor = "";  
 	  } else {
 	//	document.getElementById("gridContainer").style.cursor = ""; 	  
 	  }
@@ -239,7 +243,7 @@ document.body.addEventListener('mouseup',function(e){
 		};
 		if(e.target.classList.contains("stationCardPlaceable")&&positionCheck(transferredCard,e.target.dataset.index,playerDataObj)){
 			var cardObj = {};
-			var powerTransferred = 0;
+			var powerTransferred = 2;
 			if(transferredCard[2] == "B"){
 				cardObj = cardList.cards.basic_locations.find(x => x.cardId === transferredCard);
 			} else if (transferredCard[2] == "S"){
@@ -260,37 +264,63 @@ document.body.addEventListener('mouseup',function(e){
 			}, false);
 			cardPlaced = true;
 		} else if (e.target.classList.contains("discardBox")){
-			var cardObj = {};
-			var powerTransferred = 0;
-			if(transferredCard[2] == "B"){
-				cardObj = cardList.cards.basic_locations.find(x => x.cardId === transferredCard);
-			} else if (transferredCard[2] == "S"){
-				cardObj = cardList.cards.s_locations.find(x => x.cardId === transferredCard);			
-			} else if (transferredCard[2] == "R") {
-				cardObj = cardList.cards.reactors.find(x => x.cardId === transferredCard.slice(0,8));
-				powerTransferred = parseInt(transferredCard[transferredCard.length - 1]);
-			}
-			e.target.innerHTML = cardPrinter(cardObj,"game_card_discard",powerTransferred);
-			e.target.classList.add("discardBoxPlaced");
-			e.target.addEventListener("contextmenu", function(e){
-				var closestElement = e.target.closest(".game_card_discard").cloneNode(true);
-				document.getElementById("rCModal").style.display = "block";
-				closestElement.classList.remove("game_card_board");
-				closestElement.classList.add("game_card_list") ;
-				document.getElementById("rCModal").innerHTML = "";		
-				closestElement.style.transform = "scale(1.33)";
-				document.getElementById("rCModal").appendChild(closestElement);
-			}, false)
-			if(e.target.id == "discardForCurrencyBox"){
-				cardDiscarded = true;
-				console.log("discarding for currency")
-			} else if (e.target.id == "discardForPowerBox"){
-				cardDiscarded = true;
-				console.log("discarding for power");				
+			if(e.target.id == "discardForCurrencyBox" && !cardCurrencyDiscard && !cardPowerDiscard){
+				cardCurrencyDiscard = true;
+				document.getElementById("draggableCardArea").style.display = "";
+				document.getElementById("draggableCardArea").innerHTML = "";
+				document.getElementById("discardForPowerBox").style.display = "";
+				var cardObj = {};
+				if(transferredCard[2] == "B"){
+					cardObj = cardList.cards.basic_locations.find(x => x.cardId === transferredCard);
+				} else if (transferredCard[2] == "S"){
+					cardObj = cardList.cards.s_locations.find(x => x.cardId === transferredCard);			
+				}
+				e.target.innerHTML = cardPrinter(cardObj,"game_card_discard");
+				e.target.classList.add("discardBoxPlaced");
+				e.target.addEventListener("contextmenu", function(e){
+					var closestElement = e.target.closest(".game_card_discard").cloneNode(true);
+					document.getElementById("rCModal").style.display = "block";
+					closestElement.classList.remove("game_card_board");
+					closestElement.classList.add("game_card_list") ;
+					document.getElementById("rCModal").innerHTML = "";		
+					closestElement.style.transform = "scale(1.33)";
+					document.getElementById("rCModal").appendChild(closestElement);
+				}, false)				
+			} else if (e.target.id == "discardForPowerBox" && !cardCurrencyDiscard && !cardPowerDiscard && playerDataObj.playerData.currency >= 1){
+				cardPowerDiscard = true;
+				console.log("discarding for power");		
+				document.getElementById("draggableCardArea").style.display = "";
+				document.getElementById("draggableCardArea").innerHTML = "";	
+				document.getElementById("discardForCurrencyBox").style.display = "";
+				var cardObj = {};
+				if(transferredCard[2] == "B"){
+					cardObj = cardList.cards.basic_locations.find(x => x.cardId === transferredCard);
+				} else if (transferredCard[2] == "S"){
+					cardObj = cardList.cards.s_locations.find(x => x.cardId === transferredCard);			
+				}
+				e.target.innerHTML = cardPrinter(cardObj,"game_card_discard");
+				e.target.classList.add("discardBoxPlaced");
+				e.target.addEventListener("contextmenu", function(e){
+					var closestElement = e.target.closest(".game_card_discard").cloneNode(true);
+					document.getElementById("rCModal").style.display = "block";
+					closestElement.classList.remove("game_card_board");
+					closestElement.classList.add("game_card_list") ;
+					document.getElementById("rCModal").innerHTML = "";		
+					closestElement.style.transform = "scale(1.33)";
+					document.getElementById("rCModal").appendChild(closestElement);
+				}, false)								
+			} else {
+				for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
+					document.getElementsByClassName("game_card_hand")[l].style.display = "block";
+				}
 			}
 		} else {
-			document.getElementById("discardForCurrencyBox").style.display = "";
-			document.getElementById("discardForPowerBox").style.display = "";
+			if(!cardCurrencyDiscard){
+				document.getElementById("discardForCurrencyBox").style.display = "";
+			}
+			if(!cardPowerDiscard){
+				document.getElementById("discardForPowerBox").style.display = "";
+			}
 			document.getElementById("draggableCardArea").style.display = "";
 			document.getElementById("draggableCardArea").innerHTML = "";
 		    for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
@@ -370,31 +400,20 @@ function positionCheck(cardid,placedIndex,playerObj){
 					}
 				}
 			}
-//			console.log(cardArray)
-//			console.log(placedIndex)
-//			console.log(powerPlacedArray)
-//			console.log(powerPlacedArray)
 			for(var i = 0; i<powerPlacedArray.length; i++){
-//				console.log(dijkstraAlgo(cardArrayDijkstra,placedIndex,powerPlacedArray[i]));
 				if(dijkstraAlgo(cardArrayDijkstra,placedIndex,powerPlacedArray[i]) < 3){
-//					console.log("****")
-//					console.log(powerPlacedArray)
-//					console.log(dijkstraAlgo(cardArrayDijkstra,placedIndex,powerPlacedArray[i]));
 					powerCount = powerCount + parseInt(cardArray[powerPlacedArray[i]].slice(-1));
 				}
 			}
-			if(powerCount >= cardPowerCost){
-//			console.log("Available Power Passed")				
+			if(powerCount >= cardPowerCost){			
 				if(cardLocationRestriction.length == 0){
 					result = true;
-//					console.log("No restrictions")
 				} else {
 					for(var i = 0; i < cardLocationRestriction.length; i++){
 						for(var j=0; j<cardArray.length; j++){
 							if(cardArray[j] == cardLocationRestriction[i][0]){
 								if(dijkstraAlgo(cardArrayDijkstra,placedIndex,j) > cardLocationRestriction[i][1]){
 									result = true;
-//									console.log("Restrictions passed")
 								}
 							}
 						}
@@ -408,4 +427,89 @@ function positionCheck(cardid,placedIndex,playerObj){
 
 function arrayCounter(array, searchTerm){
 	return array.reduce((n,x) => n + (x === searchTerm),0);
+}
+
+function getAvailablePowerIndeces(arrayGrid, placedCardLocation){
+	var powerCount = 0;
+	var powerPlacedArray = [];
+	var cardArray = arrayGrid.grid;
+	var availableArray = [];
+
+	for(var i = 0; i < powerArray.length; i++){
+		for(var j=0; j<cardArray.length; j++){
+			if(cardArray[j] == powerArray[i]){
+				powerPlacedArray.push(j);
+			}
+		}
+	}
+	for(var i = 0; i<powerPlacedArray.length; i++){
+		if(dijkstraAlgo(arrayGrid,placedCardLocation,powerPlacedArray[i]) < 3){
+			availableArray.push(powerPlacedArray[i])
+		}
+	}
+	return availableArray
+}
+
+function getCardObj(cardid){
+	var cardObj = {};
+	var powerTransferred = 2;
+	if(cardid[2] == "B"){
+		cardObj = cardList.cards.basic_locations.find(x => x.cardId === cardid);
+	} else if (cardid[2] == "S"){
+		cardObj = cardList.cards.s_locations.find(x => x.cardId === cardid);			
+	} else if (cardid[2] == "R") {
+		cardObj = cardList.cards.reactors.find(x => x.cardId === cardid.slice(0,8));
+		powerTransferred = parseInt(cardid[cardid.length - 1]);
+	} else if (cardid[2] == "C"){
+		cardObj = cardList.cards.s_locations.find(x => x.cardId === cardid);					
+	}
+	return cardObj;
+}
+
+function removePower(event){
+	var targetCard = event.currentTarget;
+	var targetCardId = event.currentTarget.firstElementChild.dataset.cardid;
+	var powerAvailable = parseInt(targetCardId[8]);
+	console.log(targetCardId);
+	if(powerAvailable != 0){
+		targetCard.innerHTML = "";
+		targetCard.innerHTML = cardPrinter(getCardObj(targetCardId.slice(0,8)),"game_card_board",powerAvailable-1);
+		requiredPowerSpend--;
+		console.log(requiredPowerSpend);
+		powerSpendArray.push([event.currentTarget.firstElementChild.dataset.cardid,event.currentTarget.dataset.index]);
+	}
+	if(requiredPowerSpend == 0){
+		for(var i = 0; i < accessiblePowerArray.length; i++){
+			document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].removeEventListener('click',removePower,true);
+			document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].style.outline = "";
+			optionMode = 1;
+			confirmationBoxFlag = true;
+			confirmationBoxLoader();
+		}
+	}
+}
+
+function confirmationBoxLoader(){
+	var innerText = "";
+	var card = getCardObj(transferredCard);
+	var cardTitle = card.cardTitle;
+	var cardCost = card.cardCreditCost;
+	var cardPower = card.cardPowerCost;
+	
+	if(optionMode == 1){
+		innerText = "Place " + cardTitle + " on station for " + cardCost + " credits"
+		if (cardPower){
+			innerText = innerText + " and " + cardPower + " power"
+		}
+	} else if (optionMode == 2){
+		innerText = "Discard " + cardTitle + " for " + playerDataObj.playerData.player_currency_discard_value + " credits"		
+	} else if (optionMode == 3){
+		innerText = "Discard " + getCardObj(transferredCard2).cardTitle + " and pay 1 credit for Power Reactor"		
+	}
+	if(confirmationBoxFlag){
+		document.getElementById("turnConfirmationScreen").style.display = "flex";
+		document.getElementById("turnConfirmationBoxInnerText").innerHTML = innerText;
+	} else {
+		document.getElementById("turnConfirmationScreen").style.display = "";	
+	}		
 }

@@ -10,10 +10,11 @@ i{
 	border-right: 9px black solid;
 	display:block;
 	background-color:black;
-	transform:scale(0.2);
+	transform:scale(0.30);
 /*    margin-right: -60px;*/
 	position:absolute !important;
-	top: 0px;
+	top: -108.5px;
+	left: -109px;
 	margin-bottom:0;
 	pointer-events: auto;
 	outline:none;
@@ -603,3 +604,4 @@ div[data-cardid*="B0R_X_VR"] .card_image{
 	width:255px;
 	height:50px;
 }
+

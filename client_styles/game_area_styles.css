@@ -240,6 +240,54 @@
 	background-color:rgba(0,255,255,0.6);
 }
 
+#turnConfirmationScreen{
+	display:none;
+	position:fixed;
+	height:100vh;
+	width:calc(100vw - 300px);
+	z-index: 50;
+	justify-content: center;
+	align-items:center;
+}
+
+#turnConfirmationBox{
+	display:block;
+	position:relative;
+/*	height:150px; */
+	padding-bottom:75px;
+	padding-top:25px;
+	width:400px;
+	background-color:rgba(0,0,0,0.5);
+	box-sizing:border-box;
+	border: white thin solid;
+}
+
+.confirmationBox{
+	width:75px;
+	height:25px;
+	position:absolute;	
+	bottom: 30px;
+}
+
+#turnConfirmationBoxConfirmation{
+	left: 100px;
+}
+
+#turnConfirmationBoxCancel{
+	right: 100px;
+}
+
+#turnConfirmationBoxInnerText{
+	color:white;
+	width:300px;
+	position:relative;
+	text-align:center;
+	word-wrap:break-word;
+	white-space: pre-wrap;
+	left:50px;
+	margin-bottom:10px;
+}
+
 @media only screen and (max-height: 520px) {
 	#discardForCurrencyBox{
 		bottom: 235px;
@@ -250,5 +298,21 @@
 		font-size: small;
 		height:80px;
 		width:80px;
+	}
+	.game_card_discard{
+		height:300px;
+		width:300px;
+		border-radius:18px;
+		border: 7px black solid;
+		border-right: 9px black solid;
+		display:block;
+		background-color:black;
+		transform:scale(0.25);
+		position:absolute !important;
+		top: -118px;
+		left: -119px;
+		margin-bottom:0;
+		pointer-events: auto;
+		outline:none;
 	}
 }
