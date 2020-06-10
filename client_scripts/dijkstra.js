@@ -5,26 +5,6 @@
 function dijkstraAlgo(gridA,startIndex,finishIndex){
 	var visitedFlag = true;
 	var reachedFlag = true;
-//	console.log("Grid to be analysed is : ")
-//	console.log(gridA)
-//	console.log("Start position is : " + startIndex)
-//	console.log("Finish position is : " + finishIndex)
-/*	
-	var startIndex = (gridA.grid.findIndex(function(item, index) {
-		if (item.a == "Start") {
-			return true;
-		};
-	}));
-	console.log("Start Index is " + startIndex.toString());
-
-	var finishIndex = gridA.grid.indexOf(gridA.grid.find(function(item, index) {
-		if (item.a == "Finish") {
-			return true;
-		};
-	}));
-*/
-
-// console.log("Finish Index is " + finishIndex.toString());
 
 	var dijkstraGrid = gridA.grid.map(function(x, i){
 			if(x){

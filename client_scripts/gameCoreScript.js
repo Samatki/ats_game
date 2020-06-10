@@ -475,18 +475,49 @@ function removePower(event){
 		targetCard.innerHTML = "";
 		targetCard.innerHTML = cardPrinter(getCardObj(targetCardId.slice(0,8)),"game_card_board",powerAvailable-1);
 		requiredPowerSpend--;
-		console.log(requiredPowerSpend);
 		powerSpendArray.push([event.currentTarget.firstElementChild.dataset.cardid,event.currentTarget.dataset.index]);
 	}
-	if(requiredPowerSpend == 0){
+	if(requiredPowerSpend == 0 && transferredCard != "B0B_R_SG"){
 		for(var i = 0; i < accessiblePowerArray.length; i++){
 			document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].removeEventListener('click',removePower,true);
 			document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].style.outline = "";
-			optionMode = 1;
-			confirmationBoxFlag = true;
-			confirmationBoxLoader();
 		}
+		optionMode = 1;
+		confirmationBoxFlag = true;
+		confirmationBoxLoader();
+	} else if(requiredPowerSpend == -2 && transferredCard == "B0B_R_SG"){
+		for(var i = 0; i < accessiblePowerArray.length; i++){
+			document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].removeEventListener('click',removePower,true);
+			document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].style.outline = "";
+		}
+		document.getElementById("endEarlyButton").style.display = "";
+		optionMode = 4;
+		confirmationBoxFlag = true;
+		confirmationBoxLoader();		
+	}else if(requiredPowerSpend <= 0 && transferredCard == "B0B_R_SG"){
+		document.getElementById("endEarlyButton").style.display = "block";
+	}	
+}
+
+function endEarlyButton(){
+	if(requiredPowerSpend == 0 && transferredCard == "B0B_R_SG"){
+		for(var i = 0; i < accessiblePowerArray.length; i++){
+			document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].removeEventListener('click',removePower,true);
+			document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].style.outline = "";
+		}
+		optionMode = 1;
+		confirmationBoxFlag = true;
+		confirmationBoxLoader();		
 	}
+	if(requiredPowerSpend == -1 && transferredCard == "B0B_R_SG"){
+		for(var i = 0; i < accessiblePowerArray.length; i++){
+			document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].removeEventListener('click',removePower,true);
+			document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].style.outline = "";
+		}
+		optionMode = 5;
+		confirmationBoxFlag = true;
+		confirmationBoxLoader();		
+	}	
 }
 
 function confirmationBoxLoader(){
@@ -505,8 +536,14 @@ function confirmationBoxLoader(){
 		innerText = "Discard " + cardTitle + " for " + playerDataObj.playerData.player_currency_discard_value + " credits"		
 	} else if (optionMode == 3){
 		innerText = "Discard " + getCardObj(transferredCard2).cardTitle + " and pay 1 credit for Power Reactor"		
-	}
+	} else if (optionMode == 4){
+		innerText = "Place Shield Generator on station for 3 credits and 1 power (& 2 additional power for maximum bonus)"		
+	} else if (optionMode == 5){
+		innerText = "Place Shield Generator on station for 3 credits and 1 power (& 1 additional power for bonus)"		
+	}	
+	
 	if(confirmationBoxFlag){
+		document.getElementById("endEarlyButton").style.display = "";
 		document.getElementById("turnConfirmationScreen").style.display = "flex";
 		document.getElementById("turnConfirmationBoxInnerText").innerHTML = innerText;
 	} else {

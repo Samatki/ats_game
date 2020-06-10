@@ -23,17 +23,17 @@ document.getElementsByClassName("topBarButtons")[5].addEventListener('click',fun
 		if(window.getComputedStyle(document.getElementById("infoArea"),null).getPropertyValue("display") == "none"){
 			document.getElementById("objArea").style.display = "none";
 			document.getElementById("infoArea").style.display = "block";
+			document.getElementById("playerHandModal").style.right = "";
+			document.getElementById("gridReset").style.right = "";				
 			for(var i = 0; i<document.getElementsByClassName("gameMat").length; i++){
 				document.getElementsByClassName("gameMat")[i].style.width = "";
-				document.getElementById("playerHandModal").style.right = "";
-				document.getElementById("gridReset").style.right = "";				
 			}
 		} else {
 			document.getElementById("infoArea").style.display = "none";
+			document.getElementById("playerHandModal").style.right = "150px"
+			document.getElementById("gridReset").style.right = "-27px";				
 			for(var i = 0; i<document.getElementsByClassName("gameMat").length; i++){
 				document.getElementsByClassName("gameMat")[i].style.width = "100vw";
-				document.getElementById("playerHandModal").style.right = "150px"
-				document.getElementById("gridReset").style.right = "-27px";	
 			}				
 		}
 });
@@ -45,16 +45,16 @@ document.getElementsByClassName("topBarButtons")[4].addEventListener('click',fun
 			document.getElementById("objArea").style.display = "block";
 			for(var i = 0; i<document.getElementsByClassName("gameMat").length; i++){
 				document.getElementsByClassName("gameMat")[i].style.width = "";
-				document.getElementById("playerHandModal").style.right = "";
-				document.getElementById("gridReset").style.right = "";	
 			}
+			document.getElementById("playerHandModal").style.right = "";
+			document.getElementById("gridReset").style.right = "";	
 		} else {
 			document.getElementById("objArea").style.display = "none";
 			for(var i = 0; i<document.getElementsByClassName("gameMat").length; i++){
 				document.getElementsByClassName("gameMat")[i].style.width = "100vw";
-				document.getElementById("playerHandModal").style.right = "150px"
-				document.getElementById("gridReset").style.right = "-27px";	
-			}				
+			}
+			document.getElementById("playerHandModal").style.right = "150px"
+			document.getElementById("gridReset").style.right = "-27px";				
 		}
 });
 

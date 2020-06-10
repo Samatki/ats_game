@@ -147,6 +147,20 @@
 
 }
 
+#endEarlyButton{
+	display:none;
+	position:absolute;
+	height:30px;
+	width: 150px;
+	text-align:center;
+	padding:5px;
+	box-sizing:border-box;
+	background-color:red;
+	top: 50px;
+	left: calc(50% - 150px)
+}
+
+
 #discardArea{
 	position:absolute;
 	top:50px;

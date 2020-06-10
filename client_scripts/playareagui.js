@@ -160,7 +160,7 @@ var playerDataObj = {
 		player_currency_turn_increase: 10,
 		player_currency_discard_value: 3
     },
-    playerHand: ["B0S_B_CB","B0S_R_HIC"],
+    playerHand: ["B0S_B_CB","B0B_R_SG"],
     playerStationArray: {
         parameters: {
             x: 3,
@@ -459,7 +459,6 @@ class GameReactHandler extends React.Component {
 				for(var i = 0; i < accessiblePowerArray.length; i++){
 					document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].addEventListener('click',removePower,true);
 					document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].style.outline = "lime thick solid";
-
 				}
 			} else {
 				optionMode = 1;
@@ -507,6 +506,10 @@ class GameReactHandler extends React.Component {
 			confirmationBoxLoader();
 		}
 	}
+	
+	endEarlyButton2(e){
+		endEarlyButton();
+	}
 
 	cancelButton(e){
 		this.setState({render: this.state.render + 1});
@@ -534,6 +537,7 @@ class GameReactHandler extends React.Component {
 		powerSpendArray = [];
 		accessiblePowerArray = [];
 		confirmationBoxFlag = false;
+		endEarly = false;
 	}
 
 	render() {
@@ -543,8 +547,16 @@ class GameReactHandler extends React.Component {
 		});
 		
 		return React.createElement("div", null,
-
-		React.createElement("div", { id : "turnConfirmationScreen" },		
+/*
+		React.createElement("div", { id : "turnResolutionScreen", className : "gameMat"},		
+		React.createElement("div", { id : "turnConfirmationBox" }, 
+		React.createElement("div", { id : "turnConfirmationBoxInnerText" }, "Placeholder" ),
+		React.createElement("button", { id : "turnConfirmationBoxConfirmation", className : "confirmationBox" }, "Confirm" ),
+		React.createElement("button", { id : "turnConfirmationBoxCancel", onClick : this.cancelButton.bind(this), className : "confirmationBox"}, "Cancel" )
+		),),
+*/
+		React.createElement("div", { id : "endEarlyButton", onClick :  this.endEarlyButton2.bind(this)}, "Finish Selection"),
+		React.createElement("div", { id : "turnConfirmationScreen", className : "gameMat"},		
 		React.createElement("div", { id : "turnConfirmationBox" }, 
 		React.createElement("div", { id : "turnConfirmationBoxInnerText" }, "Placeholder" ),
 		React.createElement("button", { id : "turnConfirmationBoxConfirmation", className : "confirmationBox" }, "Confirm" ),
