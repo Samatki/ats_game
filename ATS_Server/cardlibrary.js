@@ -4,6 +4,23 @@ var mainPowerArray = ["B0R_X_MR4","B0R_X_MR3","B0R_X_MR2","B0R_X_MR1","B0R_X_MR0
 var instantSpecialCards = ["B0B_R_SG","B0B_G_EO","B0S_Y_BO","B0S_Y_MP","B0S_B_SP"]
 var resolutionSpecialCards = ["B0B_R_SG","B0B_G_EO",]
 
+function getCardObj(cardid){
+	var cardObj = {};
+	var powerTransferred = 2;
+	if(cardid[2] == "B"){
+		cardObj = cardList.cards.basic_locations.find(x => x.cardId === cardid);
+	} else if (cardid[2] == "S"){
+		cardObj = cardList.cards.s_locations.find(x => x.cardId === cardid);			
+	} else if (cardid[2] == "R") {
+		cardObj = cardList.cards.reactors.find(x => x.cardId === cardid.slice(0,8));
+		powerTransferred = parseInt(cardid[cardid.length - 1]);
+	} else if (cardid[2] == "C"){
+		cardObj = cardList.cards.s_locations.find(x => x.cardId === cardid);					
+	}
+	return cardObj;
+}
+
+
 var cardList = {
     cards: {
         basic_locations: [{
@@ -797,10 +814,7 @@ var cardList = {
             "cardLocationRestriction": [],
             "cardDescription": "Provides two Power<br>Counts as <i>Power Reactor</i><br>Counts as a location of every colour type",
             "cardId": "B0R_X_VR"
-		}],
-        conflict: [],
-        objectives: [],
-		banned :[{
+		},{
             "cardTitle": "Galactic Research Council",
             "cardImage": "galactic_research_facility.png",
             "cardColour": "G",
@@ -854,6 +868,9 @@ var cardList = {
             "cardLocationRestriction": [],
             "cardDescription": "Choose up to 2 other players. Get a combination of <span class='creditModifier2'>2</span> from them",
             "cardId": "B0S_Y_MP"
-        }]
+        }],
     }
 }
+
+module.exports.cardList = cardList;
+module.exports.getCardObj = getCardObj;

@@ -1,0 +1,25 @@
+{
+  "name": "ats_game",
+  "version": "1.0.0",
+  "description": "Among the Stars game ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samatki/ats_game.git"
+  },
+  "author": "SLA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Samatki/ats_game/issues"
+  },
+  "homepage": "https://github.com/Samatki/ats_game#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "socket.io": "^2.3.0"
+  }
+}

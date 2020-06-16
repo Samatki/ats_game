@@ -1,157 +1,17 @@
 var playerColourStyles = [{ color: "red" }, { color: "cyan" }, { color: "Magenta" }, { color: "SeaShell" }, { color: "Coral" }, { color: "Lime" }];
 
-var playerDataObj2 = {
-    gameData: {
-        round: 1,
-        turn: 1,
-		turnOrder : false
-    },
-    playerData: {
-		playerName: "Sam00",
-		playerNo : 1,
-        curr_score: 0,
-        eg_score: 0,
-        currency: 5,
-        secret_obj: null,
-        ability_available: null,
-        player_race: "qualeen",
-		color : "lime",
-		main_reactor_color : "blue"
-    },
-    playerHand: ["B0S_B_CB","B0B_R_FLB","B0R_X_MR2"],
-    playerStationArray: {
-        parameters: {
-            x: 3,
-            infinite: true,
-			grid_transform_string : null
-        },
-        grid: [
-            false,
-            "B0B_R_FLB",
-            false,
-            "B0B_R_FLB", 
-			"B0S_B_CB",
-			"B0S_P_OD",
-            false,
-            false,
-            false			
-        ],
-        gridSchema: {
-            cardPresence: false,
-            card_obj: {}
-        }
-    },
-	otherPlayersData : {
-		numberOther : 3,
-		otherPlayers : [
-			{
-				playerNo : 2,
-				playerName : "a",
-				playerScore : 0,
-				currency:0,
-				eg_score : 0,
-				ability_available : null,
-				player_race : "zehuti",
-				color : "red",
-				main_reactor_color : "red",
-				playerStationArray: {
-					parameters: {
-						x: 3,
-						infinite: true,
-						grid_transform_string : null
-					},
-					grid: [
-						false,
-						"B0B_R_FLB",
-						false,
-						"B0B_R_FLB", 
-						"B0S_B_CB",
-						"B0S_P_OD",
-						false,
-						false,
-						false
-					]
-				}
-			}, 
-			{
-				playerNo : 3,
-				playerName : "b",
-				playerScore : 0,
-				eg_score : 0,
-				currency:0,
-				ability_available : null,
-				player_race : "vak",
-				color : "cyan",
-				main_reactor_color : "vak",
-				playerStationArray: {
-					parameters: {
-						x: 3,
-						infinite: true,
-						grid_transform_string : null
-					},
-					grid: [
-						false,
-						"B0B_R_FLB",
-						false,
-						"B0B_R_FLB", 
-						"B0S_B_CB",
-						"B0S_P_OD",
-						false,
-						false,
-						false
-					]
-				}
-			} , 
-			{
-				playerNo : 4,
-				playerName : "c",
-				playerScore : 0,
-				eg_score : 0,
-				currency:0,
-				ability_available : null,
-				player_race : "humareen",
-				color : "SeaShell",
-				main_reactor_color : "green",
-				playerStationArray: {
-					parameters: {
-						x: 3,
-						infinite: true,
-						grid_transform_string : null
-					},
-					grid: [
-						false,
-						"B0B_R_FLB",
-						false,
-						"B0B_R_FLB", 
-						"B0S_B_CB",
-						"B0S_P_OD",
-						"B0B_R_FLB",
-						false,
-						false
-					]
-				}
-			}
-		
-		]
-	},
-	discardPile : {
-		    cards: ["B0S_B_CB","B0S_B_CB"]
-		
-	}
-};
-
 var playerDataObj = {
     gameData: {
-        round: 1,
-        turn: 1,
+        round: null,
+        turn: null,
 		turnOrder : false
     },
     playerData: {
-		playerName: "Sam00",
+		playerName: "",
 		playerNo : 1,
         curr_score: 0,
         eg_score: 0,
-        currency: 10,
+        currency: 0,
         secret_obj: null,
         ability_available: null,
         player_race: "qualeen",
@@ -160,137 +20,27 @@ var playerDataObj = {
 		player_currency_turn_increase: 10,
 		player_currency_discard_value: 3
     },
-    playerHand: ["B0S_B_CB","B0B_R_SG"],
+    playerHand: [],
     playerStationArray: {
         parameters: {
-            x: 3,
+            x: 0,
             infinite: true,
 			grid_transform_string : null
         },
-        grid: [
-            false,
-            "B0R_X_MR3",
-            false,
-			false,
-			false,
-			false,
-            false, 
-			"B0R_X_MR0",
-			"B0B_B_TP",
-			false, 
-			false,
-			"B0B_B_TP",
-			false, 
-			false,
-			"B0B_B_TP",
-			false, 
-			"B0R_X_PR2",
-			false,
-			false, 
-			"B0R_X_PR3",
-			false,			
-        ],
+        grid: [],
         gridSchema: {
             cardPresence: false,
             card_obj: {}
         }
     },
 	otherPlayersData : {
-		numberOther : 3,
-		otherPlayers : [
-			{
-				playerNo : 2,
-				playerName : "a",
-				playerScore : 0,
-				currency:0,
-				eg_score : 0,
-				ability_available : null,
-				player_race : "zehuti",
-				color : "red",
-				main_reactor_color : "red",
-				playerStationArray: {
-					parameters: {
-						x: 3,
-						infinite: true,
-						grid_transform_string : null
-					},
-					grid: [
-						false,
-						"B0B_R_FLB",
-						false,
-						"B0B_R_FLB", 
-						"B0S_B_CB",
-						"B0S_P_OD",
-						false,
-						false,
-						false
-					]
-				}
-			}, 
-			{
-				playerNo : 3,
-				playerName : "b",
-				playerScore : 0,
-				eg_score : 0,
-				currency:0,
-				ability_available : null,
-				player_race : "vak",
-				color : "cyan",
-				main_reactor_color : "vak",
-				playerStationArray: {
-					parameters: {
-						x: 3,
-						infinite: true,
-						grid_transform_string : null
-					},
-					grid: [
-						false,
-						"B0B_R_FLB",
-						false,
-						"B0B_R_FLB", 
-						"B0S_B_CB",
-						"B0S_P_OD",
-						false,
-						false,
-						false
-					]
-				}
-			} , 
-			{
-				playerNo : 4,
-				playerName : "c",
-				playerScore : 0,
-				eg_score : 0,
-				currency:0,
-				ability_available : null,
-				player_race : "humareen",
-				color : "SeaShell",
-				main_reactor_color : "green",
-				playerStationArray: {
-					parameters: {
-						x: 3,
-						infinite: true,
-						grid_transform_string : null
-					},
-					grid: [
-						false,
-						"B0B_R_FLB",
-						false,
-						"B0B_R_FLB", 
-						"B0S_B_CB",
-						"B0S_P_OD",
-						false,
-						false,
-						false
-					]
-				}
-			}
-		
-		]
+		numberOther : 0,
+		otherPlayers : []
 	},
 	discardPile : {
-		    cards: ["B0S_B_CB","B0S_B_CB","B0S_P_OD"]
-	}
+		    cards: []
+	},
+	gameLog : []
 };
 
 function PlayerMat(props) {
@@ -316,6 +66,17 @@ function PlayerMat(props) {
   }
   return playerMatHTML;
 }
+
+class TurnTracker extends React.Component {
+render(){
+	return (
+  React.createElement("div", { id: "gameProgressBox" },
+  React.createElement("div", { className: "gameProgressBoxInner" },"Year: " + this.props.turn),
+  React.createElement("div", { className: "gameProgressBoxInner" },"Round: " + this.props.round)
+  ))
+}	
+}
+
 
 class OwnPlayerMat extends React.Component {
 render(){
@@ -433,12 +194,26 @@ class GameReactHandler extends React.Component {
 	
 	constructor(props) {
 		super(props);
+//		this.state.render = 0;
 		this.state = playerDataObj;
-		this.state.render = 0;
+		console.log("---------------");
+		console.log(this.state);
+	}
+	
+	componentWillMount(){
+		socket.emit('pageLoader',{"playerKey": playerKey});
+		socket.on('pageLoader',function(data){
+			console.log("This data received from server :")
+			console.log(data);
+			this.setState(data);
+		}.bind(this))
 	}
 
 	componentDidMount() {
+		console.log("Mounted");
 		playerDataObj = this.state;
+		console.log("**********");
+		console.log(this.state);
 		discardListGen(this.state.discardPile.cards);
 		handGen(this.state.playerHand);
 	}
@@ -450,16 +225,32 @@ class GameReactHandler extends React.Component {
 	processPlacement(e){
 		if(cardPlaced){
 			var cardObj = getCardObj(transferredCard);
-			accessiblePowerArray = getAvailablePowerIndeces(playerDataObj.playerStationArray, e.target.closest(".stationCardPlaceable").dataset.index);
 			requiredPowerSpend = cardObj.cardPowerCost;
 			console.log(cardObj);
 			console.log(transferredCard);
 			console.log(e.target.closest(".stationCardPlaceable").dataset.index);
 			if(requiredPowerSpend != 0){
+				accessiblePowerArray = getAvailablePowerIndeces(playerDataObj.playerStationArray, e.target.closest(".stationCardPlaceable").dataset.index,powerArray,2);
 				for(var i = 0; i < accessiblePowerArray.length; i++){
 					document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].addEventListener('click',removePower,true);
 					document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].style.outline = "lime thick solid";
 				}
+			} else if(transferredCard == "B0S_B_SP") {
+				accessiblePowerArray = getAvailablePowerIndeces(playerDataObj.playerStationArray, e.target.closest(".stationCardPlaceable").dataset.index,powerArray2,1);				
+				for(var i = 0; i < accessiblePowerArray.length; i++){
+					document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].addEventListener('click',addPower,true);
+					document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].style.outline = "lime thick solid";
+				}
+			} else if(transferredCard == "B0S_B_BR") {
+				accessiblePowerArray = getAvailablePowerIndeces(playerDataObj.playerStationArray, e.target.closest(".stationCardPlaceable").dataset.index,mainPowerArray,Infinity);				
+				for(var i = 0; i < accessiblePowerArray.length; i++){
+					document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].addEventListener('click',addPower,true);
+					document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].style.outline = "lime thick solid";
+				}
+			} else if(transferredCard == "B0B_G_EO"){
+				document.getElementById("embassyOfficeScreen").style.display = "flex";						
+			} else if(transferredCard == "B0S_Y_BO" && this.state.playerData.currency > 1){
+				document.getElementById("businessOfficeScreen").style.display = "flex";			
 			} else {
 				optionMode = 1;
 				confirmationBoxFlag = true;
@@ -507,6 +298,27 @@ class GameReactHandler extends React.Component {
 		}
 	}
 	
+	boConfirmation(e){
+		businessOfficesExtraSpend = parseInt(document.getElementById("businessOfficeRange").value);
+		document.getElementById("businessOfficeScreen").style.display = "";
+		optionMode = 6;
+		confirmationBoxFlag = true;
+		confirmationBoxLoader();		
+	}
+	
+	eoConfirmation(e){
+		embassyOfficePlayerSelect = document.querySelector('input[name="playerRadioSelect"]:checked').value;
+		console.log(embassyOfficePlayerSelect);
+		document.getElementById("embassyOfficeScreen").style.display = "";
+		optionMode = 7;
+		confirmationBoxFlag = true;
+		confirmationBoxLoader();		
+	}
+
+	boSlider(e){
+		document.getElementById("businessOfficeRangeValue").innerHTML = document.getElementById("businessOfficeRange").value;
+	}
+
 	endEarlyButton2(e){
 		endEarlyButton();
 	}
@@ -515,13 +327,20 @@ class GameReactHandler extends React.Component {
 		this.setState({render: this.state.render + 1});
 		confirmationBoxFlag = false;
 		confirmationBoxLoader();
+		document.getElementById('waitingBox').style.display = '';
 	}
 	
+	submitTurnButton(e){
+		socket.emit('submitTurnData',turnObject);
+		document.getElementById('waitingBox').style.display = 'block';
+		document.getElementById('turnConfirmationScreen').style.display = '';
+	}
+		
 	componentDidUpdate(){
 		playerDataObj = this.state;
 		handGen(this.state.playerHand);
 		discardListGen(this.state.discardPile.cards);
-		generateListeners();
+		renderGameLog(this.state.gameLog);
 		confirmationBoxLoader();
 		playerDataObj = this.state;
 		cardForDiscard = null;
@@ -538,6 +357,17 @@ class GameReactHandler extends React.Component {
 		accessiblePowerArray = [];
 		confirmationBoxFlag = false;
 		endEarly = false;
+		powerAddArray = [];
+		businessOfficesExtraSpend = 0;
+		embassyOfficePlayerSelect = "";
+        placedCardIndex = null;
+		turnObject = {};
+		if(this.state.playerHand.length == 0){
+			document.getElementById('waitingBox').style.display = 'block';
+		} else {
+			document.getElementById('waitingBox').style.display = '';			
+		}
+		generateListeners();
 	}
 
 	render() {
@@ -546,22 +376,51 @@ class GameReactHandler extends React.Component {
 			return React.createElement(OtherPlayGrid, {...playerItem.playerStationArray, playerNo : playerItem.playerNo}, null)
 		});
 		
+		var other_player_selectors = this.state.otherPlayersData.otherPlayers.map(function(playerItem){
+			return React.createElement("div", {className:"playerRadioContainer"},
+				React.createElement("div", {className:"playerRadioImage"},null),
+				React.createElement("label", {htmlfor:((playerItem.playerName).toString() + playerItem.playerNo.toString()), className:"playerRadioNameLabel"},playerItem.playerName),
+				React.createElement("input", {type:"radio", name:"playerRadioSelect", id:((playerItem.playerName).toString() + playerItem.playerNo.toString()), value:playerItem.playerNo},null)
+			)	
+		})
+		
+		other_player_selectors.push(React.createElement("div", {className:"playerRadioContainer"},
+				React.createElement("div", {className:"playerRadioImage"},null),
+				React.createElement("label", {htmlfor:"none", className:"playerRadioNameLabel"},"None"),
+				React.createElement("input", {type:"radio", name:"playerRadioSelect", id:"None", value:"None", checked:"checked"},null)
+			)	);
+		
+		console.log(other_player_selectors);
+		
 		return React.createElement("div", null,
-/*
-		React.createElement("div", { id : "turnResolutionScreen", className : "gameMat"},		
-		React.createElement("div", { id : "turnConfirmationBox" }, 
-		React.createElement("div", { id : "turnConfirmationBoxInnerText" }, "Placeholder" ),
-		React.createElement("button", { id : "turnConfirmationBoxConfirmation", className : "confirmationBox" }, "Confirm" ),
-		React.createElement("button", { id : "turnConfirmationBoxCancel", onClick : this.cancelButton.bind(this), className : "confirmationBox"}, "Cancel" )
+
+	
+		React.createElement("div", { id : "embassyOfficeScreen", className : "gameMat modalScreen"},		
+		React.createElement("div", { id : "embassyOfficeDialogueBox", className : "dialogueBox"  }, 
+		React.createElement("div", { id : "embassyOfficeText",  className : "dialogueBoxInnerText"}, "Choose another player to gain +1VP. If you do so, you gain +2VP." ),
+		other_player_selectors,
+		React.createElement("button", { id : "embassyOfficeConfirmation", className : "confirmationBox", onClick : this.eoConfirmation.bind(this)}, "Confirm" ),
+		),null),
+
+		React.createElement("div", { id : "businessOfficeScreen", className : "gameMat modalScreen"},		
+		React.createElement("div", { id : "businessOfficeDialogueBox", className : "dialogueBox"  }, 
+		React.createElement("div", { id : "businessOfficeText",  className : "dialogueBoxInnerText"}, "Place up to 6 credits on card, +1 VP for every  2 credits on card (retrieve at end of year)" ),
+		React.createElement("input", { type:"range", id : "businessOfficeRange", min : "0", max : (Math.min(playerDataObj.playerData.currency - 1,6)).toString(), onChange:this.boSlider.bind(this), defaultValue:"0" } ),
+		React.createElement("div", {id:"businessOfficeRangeValue" }, 0 ),
+		React.createElement("button", { id : "businessOfficeConfirmation", className : "confirmationBox", onClick : this.boConfirmation.bind(this)}, "Confirm" ),
 		),),
-*/
+
 		React.createElement("div", { id : "endEarlyButton", onClick :  this.endEarlyButton2.bind(this)}, "Finish Selection"),
-		React.createElement("div", { id : "turnConfirmationScreen", className : "gameMat"},		
-		React.createElement("div", { id : "turnConfirmationBox" }, 
-		React.createElement("div", { id : "turnConfirmationBoxInnerText" }, "Placeholder" ),
-		React.createElement("button", { id : "turnConfirmationBoxConfirmation", className : "confirmationBox" }, "Confirm" ),
+		
+		React.createElement("div", { id : "turnConfirmationScreen", className : "gameMat modalScreen"},		
+		React.createElement("div", { id : "turnConfirmationBox", className : "dialogueBox" }, 
+		React.createElement("div", { id : "turnConfirmationBoxInnerText", className : "dialogueBoxInnerText"}, "Placeholder" ),
+		React.createElement("button", { id : "turnConfirmationBoxConfirmation", className : "confirmationBox", onClick :this.submitTurnButton.bind(this)}, "Confirm" ),
 		React.createElement("button", { id : "turnConfirmationBoxCancel", onClick : this.cancelButton.bind(this), className : "confirmationBox"}, "Cancel" )
 		),),
+
+		React.createElement("div", { id : "waitingBox"},"Waiting for other players..."),
+		React.createElement(TurnTracker, {...this.state.gameData}),
 	
 		React.createElement("div", { id: "topBarFlexContainer" },
 		React.createElement(PlayerMat,  {...this.state.otherPlayersData} )),

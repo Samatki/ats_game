@@ -15,6 +15,11 @@ for(var i = 0; i < cardList.cards.reactors.length; i++){
 	cardPrint = cardPrint + cardPrinter(cardList.cards.reactors[i], "game_card_list");
 }
 
+cardPrint = (cardList.cards.banned.length !=0)? cardPrint + "<div style='width:100%; text-align:center; margin-top:30px; margin-bottom:30px;'><span class='cardListHeader'>Banned Cards</span></div>":""
+for(var i = 0; i < cardList.cards.banned.length; i++){
+	cardPrint = cardPrint + cardPrinter(cardList.cards.banned[i], "game_card_list");
+}
+
 (cardList.cards.conflict.length !=0)? cardList = cardList + "<div style='width:100%; text-align:center; margin-top:30px; margin-bottom:30px;'><span class='cardListHeader'>Conflict Cards</span></div>":""
 for(var i = 0; i < cardList.cards.conflict.length; i++){
 	cardPrint = cardPrint + cardPrinter(cardList.cards.conflict[i], "game_card_list");

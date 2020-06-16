@@ -1,3 +1,30 @@
+#gameProgressBox{
+	position:absolute;
+	top:60px;
+	left:10px;
+	background-color:rgba(0,0,0,0.3);
+	z-index:100;
+}
+
+.gameProgressBoxInner{
+	color:white;
+	margin:5px;
+	font-size:x-small;
+	display:inline-block;
+}
+
+#waitingBox{
+	display:none;
+	padding:5px;
+	color:white;
+	font-size:x-small;
+	z-index:100;
+	top:85px;
+	left:10px;
+	position:absolute;
+	background-color:rgba(0,0,0,0.3);
+}
+
 .loadingContainer{
   background-color:black;
   height:100vh;
@@ -15,6 +42,18 @@
 @keyframes loadingCover{
   0%{opacity:1;}
   100%{opacity:0; display:none;  pointer-events:none;}
+}
+
+.gameLogEntry{
+	text-align:left;
+	display:block;
+    text-indent: 30px;
+	margin-left:20px;
+	font-size:small;
+}
+
+.gameLogEntry:first-line {
+	  text-indent: -10px;
 }
 
 #topBar{
@@ -254,8 +293,7 @@
 	background-color:rgba(0,255,255,0.6);
 }
 
-#turnConfirmationScreen{
-	display:none;
+.modalScreen{
 	position:fixed;
 	height:100vh;
 	width:calc(100vw - 300px);
@@ -264,7 +302,15 @@
 	align-items:center;
 }
 
-#turnConfirmationBox{
+#businessOfficeScreen{
+	display:none;
+}
+
+#turnConfirmationScreen{
+	display:none;
+}
+
+.dialogueBox{
 	display:block;
 	position:relative;
 /*	height:150px; */
@@ -291,7 +337,27 @@
 	right: 100px;
 }
 
-#turnConfirmationBoxInnerText{
+#businessOfficeRangeValue{
+	color:white;
+	position:absolute;
+	width: 50px;
+	height: 50px;
+	left: 192px;
+	top:110px;
+}
+
+#businessOfficeRange{
+	position: absolute;
+	left:130px;
+}
+
+#businessOfficeConfirmation{
+	position:relative;
+	left:160px;
+	top:50px;
+}
+
+.dialogueBoxInnerText{
 	color:white;
 	width:300px;
 	position:relative;
@@ -300,6 +366,29 @@
 	white-space: pre-wrap;
 	left:50px;
 	margin-bottom:10px;
+}
+
+#embassyOfficeScreen{
+	display:none;
+}
+
+.playerRadioContainer{
+	position: relative;
+	width:75px;
+	height:25px;
+	left:calc(50% - 33px);
+}
+
+.playerRadioNameLabel{
+	position: absolute;
+	color:white;
+	text-align:left;
+	left:calc(50% - 20px);
+}
+
+#embassyOfficeConfirmation{
+	margin-top:0px;
+	left:160px;
 }
 
 @media only screen and (max-height: 520px) {

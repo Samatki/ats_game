@@ -4,24 +4,30 @@
 	<link rel="icon" type="image/jpg" href="https://img.favpng.com/8/15/10/international-space-station-orbital-spaceflight-outer-space-png-favpng-kcnW2wT6F4JcytYer7pFt6qhQ.jpg">
 	<meta name="viewport" content="user-scalable=no" />
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="client_styles/card_styles.css"> 
-	<link rel="stylesheet" type="text/css" href="client_styles/game_area_styles.css">
-	<link rel="stylesheet" type="text/css" href="client_styles/playareaguistyles.css">
-	<link rel="stylesheet" type="text/css" href="client_styles/objective_styles.css">
-	
-	<script type="text/javascript" src="./client_scripts/cardlibrary.js"></script>
-	<script type="text/javascript" src="./client_scripts/cardPrinter.js"></script>
-	<script type="text/javascript" src="./client_scripts/dijkstra.js"></script>
-
-	<script type="text/javascript">
-function playSound(){
-	document.getElementById("placementSound").play()
-}
-</script>
+	<link rel="stylesheet" type="text/css" href="/card_styles.css"> 
+	<link rel="stylesheet" type="text/css" href="/game_area_styles.css">
+	<link rel="stylesheet" type="text/css" href="/playareaguistyles.css">
+	<link rel="stylesheet" type="text/css" href="/objective_styles.css">
+	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var dummySetup = {gameId:53455}
+	  var playerDataObj;
+	  var socket = io();
+	  socket.on('connect',function(){
+		socket.emit('loginCheck',playerKey);
+	  });
+	  socket.on('redirect', function(destination) {
+		window.location.href = destination;
+	  });	  
+	 // socket.emit('on connection')
+	</script>	
+	<script type="text/javascript" src="/cardlibrary.js"></script>
+	<script type="text/javascript" src="/cardPrinter.js"></script>
+	<script type="text/javascript" src="/dijkstra.js"></script>
+
+	<script>
+//		var dummySetup = {gameId:53455}
 		document.addEventListener("DOMContentLoaded", function(){
-			document.getElementById("gameLogTitle").innerHTML = "Among The Stars<br>Game #" + dummySetup.gameId.toString();
+			document.getElementById("gameLogTitle").innerHTML = "Among The Stars<br>"//Game #" + dummySetup.gameId.toString();
 			var initialgridPositionX = document.getElementById("gridContainer").getBoundingClientRect().left;
 			var initialgridPositionY = document.getElementById("gridContainer").getBoundingClientRect().top;
 			generateListeners();
@@ -43,24 +49,27 @@ function playSound(){
 		var handLock = false;
 		var requiredPowerSpend = 0;
 		var powerSpendArray = [];
+		var powerAddArray = [];
 		var accessiblePowerArray = [];
 		var confirmationBoxFlag = false;
 		var optionMode = 0;
 		var transferredCard2 = "";
 		var endEarly = false;
+		var businessOfficesExtraSpend = 0;
+		var embassyOfficePlayerSelect = "";
+		var playerDataObj = {};
+		var placedCardIndex = null;
+		var turnObject = {};
 	</script>
 	
 
 </head>
 <body>
-<div class="loadingContainer"></div> 
-<audio id="placementSound">
-  <source src="ATS_Sounds/placement.mp3" type="audio/mpeg">
-</audio>
+<div class="loadingContainer"></div>
 <div id="game_background"></div>
 <div id="topBar">
 	<div class="topBarButtonContainer">
-		<button id="gameResign" class="topBarButtons">Resign</button>	
+		<button id="gameResign" class="topBarButtons">Resign</button>
 		<button id="gameDiscard" class="topBarButtons">Discard</button>
 	</div>
 	<div class="topBarButtonContainer">
@@ -69,48 +78,28 @@ function playSound(){
 	</div>
 	<div class="topBarButtonContainer">
 		<button id="gameObjs" class="topBarButtons">Objectives</button>
-		<button id="gameLog" class="topBarButtons">Game Log</button>	
+		<button id="gameLog" class="topBarButtons">Game Log</button>
 	</div>
 </div>
 <div id="rCModal"></div>
 <div id="infoArea" >
 	<p class="gameInfoTitle" id="gameLogTitle"></p>
-	<p id="gameLogText">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel pellentesque leo. In quis velit nibh. In suscipit ligula mauris, non tempus erat interdum sed. Mauris volutpat vulputate egestas. Ut eleifend nulla rutrum, lobortis magna id, aliquet odio. Etiam vel porttitor justo. Aenean quis ex eu augue varius porta vitae nec felis. Suspendisse faucibus sodales feugiat.
-
-Curabitur in porta urna. Vestibulum iaculis mauris ac tincidunt dapibus. Mauris bibendum maximus interdum. Curabitur fermentum justo sed nisl lobortis, sit amet lobortis leo dignissim. Nunc quis elit vel urna pharetra porta. Suspendisse in accumsan augue. Sed convallis lorem nec imperdiet tincidunt. Curabitur vestibulum arcu eu lacus mollis sodales. Nullam semper, massa ac pretium pretium, ante quam volutpat metus, ac lobortis nisi magna sed nunc. Aenean suscipit porta nunc, sed ullamcorper nunc convallis vitae. Donec ac orci ut ligula porta rutrum. In consequat purus a sapien dictum, sed scelerisque ante dictum. Morbi pellentesque mi in suscipit hendrerit. Sed at urna tortor. Duis quis ligula erat.
-
-Aenean sit amet lobortis dui. Vivamus nec enim ultrices, tristique risus a, eleifend diam. Proin facilisis auctor ligula vel placerat. Duis eget condimentum risus. Integer a ex ex. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla dignissim sapien posuere interdum gravida. Nullam odio mi, tristique eu erat a, blandit imperdiet dui.
-
-Sed condimentum, ipsum a gravida imperdiet, massa nulla egestas sem, non dictum sapien ex nec leo. Integer luctus justo ac dapibus molestie. Pellentesque justo augue, convallis vitae lorem non, suscipit pharetra eros. Proin nibh sapien, suscipit a consequat lobortis, auctor suscipit elit. Duis est eros, ornare vitae sagittis eu, volutpat et risus. Vestibulum eu velit finibus felis placerat rhoncus. Vivamus gravida est vel lorem auctor molestie. Maecenas finibus aliquam lectus, id tincidunt urna ultricies non. Etiam sed urna sed ligula placerat iaculis. Vivamus luctus, dui vitae dictum lacinia, lorem tellus elementum purus, vitae dapibus erat ligula ut libero. Duis tempor risus ut enim blandit cursus. Integer fringilla aliquet nulla eu imperdiet.
-
-Phasellus tristique lacus a quam commodo tempus. Pellentesque nec justo dictum, ullamcorper ligula eget, malesuada dolor. Cras in nunc sed ipsum porttitor pulvinar et eu urna. Integer vitae massa in eros sodales dapibus. Pellentesque interdum elementum massa non imperdiet. Donec sollicitudin lorem et condimentum volutpat. Vivamus non dui ex.
-
-Nunc posuere et lectus in maximus. Pellentesque turpis turpis, mattis in egestas eget, tincidunt ac purus. Cras eu est bibendum velit finibus vehicula at ac dolor. Fusce nibh elit, vulputate vel lorem sit amet, pretium maximus risus. Vestibulum eget tempus tortor, et posuere augue. Pellentesque dapibus ut nulla ultrices ornare. Nulla tristique eu enim in euismod. Nunc dignissim libero sed nulla eleifend maximus. Nulla eu ultrices lorem. Nulla a vulputate velit. Aenean vel mauris est.
-
-Integer gravida fringilla nulla, quis pulvinar turpis facilisis vel. Nam mattis velit vitae metus pharetra rutrum. Etiam viverra magna vel congue convallis. Proin eget leo orci. Nam consequat ante in magna tincidunt tempus. Nunc iaculis placerat fermentum. Aenean elementum cursus magna ut aliquam. Nam accumsan posuere nibh, vel pulvinar lorem porta nec. Aenean sed erat orci. Sed nec erat eu mauris aliquet maximus id sed nulla. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-
-Nulla mattis risus orci, et tempor lectus commodo ac. Vivamus elit odio, tristique ac aliquet vitae, ultrices nec nulla. Praesent dignissim, justo a convallis interdum, neque nibh sagittis nunc, non dictum ligula mauris luctus urna. Phasellus ac orci semper, maximus risus eu, bibendum nibh. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sit amet orci quam. Sed suscipit, sapien ut accumsan posuere, dolor purus mollis metus, eget iaculis nisi ipsum nec neque.
-
-Proin vel risus commodo, lobortis massa ac, varius metus. Nam sit amet nisl magna. Pellentesque eget orci nisi. Duis pretium mattis feugiat. Proin vel suscipit turpis, quis egestas nulla. Sed eleifend erat ligula, eget mollis neque auctor non. Nulla ut vehicula eros.
-
-Sed euismod, mauris id consectetur consequat, metus lorem rutrum arcu, vehicula ultricies odio lacus eget massa. Cras mollis consequat elit, vitae tempor orci efficitur nec. Pellentesque in diam vitae arcu tempus imperdiet. Integer quis tellus eget odio sodales tincidunt a et tellus. Sed luctus est urna, et faucibus lorem tempor non. Proin rutrum lorem in nibh vestibulum, vitae faucibus elit vulputate. Proin dignissim sit amet arcu eget auctor. Aliquam id congue nisi, ac auctor sem. Curabitur eu molestie metus, vitae cursus dolor.</p>
+	<p id="gameLogText"></p>
 </div>
 <div id="objArea">
 	<p class="gameInfoTitle" id="gameObjTitle">Objectives</p>
-	<div id="objListArea">
+<!--	<div id="objListArea">
 		<div class="objective">
 			<div class="objTitle">Accelerated Construction</div>
 			<div class="objPoints">4</div>
 			<div class="objDescription">Be the first to reach 50 (before the end of the 4th year).<br><i>In case more than 1 players reach them at the same round, the bonus goes to the one who went higher - in case of a tie, no bonus is given.</i></div>
 		</div>
-	</div>
-	<div id="objListArea">
 		<div class="objective">
 			<div class="objTitle">Accelerated Construction</div>
 			<div class="objPoints">4</div>
 			<div class="objDescription">Be the first to reach 50 (before the end of the 4th year).<br><i>In case more than 1 players reach them at the same round, the bonus goes to the one who went higher - in case of a tie, no bonus is given.</i></div>
 		</div>
-	</div>
+	</div> -->
 </div>
 <div id="gameArea" class="gameMat">
 	<div id="reactContainer"></div>
@@ -119,15 +108,16 @@ Sed euismod, mauris id consectetur consequat, metus lorem rutrum arcu, vehicula 
 <div id="cardListArea" class="gameMat"></div>
 <div id="discardArea" class="gameMat"></div>
 <div id="cardListArea" class="gameMat"></div>
-<script type="text/javascript" src="./client_scripts/gameCardAreaPrinters.js"></script>
+<script type="text/javascript" src="/gameCardAreaPrinters.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/react/16.13.1/umd/react.production.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js'></script><script  src="./client_scripts/playareagui.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js'></script><script  src="/playareagui.js"></script>
 <div class="loadingContainer"></div> 
+
 
 </body>
 
-<script type="text/javascript" src="./client_scripts/gameAreaButtons.js"></script>
-<script type="text/javascript" src="./client_scripts/gameCoreScript.js"></script>
+<script type="text/javascript" src="/gameAreaButtons.js"></script>
+<script type="text/javascript" src="/gameCoreScript.js"></script>
 
 </html>

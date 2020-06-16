@@ -5,3 +5,4 @@ ATS_Images/Artwork/Reference
 ATS_Images/Artwork/Cards/Old
 *.xcf
 ATS_Images/Artwork/Cards/FullSize
+node_modules/

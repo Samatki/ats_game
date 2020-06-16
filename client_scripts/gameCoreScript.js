@@ -166,7 +166,7 @@ function generateListeners(){
 		}
 	  }
 	  if(handMouseDown){
-		document.getElementById("gridContainer").style.cursor = "";  
+		document.getElementById("gridContainer").style.cursor = "none";  
 	  } else {
 	//	document.getElementById("gridContainer").style.cursor = ""; 	  
 	  }
@@ -243,6 +243,7 @@ document.body.addEventListener('mouseup',function(e){
 		};
 		if(e.target.classList.contains("stationCardPlaceable")&&positionCheck(transferredCard,e.target.dataset.index,playerDataObj)){
 			var cardObj = {};
+			placedCardIndex = e.target.dataset.index;
 			var powerTransferred = 2;
 			if(transferredCard[2] == "B"){
 				cardObj = cardList.cards.basic_locations.find(x => x.cardId === transferredCard);
@@ -408,6 +409,16 @@ function positionCheck(cardid,placedIndex,playerObj){
 			if(powerCount >= cardPowerCost){			
 				if(cardLocationRestriction.length == 0){
 					result = true;
+				} else if(cardid == "B0S_B_SP"){
+					for(var i = 0; i < cardLocationRestriction.length; i++){
+						for(var j=0; j<cardArray.length; j++){
+							if(cardArray[j] == cardLocationRestriction[i][0]){
+								if(dijkstraAlgo(cardArrayDijkstra,placedIndex,j) <= cardLocationRestriction[i][1]){
+									result = true;
+								}
+							}
+						}
+					}					
 				} else {
 					for(var i = 0; i < cardLocationRestriction.length; i++){
 						for(var j=0; j<cardArray.length; j++){
@@ -429,21 +440,21 @@ function arrayCounter(array, searchTerm){
 	return array.reduce((n,x) => n + (x === searchTerm),0);
 }
 
-function getAvailablePowerIndeces(arrayGrid, placedCardLocation){
+function getAvailablePowerIndeces(arrayGrid, placedCardLocation,arraypower,radius){
 	var powerCount = 0;
 	var powerPlacedArray = [];
 	var cardArray = arrayGrid.grid;
 	var availableArray = [];
 
-	for(var i = 0; i < powerArray.length; i++){
+	for(var i = 0; i < arraypower.length; i++){
 		for(var j=0; j<cardArray.length; j++){
-			if(cardArray[j] == powerArray[i]){
+			if(cardArray[j] == arraypower[i]){
 				powerPlacedArray.push(j);
 			}
 		}
 	}
 	for(var i = 0; i<powerPlacedArray.length; i++){
-		if(dijkstraAlgo(arrayGrid,placedCardLocation,powerPlacedArray[i]) < 3){
+		if(dijkstraAlgo(arrayGrid,placedCardLocation,powerPlacedArray[i]) <= radius){
 			availableArray.push(powerPlacedArray[i])
 		}
 	}
@@ -475,7 +486,7 @@ function removePower(event){
 		targetCard.innerHTML = "";
 		targetCard.innerHTML = cardPrinter(getCardObj(targetCardId.slice(0,8)),"game_card_board",powerAvailable-1);
 		requiredPowerSpend--;
-		powerSpendArray.push([event.currentTarget.firstElementChild.dataset.cardid,event.currentTarget.dataset.index]);
+		powerSpendArray.push([event.currentTarget.dataset.index,event.currentTarget.firstElementChild.dataset.cardid]);
 	}
 	if(requiredPowerSpend == 0 && transferredCard != "B0B_R_SG"){
 		for(var i = 0; i < accessiblePowerArray.length; i++){
@@ -497,6 +508,22 @@ function removePower(event){
 	}else if(requiredPowerSpend <= 0 && transferredCard == "B0B_R_SG"){
 		document.getElementById("endEarlyButton").style.display = "block";
 	}	
+}
+
+function addPower(event){
+	var targetCard = event.currentTarget;
+	var targetCardId = event.currentTarget.firstElementChild.dataset.cardid;
+	var powerAvailable = parseInt(targetCardId[8]);
+		targetCard.innerHTML = "";
+		targetCard.innerHTML = cardPrinter(getCardObj(targetCardId.slice(0,8)),"game_card_board",powerAvailable+1);
+		powerAddArray.push([event.currentTarget.dataset.index,event.currentTarget.firstElementChild.dataset.cardid]);
+		for(var i = 0; i < accessiblePowerArray.length; i++){
+			document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].removeEventListener('click',addPower,true);
+			document.getElementsByClassName("stationCardSpace")[accessiblePowerArray[i]].style.outline = "";
+		}
+		optionMode = 1;
+		confirmationBoxFlag = true;
+		confirmationBoxLoader();
 }
 
 function endEarlyButton(){
@@ -526,11 +553,19 @@ function confirmationBoxLoader(){
 	var cardTitle = card.cardTitle;
 	var cardCost = card.cardCreditCost;
 	var cardPower = card.cardPowerCost;
+		turnObject = {};
+		turnObject.playerKey = playerKey;
+		turnObject.mode = optionMode;
+		turnObject.cardFromHand = transferredCard;
+		turnObject.updatedGrid = [[placedCardIndex, transferredCard]];
+		powerSpendArray.forEach(function(item){turnObject.updatedGrid.push(item)});
+		powerAddArray.forEach(function(item){turnObject.updatedGrid.push(item)});
+		turnObject.extraData = [];
 	
 	if(optionMode == 1){
 		innerText = "Place " + cardTitle + " on station for " + cardCost + " credits"
 		if (cardPower){
-			innerText = innerText + " and " + cardPower + " power"
+			innerText = innerText + " and " + cardPower + " power";
 		}
 	} else if (optionMode == 2){
 		innerText = "Discard " + cardTitle + " for " + playerDataObj.playerData.player_currency_discard_value + " credits"		
@@ -538,8 +573,22 @@ function confirmationBoxLoader(){
 		innerText = "Discard " + getCardObj(transferredCard2).cardTitle + " and pay 1 credit for Power Reactor"		
 	} else if (optionMode == 4){
 		innerText = "Place Shield Generator on station for 3 credits and 1 power (& 2 additional power for maximum bonus)"		
+		turnObject.extraData.push(2);
 	} else if (optionMode == 5){
-		innerText = "Place Shield Generator on station for 3 credits and 1 power (& 1 additional power for bonus)"		
+		innerText = "Place Shield Generator on station for 3 credits and 1 power (& 1 additional power for bonus)"
+		turnObject.extraData.push(1);		
+	} else if (optionMode == 6){
+		innerText = "Place Business Offices on station for 1 credit. Spend an additional " + (businessOfficesExtraSpend) + " credits for an extra " + parseInt(Math.floor(businessOfficesExtraSpend/2)) + " VP"
+		turnObject.extraData.push(businessOfficesExtraSpend);		
+	} else if (optionMode == 7){
+		if(embassyOfficePlayerSelect != "None"){
+			var otherSelectedPlayerName = playerDataObj.otherPlayersData.otherPlayers.find(function(item){if(item.playerNo == embassyOfficePlayerSelect){return item}}).playerName
+			innerText = "Place Embassy Offices on station for 2 credits. Gain an additional +2VP  with player " + otherSelectedPlayerName + " receiving +1 VP."
+			turnObject.extraData.push(embassyOfficePlayerSelect);
+			turnObject.extraData.push(otherSelectedPlayerName);
+		} else {
+			innerText = "Place Embassy Offices on station for 2 credits."			
+		}
 	}	
 	
 	if(confirmationBoxFlag){
@@ -549,4 +598,14 @@ function confirmationBoxLoader(){
 	} else {
 		document.getElementById("turnConfirmationScreen").style.display = "";	
 	}		
+}
+
+function renderGameLog(logArray){
+	var gameLogHTML = document.getElementById('gameLogText');
+	var gameLogHTMLWrite = ""
+	gameLogText.innerHTML = "";
+	for(var i = 0;i<logArray.length;i++){
+		gameLogHTMLWrite = gameLogHTMLWrite + "<div class='gameLogEntry'>" + logArray[i] + "</div>"
+	}
+	gameLogHTML.innerHTML = gameLogHTMLWrite;
 }
