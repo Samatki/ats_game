@@ -1,164 +1,3 @@
-/*var playerDataObj = {
-    gameData: {
-        round: 1,
-        turn: 1,
-		turnOrder : false
-    },
-    playerData: {
-		playerName: "Sam00",
-		playerNo : 1,
-        curr_score: 0,
-        eg_score: 0,
-        currency: 10,
-        secret_obj: null,
-        ability_available: null,
-        player_race: "qualeen",
-		color : "lime",
-		main_reactor_color : "blue",
-		player_currency_turn_increase: 10,
-		player_currency_discard_value: 3
-    },
-    playerHand: ["B0S_B_CB","B0S_B_SP","B0B_R_FLB","B0S_B_BR","B0S_Y_BO","B0B_G_EO"],
-    playerStationArray: {
-        parameters: {
-            x: 5,
-            infinite: true,
-			grid_transform_string : null
-        },
-        grid: [
-			false,
-            false,
-            false,
-			false,
-			false,
-			false,
-            false,
-            false,
-            false,
-			false,
-			false,
-			false,
-            false, 
-			"B0R_X_MR3",
-			"B0B_B_TP",
-			false, 
-			false,
-			"B0B_B_TP",
-			false, 
-			false,
-			"B0B_B_TP",
-			false, 
-			"B0R_X_PR2",
-			false,
-			false, 
-			"B0R_X_PR3",
-			false,			
-        ],
-        gridSchema: {
-            cardPresence: false,
-            card_obj: {}
-        }
-    },
-	otherPlayersData : {
-		numberOther : 3,
-		otherPlayers : [
-			{
-				playerNo : 2,
-				playerName : "a",
-				playerScore : 0,
-				currency:0,
-				eg_score : 0,
-				ability_available : null,
-				player_race : "zehuti",
-				color : "red",
-				main_reactor_color : "red",
-				playerStationArray: {
-					parameters: {
-						x: 3,
-						infinite: true,
-						grid_transform_string : null
-					},
-					grid: [
-						false,
-						"B0B_R_FLB",
-						false,
-						"B0B_R_FLB", 
-						"B0S_B_CB",
-						"B0S_P_OD",
-						false,
-						false,
-						false
-					]
-				}
-			}, 
-			{
-				playerNo : 3,
-				playerName : "b",
-				playerScore : 0,
-				eg_score : 0,
-				currency:0,
-				ability_available : null,
-				player_race : "vak",
-				color : "cyan",
-				main_reactor_color : "vak",
-				playerStationArray: {
-					parameters: {
-						x: 3,
-						infinite: true,
-						grid_transform_string : null
-					},
-					grid: [
-						false,
-						"B0B_R_FLB",
-						false,
-						"B0B_R_FLB", 
-						"B0S_B_CB",
-						"B0S_P_OD",
-						false,
-						false,
-						false
-					]
-				}
-			} , 
-			{
-				playerNo : 4,
-				playerName : "c",
-				playerScore : 0,
-				eg_score : 0,
-				currency:0,
-				ability_available : null,
-				player_race : "humareen",
-				color : "SeaShell",
-				main_reactor_color : "green",
-				playerStationArray: {
-					parameters: {
-						x: 3,
-						infinite: true,
-						grid_transform_string : null
-					},
-					grid: [
-						false,
-						"B0B_R_FLB",
-						false,
-						"B0B_R_FLB", 
-						"B0S_B_CB",
-						"B0S_P_OD",
-						false,
-						false,
-						false
-					]
-				}
-			}
-		
-		]
-	},
-	discardPile : {
-		    cards: ["B0S_B_CB","B0S_B_CB","B0S_P_OD"]
-	}
-};
-*/
-
-
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
@@ -177,8 +16,8 @@ var playerDatabase = [{username:"Jeremy",userpassword:"PASSWORD123",playerKey:(M
 /* GAME SCRIPTS */
 var players = playerDatabase.map(function(item){return {username:item.username, playerKey:item.playerKey}});
 var noPlayers = players.length;
-console.log(players);
-console.log(noPlayers);
+//console.log(players);
+//console.log(noPlayers);
 var handSize = 6;
 var objectives = false;
 var playerAbilities = false;
@@ -188,8 +27,9 @@ var gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
 var playerSubmitTracker = [];
 var playerSubmitActions = [];
 var discardPile = [];
-initialHand()
-
+var currentCredits = [0,0,0,0,0,0];
+initialHand();
+newTurnCreditsMessage();
 /* END GAME SCRIPTS */
 
 var app = express();
@@ -209,27 +49,28 @@ http.listen(process.env.PORT || 8080, function(){
 });
 
 io.on('connection', (socket) => {
+  console.log('User Connected');
   loginCheckFunction(socket);
   socket.join('ATS_Game_Room');
   socket.on('pageLoader',function(data){
 		  try{
-			  console.log(loginCheckFunction(socket))
+//			  console.log(loginCheckFunction(socket))
 			  if(loginCheckFunction(socket)){
 				  if(playerSubmitTracker.includes(data.playerKey)){
 					for(var i=0; i<playerObjs.length; i++){
 						if(playerObjs[i].playerData.playerKey == data.playerKey){
 							x = {...playerObjs[i]};
 							x.playerHand = [];
-							console.log("1")
+//							console.log("1")
 							socket.emit('pageLoader',JSON.parse(JSON.stringify(x)));  
 						}
 					}
 				  } else {
 					for(var i=0; i<playerObjs.length; i++){
-						console.log(playerObjs[i].playerData.playerKey)
-						console.log(data)
+//						console.log(playerObjs[i].playerData.playerKey)
+//						console.log(data)
 						if(playerObjs[i].playerData.playerKey == data.playerKey && data.playerKey != undefined){
-							console.log("2");
+//							console.log("2");
 							socket.emit('pageLoader',playerObjs[i]);  
 							break;
 						}
@@ -243,8 +84,8 @@ io.on('connection', (socket) => {
 	  });
   
     socket.on("submitTurnData",(data) =>{
-		console.log("A");
-		console.log(data);
+//		console.log("A");
+//		console.log(data);
 	   /* Data Object:
 	  {
 		playerKey : sdfwef,
@@ -255,11 +96,11 @@ io.on('connection', (socket) => {
 	  }
 	  */
 	  try{
-		  		console.log("B");
+//		  		console.log("B");
 		  if (loginCheckFunction(socket)){
-			 console.log("C");
+//			 console.log("C");
 			if(processUserTurn(data)){
-						console.log("D1");
+//						console.log("D1");
 				processPlayerActions()				
 				passData()
 			}
@@ -270,15 +111,15 @@ io.on('connection', (socket) => {
 	  }
 	});
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log('User Disconnected');
   });  
 });
 
 
 app.route('/reset')
 	.get(function(req,res){
-		console.log("Game Reset!");
 		if(req.session.loginStatus){
+			console.log("Game Reset!");
 			players = playerDatabase.map(function(item){return {username:item.username, playerKey:item.playerKey}});
 			noPlayers = players.length;
 			handSize = 6;
@@ -290,17 +131,20 @@ app.route('/reset')
 			playerSubmitTracker = [];
 			playerSubmitActions = [];
 			discardPile = [];
-			initialHand()
+			currentCredits = [0,0,0,0,0,0];
+			initialHand();
+			newTurnCreditsMessage();
+			io.to('ATS_Game_Room').emit('redirect','');
+			res.redirect('..');
 		}
-		io.to('ATS_Game_Room').emit('redirect','');
-		res.redirect('..');
+		res.end();
 //		res.sendFile(__dirname + 'index.html');
 	});
 
 app.route('*')
 	.get(function(req,res){
 		if(req.session.loginStatus){
-			console.log("This HTTP session id is " + req.session.id);
+//			console.log("This HTTP session id is " + req.session.id);
 			res.write('<script>var playerKey ='+req.session.playerKey+'</script>')
 			fs.readFile(('./index.html'),function(err,data){res.write(data);res.end()});
 		} else {
@@ -319,10 +163,10 @@ app.route('*')
 			console.log(req.body.username + " has logged in");
 			req.session.loginStatus = true;
 			req.session.username = req.body.username;	
-			console.log("This HTTP session id is " + req.session.id);
+//			console.log("This HTTP session id is " + req.session.id);
 			res.redirect(req.protocol + '://' + req.get('host'));
 		} else {
-			console.log("login failure");
+			console.log("Login Failure");
 			res.sendFile(__dirname + '/login.html');			
 		}
 	})
@@ -332,26 +176,26 @@ app.route('*')
 function loginCheckFunction(socket){
 	var result = true;
 	socket.on("loginCheck",(data) =>{
-	  console.log(result)
+//	  console.log(result)
 	  playerDatabase.forEach(function(item){
 		  if(item.playerKey == data){
 			  result = false;
 			}
 		})
-		console.log(result)
+//		console.log(result)
 		if(result){
-		  console.log("sending for redirect")
+		  console.log("Sending for redirect")
 		  var destination = '';
 		  socket.emit('redirect', destination);
 		  result = false;
 		} else {
-		  console.log("passed login check")
+//		  console.log("Passed login check")
 		  playerDatabase.forEach(function(item){
-			  console.log(item.playerKey == data)
+//			  console.log(item.playerKey == data)
 			  if(item.playerKey == data){
 				  item.socketKey = socket.id;
 				  result = true;
-				  console.log(result)
+//				  console.log(result)
 				}
 			})		
 		}
@@ -360,29 +204,28 @@ function loginCheckFunction(socket){
 }
 
 function processUserTurn(data){
-	console.log("D")
+//	console.log("D")
 	if(! playerSubmitTracker.includes(data.playerKey)){
-		console.log("E")
+//		console.log("E")
 		for(var i = 0; i<playerDatabase.length; i++){
 			if(playerDatabase[i].playerKey == data.playerKey){
-				console.log("F")
+//				console.log("F")
 				playerSubmitTracker.push(data.playerKey);
 					for(var i = 0; i<playerObjs.length; i++){
 						if(playerObjs[i].playerData.playerKey == data.playerKey){
-							console.log("G")
-							console.log(data.cardFromHand)
-							console.log(playerObjs[i].playerHand)
+//							console.log("G")
+//							console.log(data.cardFromHand)
+//							console.log(playerObjs[i].playerHand)
 							if(playerObjs[i].playerHand.includes(data.cardFromHand) || data.cardFromHand == "B0R_X_PR2"){
-								console.log("H")
-								console.log(data.cardFromHand);
-								console.log(playerObjs[i].playerHand);
+//								console.log("H")
+//								console.log(playerObjs[i].playerData.playerName);
+//								console.log(playerObjs[i].playerHand);
+//								console.log(data.cardFromHand);
 								//Remove played card from player hand
 								var hand = playerObjs[i].playerHand;
-								hand.splice(hand[i].indexOf(data.cardFromHand),1);
+								hand.splice(hand.indexOf(data.cardFromHand),1);
 								playerObjs[i].updatePlayerHand(hand);
 								playerObjs[i].updateGrid(data.updatedGrid);
-								console.log(playerObjs[i].playerHand);
-								console.log(playerObjs[i]);
 							}
 							break;
 						}
@@ -402,44 +245,69 @@ function processUserTurn(data){
 
 
 function processPlayerActions(){
-	var playerHandSwitchArray = []
+	var currentScores = [];
+	var playerHandSwitchArray = [];
+	for (var j = 0; j<playerObjs.length; j++){
+		// Regenerate Other Player Grids
+		currentScores.push([playerObjs[0].playerData.curr_score,playerObjs[0].playerData.eg_score]);
+		playerObjs[j].discardPile.cards = discardPile;
+		playerObjs[j].otherPlayersData.otherPlayers = [];
+//		console.log("Updating...")
+//		console.log(playerObjs[j].playerData.playerName)
+//		console.log(playerObjs[j].playerData.playerNo);
+//		console.log('.....')
+		for(var k = j + 1 ; k< j + playerObjs.length ; k++){
+			currentPlayerObj = playerObjs[(k % playerObjs.length + playerObjs.length) % playerObjs.length];
+//			console.log(currentPlayerObj.playerData.playerName);
+//			console.log(currentPlayerObj.playerData.playerNo);
+			playerObjs[j].addOtherPlayer(currentPlayerObj.playerData.playerNo,currentPlayerObj.playerData.playerName,currentPlayerObj.playerData.currency,currentPlayerObj.playerData.playerNo.abilities,currentPlayerObj.playerData.player_race,currentPlayerObj.playerData.curr_score,currentPlayerObj.playerData.eg_score,currentPlayerObj.playerStationArray.grid,currentPlayerObj.playerStationArray.parameters.x);
+		}
+	}
 	for(var i = 0; i<playerSubmitActions.length; i++){
 		for (var j = 0; j<playerObjs.length; j++){
 			if(playerSubmitActions[i].playerKey == playerObjs[j].playerData.playerKey){
 				if (playerSubmitActions[i].mode == 2){
 					// Discard for money
-					playerObjs[j].currencyChange(playerObjs[j].playerData.player_currency_discard_value);
-					discardPile.push(playerSubmitActions[i].cardFromHand);
-					var actionedCard = cL.getCardObj(playerSubmitActions[i].cardFromHand);
-					for(var k = 0; k<playerObjs.length; k++){
-						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> discards <span class='logCard' cardid='"+actionedCard.cardId+"'>" + actionedCard.cardTitle +"</span> for " + playerObjs[j].playerData.player_currency_discard_value + " credits");
+					if(playerSubmitActions[i].cardFromHand[2] != "R"){
+						playerObjs[j].currencyChange(playerObjs[j].playerData.player_currency_discard_value);
+						discardPile.push(playerSubmitActions[i].cardFromHand);
+						var actionedCard = cL.getCardObj(playerSubmitActions[i].cardFromHand);
+						for(var k = 0; k<playerObjs.length; k++){
+							playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> discards <span class='logCard' data-cardid='"+actionedCard.cardId+"'>" + actionedCard.cardTitle +"</span> for " + playerObjs[j].playerData.player_currency_discard_value + " credits");
+						}
+					} else {
+						console.log("Someone attempted to discard a reactor - Illegal!");
 					}
 				} else if (playerSubmitActions[i].mode == 3) {
 					// Discard for power reactor
-					playerObjs[j].currencyChange(-1);					
-					discardPile.push(playerSubmitActions[i].cardFromHand);
-					var actionedCard = cL.getCardObj(playerSubmitActions[i].cardFromHand);
-					for(var k = 0; k<playerObjs.length; k++){
-						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> discards <span class='logCard' cardid='"+actionedCard.cardId+"'>"+ actionedCard.cardTitle +"</span> and pays 1 credit to place a <span class='logCard' cardid='B0R_X_PR2'>Power Reactor</span> on their station");
-					}					
+					if(playerSubmitActions[i].cardFromHand[2] != "R"){
+						playerObjs[j].currencyChange(-1);					
+						discardPile.push(playerSubmitActions[i].cardFromHand);
+						var actionedCard = cL.getCardObj(playerSubmitActions[i].cardFromHand);
+						for(var k = 0; k<playerObjs.length; k++){
+							playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> discards <span class='logCard' data-cardid='"+actionedCard.cardId+"'>"+ actionedCard.cardTitle +"</span> and pays 1 credit to place a <span class='logCard' data-cardid='B0R_X_PR2'>Power Reactor</span> on their station");
+						}					
+					} else {
+						console.log("Someone attempted to discard a reactor - Illegal!");
+					}	
 				} else if (playerSubmitActions[i].mode == 4) {
 					// Shield Generator Logic
 					playerObjs[j].currencyChange(-3);	
-					playerObjs[j].currentPointsChange(4);
+					playerObjs[j].currentPointsChange(8);
 					for(var k = 0; k<playerObjs.length; k++){
-						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' cardid='B0B_R_SG'>Shield Generator</span> for 1 power and 3 credits to gain +4VP, paying an additional 2 power for an additional +4VP");
+						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' data-cardid='B0B_R_SG'>Shield Generator</span> for 1 power and 3 credits, paying an additional 2 power for an additional <span class='posScoreDelta'>+4VP</span>");
 					}					
 				} else if (playerSubmitActions[i].mode == 5) {
 					// Shield Generator Logic
 					playerObjs[j].currencyChange(-3);					
-					playerObjs[j].currentPointsChange(2);
+					playerObjs[j].currentPointsChange(6);
 					for(var k = 0; k<playerObjs.length; k++){
-						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' cardid='B0B_R_SG'>Shield Generator</span> for 1 power and 3 credits to gain +4VP, paying an additional 1 power for an additional +2VP");
+						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' data-cardid='B0B_R_SG'>Shield Generator</span> for 1 power and 3 credits, paying an additional 1 power for an additional <span class='posScoreDelta'>+2VP</span>");
 					}	
 				} else if (playerSubmitActions[i].mode == 6){
 					// Business office select
-					var boChanger = extraData[0];
-					var boChangerPoints = parseInt(Math.floor(extraData[0]/2));
+					var boChanger = playerSubmitActions[i].extraData[0];
+					var boChangerPoints = parseInt(Math.floor(playerSubmitActions[i].extraData[0]/2));
 					if(boChangerPoints){
 						if(boChangerPoints > 3){
 							boChangerPoints = 3;
@@ -451,7 +319,7 @@ function processPlayerActions(){
 					playerObjs[j].currentPointsChange(1);
 					playerObjs[j].currencyChange(-1);
 					for(var k = 0; k<playerObjs.length; k++){
-						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' cardid='B0S_Y_BO'>Business Offices</span> for 1 credit to gain +1VP, paying an additional "+boChanger+" credits for an additional +"+boChangerPoints+"VP");
+						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' data-cardid='B0S_Y_BO'>Business Offices</span> for 1 credit, paying an additional "+boChanger+" credits for an additional <span class='posScoreDelta'>+"+boChangerPoints+"VP</span>");
 					}					
 				} else if (playerSubmitActions[i].mode == 7){
 					// Embassy office select;
@@ -469,51 +337,87 @@ function processPlayerActions(){
 					playerObjs[j].currencyChange(-2);
 					playerObjs[j].currentPointsChange(2);
 					for(var k = 0; k<playerObjs.length; k++){
-						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' cardid='B0B_G_EO'>Embassy Offices</span> for 2 credit to gain for +4VP, and gives <span style='color:"+selectedEOPlayerColor+"'>"+selectedEOPlayer+"</span> +1VP");
+						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' data-cardid='B0B_G_EO'>Embassy Offices</span> for 2 credit to gain for +4VP, and gives <span style='color:"+selectedEOPlayerColor+"'>"+selectedEOPlayer+"</span> +1VP");
 					}
 				} else {
 					var actionedCard = cL.getCardObj(playerSubmitActions[i].cardFromHand);
 					for(var k = 0; k<playerObjs.length; k++){
-						if(actionedCard.cardPowerCost != 0){
-							playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> places <span class='logCard' cardid='"+actionedCard.cardId+"'>" + actionedCard.cardTitle +"</span> on their station for " + actionedCard.cardCreditCost + " credits");
+						if(actionedCard.cardPowerCost == 0){
+							playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> places <span class='logCard' data-cardid='"+actionedCard.cardId+"'>" + actionedCard.cardTitle +"</span> on their station for " + actionedCard.cardCreditCost + " credits");
 						}else{
-							playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> places <span class='logCard' cardid='"+actionedCard.cardId+"'>" + actionedCard.cardTitle +"</span> on their station for " + actionedCard.cardCreditCost + " credits and "+actionedCard.cardPowerCost+" power");
+							playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> places <span class='logCard' data-cardid='"+actionedCard.cardId+"'>" + actionedCard.cardTitle +"</span> on their station for " + actionedCard.cardCreditCost + " credits and "+actionedCard.cardPowerCost+" power");
 						}
 					}
-					cf.placementScoringCost(playerObjs,j,playerSubmitActions[i]);
+					cF.placementScoringCost(playerObjs,j,playerSubmitActions[i]);
+					if(playerObjs[j].playerStationArray.parameters.infinite){
+						playerObjs[j].gridResizer();
+					}
 				}
 			}
 		}
 	}
-	for (var j = 0; j<playerObjs.length; j++){
-		// Regenerate Other Player Grids
-		playerObjs[j].discardPile.cards = discardPile;
-		playerObjs[j].otherPlayersData.otherPlayers = [];
-		for(var k = j + 1 ; k< j + playersObjs.length ; k++){
-			currentPlayerObj = playersObjs[(k % playersObjs.length + playersObjs.length) % playersObjs.length];
-			playerObjs[j].addOtherPlayer(currentPlayerObj.playerData.playerNo,currentPlayerObj.playerData.playerName,currentPlayerObj.playerData.currency,currentPlayerObj.playerData.playerNo.abilities,currentPlayerObj.playerData.player_race);			
+//	for(var k = 0; k<playerObjs.length; k++){
+//		playerObjs[k].updateEGScoring();
+//	}
+	for(var k = 0; k<playerObjs.length; k++){
+		var scoreDelta = (playerObjs[k].playerData.curr_score + playerObjs[k].playerData.eg_score) - (currentScores[k][0] + currentScores[k][1]);
+		for(var j = 0; j<playerObjs.length; j++){
+			if(scoreDelta >= 0){
+				playerObjs[j].addGameLogEntry("<span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"'s</span> score increases by <span class='posScoreDelta'>+"+scoreDelta+"VP</span> this round");
+			} else {
+				playerObjs[j].addGameLogEntry("<span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"'s</span> score decreases by <span class='negScoreDelta'> "+scoreDelta+"VP</span> this round");		
+			}
 		}
+	}
+	currentCredits = [];
+	for (var j = 0; j<playerObjs.length; j++){
+		currentCredits.push(playerObjs[j].playerData.currency);
 		playerHandSwitchArray.push(playerObjs[j].playerHand);
 		playerObjs[j].incrementTurn();
-		
 	}
-	// Generate New Hands
-	if(playerObjs[0].gameData.turnOrder == true){
+	// Generate New Hands & Pass
+	if (playerObjs[0].gameData.round == 1){
+		initialHand();
+		newTurnCreditsMessage()
+		for (var j = 0; j<playerObjs.length; j++){
+			playerObjs[j].addGameLogEntry("Hand pass order reversed");
+		}
+	} else if(playerObjs[0].gameData.turnOrder){
 		var x = playerHandSwitchArray.shift();
 		playerHandSwitchArray.push(x);
 	} else {
 		var x = playerHandSwitchArray.pop();
 		playerHandSwitchArray.unshift(x);
 	}
-	if (playerObjs[0].gameData.round == 1){
-		for (var j = 0; j<playerObjs.length; j++){
-			var hand = [];
-			for(var i = 0; i<handSize; i++){
-				hand.push(gameDeck.pop());
+	if(playerObjs[0].gameData.round != 1){
+		var passDirection = playerObjs[0].gameData.turnOrder ? 1 : -1;
+		for (var j = 0; j<playerObjs.length; j++ && playerObjs[0].gameData.round != 1){
+			var passIndex = ((j+passDirection) % playerObjs.length + playerObjs.length) % playerObjs.length;
+			var passedPlayer = playerObjs[passIndex].playerData.playerName;
+			var passedPlayerColour = playerObjs[passIndex].playerData.color;
+			playerObjs[j].updatePlayerHand(playerHandSwitchArray[j],true,[passedPlayer,passedPlayerColour])
+			for(var k = 0; k<playerObjs.length; k++){
+				passIndex = ((k+passDirection) % playerObjs.length + playerObjs.length) % playerObjs.length;
+				if(j==k){
+					continue;
+				} else {
+					playerObjs[j].addGameLogEntry("<span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span> receives cards from " + "<span style='color:"+playerObjs[passIndex].playerData.color+"'>"+playerObjs[passIndex].playerData.playerName+"</span>");
+				}
 			}
-			playerObjs[j].updatePlayerHand(hand); 
-		}		
+		}
 	}
+	
+	for (var j = 0; j<playerObjs.length; j++){
+		// Regenerate Other Player Grids (now with correct scores and credit balances);
+		playerObjs[j].otherPlayersData.otherPlayers = [];
+		for(var k = j + 1 ; k< j + playerObjs.length ; k++){
+			currentPlayerObj = playerObjs[(k % playerObjs.length + playerObjs.length) % playerObjs.length];
+//			console.log(currentPlayerObj.playerData.playerName);
+//			console.log(currentPlayerObj.playerData.playerNo);
+			playerObjs[j].addOtherPlayer(currentPlayerObj.playerData.playerNo,currentPlayerObj.playerData.playerName,currentPlayerObj.playerData.currency,currentPlayerObj.playerData.playerNo.abilities,currentPlayerObj.playerData.player_race,currentPlayerObj.playerData.curr_score,currentPlayerObj.playerData.eg_score,currentPlayerObj.playerStationArray.grid,currentPlayerObj.playerStationArray.parameters.x);
+		}
+	}
+	
 	playerSubmitActions = [];
 }
 
@@ -521,7 +425,7 @@ function passData(){
 	for (var i = 0; i<playerObjs.length; i++){
 		for (var j = 0; j<playerDatabase.length; j++){
 			if(playerObjs[i].playerData.playerKey == playerDatabase[j].playerKey){
-				console.log("3");
+//				console.log("3");
 				io.to(playerDatabase[j].socketKey).emit('pageLoader',playerObjs[i]);
 			}
 		}
@@ -543,4 +447,18 @@ function initialHand(){
 		}
 	}
 }	
+}
+
+function newTurnCreditsMessage(){
+	for(var k = 0; k<playerObjs.length; k++){
+		for (var j = 0; j < playerObjs.length; j++){
+			var updatedCredits = playerObjs[j].playerData.currency;
+			var currencyDelta = updatedCredits - currentCredits[j];
+			if(currencyDelta >= 0){
+				playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> receives <span class='posScoreDelta'>+"+currencyDelta+"</span> credits");
+			} else {
+				playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> loses <span class='negScoreDelta'>+"+currencyDelta+"</span> credits");
+			}
+		}
+	}
 }

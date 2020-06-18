@@ -14,9 +14,14 @@ body{
 /*  height:calc(100vh) */
 }
 
+.logCard{
+	font-style: italic;
+}
+
 #topBarFlexContainer{
   display:flex;
   box-sizing:border-box;
+  -moz-box-sizing:border-box;  
   width:100%;
   justify-content:space-between;
   width:calc(100vw - 300px);
@@ -101,6 +106,7 @@ body{
   height:18.2%;
   width:60%;
   box-sizing:border-box;
+  -moz-box-sizing:border-box;
 }
 
 #ownPlayerBoxTop{
@@ -250,6 +256,12 @@ body{
 	font-weight:900;
 }
 
+.logHeader{
+	display:block;
+	padding-top:10px;
+	padding-bottom:5px;
+}
+
 #gameLogText{
 	text-align:justify;
 	padding-left:10px;
@@ -270,9 +282,10 @@ body{
 #turnOrderIcon{
 	background-image: url("../ATS_Images/Game_Icons/spin_icon.png");
 	background-size:cover;
+	transform: scaleX(-1);
 }
 
-.flipped{transform: scaleX(-1);}
+.flipped{transform: scaleX(1);}
 
 #ownPlayerBoxMoney{
 	background-image : url("../ATS_Images/Card_Details/coin2.png");
@@ -284,6 +297,7 @@ body{
 	color:white;
 	text-align:right;
 	box-sizing:border-box;
+	-moz-box-sizing:border-box;
 	padding-right:20px;
 	padding-top:-5px;
 }
@@ -298,6 +312,7 @@ body{
 	color:white;
 	text-align:right;
 	box-sizing:border-box;
+	-moz-box-sizing:border-box;
 	padding-right:20px;
 	padding-top:-5px;
 }
@@ -325,6 +340,7 @@ body{
     text-align: right;
     width: 100%;
     box-sizing: border-box;
+	-moz-box-sizing:border-box;
     padding-right: 20%;
 }
 
@@ -335,6 +351,7 @@ body{
     text-align: right;
     width: 100%;
     box-sizing: border-box;
+	-moz-box-sizing:border-box;
     padding-right: 20%;
 }
 
@@ -358,6 +375,8 @@ body{
   margin:5px;
   border: white thin solid;
   box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  
 }
 
 .newRowStyle{

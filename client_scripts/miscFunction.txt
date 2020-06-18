@@ -1,3 +1,0 @@
-function powerRemover(arrayGrid, placedCardLocation){
-	var powerGrid = = wsghsduiopfgh sd
-}

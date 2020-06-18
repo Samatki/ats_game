@@ -2,6 +2,10 @@ i{
 	font-weight:bolder;
 }
 
+.game_card_log{
+	transform:scale(1.33) !important;
+}
+
 .game_card_discard{
 	height:300px;
 	width:300px;
@@ -140,6 +144,7 @@ i{
 	position:absolute;
 	z-index:4;
 	animation: glow 5s ease-in-out infinite;
+	-webkit-animation: glow 5s ease-in-out infinite;
 }
 
 .blue_card{
@@ -173,36 +178,42 @@ i{
 	background-image:url("../ATS_Images/Card_Details/blue_category.png");
 	background-size:cover;
 	animation: glow 5s ease-in-out infinite;
+	-webkit-animation: glow 5s ease-in-out infinite;
 }
 
 .green_class{
 	background-image:url("../ATS_Images/Card_Details/green_category.png");
 	background-size:cover;
 	animation: glow 5s ease-in-out infinite;
+	-webkit-animation: glow 5s ease-in-out infinite;
 }
 
 .red_class{
 	background-image:url("../ATS_Images/Card_Details/red_category.png");
 	background-size:cover;
 	animation: glow 5s ease-in-out infinite;
+	-webkit-animation: glow 5s ease-in-out infinite;
 }
 
 .purple_class{
 	background-image:url("../ATS_Images/Card_Details/purple_category.png");
 	background-size:cover;
 	animation: glow 5s ease-in-out infinite;
+	-webkit-animation: glow 5s ease-in-out infinite;
 }
 
 .yellow_class{
 	background-image:url("../ATS_Images/Card_Details/yellow_category.png");
 	background-size:cover;
 	animation: glow 5s ease-in-out infinite;
+	-webkit-animation: glow 5s ease-in-out infinite;
 }
 
 .grey_class{
 	background-image:url("../ATS_Images/Card_Details/grey_category.png");
 	background-size:cover;	
 	animation: glow 5s ease-in-out infinite;
+	-webkit-animation: glow 5s ease-in-out infinite;
 }
 
 .card_title{
@@ -216,6 +227,7 @@ i{
 	background-color:lightgrey;
 	z-index:2;
 	box-sizing:border-box;
+	-moz-box-sizing:border-box;
 	border: black thin solid;
 	opacity: 0.75;
 	padding-left:40px;
@@ -248,6 +260,7 @@ i{
 	background-size: cover;
 	text-align: center;
 	box-sizing: border-box;
+	-moz-box-sizing:border-box;
 	padding-top: 5px;
 	padding-left:1px;
 	font-size: 25px;
@@ -255,6 +268,7 @@ i{
 	font-weight:800;
 	text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
 	animation: glow 2.1s ease-in-out infinite;
+	-webkit-animation: glow 2.1s ease-in-out infinite;	
 }
 
 .card_pcost{
@@ -268,6 +282,7 @@ i{
 	background-image:url("../ATS_Images/Card_Details/cube2.png");	
 	background-size: cover;
 	animation: glow 2.5s ease-in-out infinite;
+	-webkit-animation: glow 2.5s ease-in-out infinite;
 }
 
 @keyframes glow{
@@ -276,6 +291,11 @@ i{
 	100% {filter: brightness(1);}
 }
 
+@-webkit-keyframes glow{
+	0% {filter:brightness(1);}
+	50% {filter: brightness(1.15);}
+	100% {filter: brightness(1);}
+}
 
 /* FIX THIS TO BE MORE RELIABLE*/
 .card_pcost:nth-child(even){
@@ -289,6 +309,7 @@ i{
 	left:12px;
 	border-radius:5px;
 	box-sizing: border-box;
+	-moz-box-sizing:border-box;
 	border: 1px black solid;
 	box-shadow: 2px 2px 10px black;
 	padding:0;
@@ -307,6 +328,7 @@ i{
 	background-color:blue;
 	border-radius:3px;
 	box-sizing: border-box;
+	-moz-box-sizing:border-box;
 	opacity:0.75;
 	z-index:-1;
 }
@@ -326,6 +348,7 @@ i{
 	padding-top:2px;
 	padding-left:5.2px;
 	box-sizing:border-box;
+	-moz-box-sizing:border-box;
 	display:inline-block;
 	font-size:8px;
 	position:relative;
@@ -441,6 +464,7 @@ i{
 	padding-top:2px;
 	padding-left:2px;
 	box-sizing:border-box;
+	-moz-box-sizing:border-box;
 	display:inline-block;
 	font-size:8px;
 	position:relative;
@@ -472,6 +496,7 @@ i{
 	left:12px;
 	z-index:3;
 	box-sizing: border-box;
+	-moz-box-sizing:border-box;
 	border-radius: 8px;
 	border: 1px black solid;
 	box-shadow: 3px 3px 10px black;
@@ -495,6 +520,7 @@ i{
 	background-size: cover;	
 	z-index:6;
 	box-sizing:border-box;
+	-moz-box-sizing:border-box;
 	padding-top:11px;
 	padding-left:20px;
 	font-size: 18px;
@@ -502,6 +528,7 @@ i{
 	font-weight:800;
 	text-shadow: -1px 1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
 	animation: glow 5s ease-in-out infinite;
+	-webkit-animation: glow 5s ease-in-out infinite;	
 }
 
 .card_description{
@@ -567,16 +594,23 @@ i{
 }
 
 div[data-cardid*="B0R_X_VR"] .card_image{
-	animation: vakAnimation 10s linear infinite
+	animation: vakAnimation 10s linear infinite;
+	-webkit-animation: vakAnimation 10s linear infinite	
 }
 
 .multi_class{
 	background-image:url("../ATS_Images/Card_Details/multi_category.png");
 	background-size:cover;
-	animation: vakAnimation 10s linear infinite
+	animation: vakAnimation 10s linear infinite;
+	-webkit-animation: vakAnimation 10s linear infinite	
 }
 
 @keyframes vakAnimation{
+    0%   {filter: hue-rotate(0deg);}
+    100% {filter: hue-rotate(360deg);}
+}
+
+@-webkit-keyframes vakAnimation{
     0%   {filter: hue-rotate(0deg);}
     100% {filter: hue-rotate(360deg);}
 }
@@ -590,6 +624,7 @@ div[data-cardid*="B0R_X_VR"] .card_image{
 	background-image:url("../ATS_Images/Card_Details/cube2.png");	
 	background-size: cover;
 	animation: glow 2.5s ease-in-out infinite;
+	-webkit-animation: glow 2.5s ease-in-out infinite;	
 }
 
 

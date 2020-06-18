@@ -63,27 +63,27 @@ function findNextMinCell(arr) {
 }
 
 function neighbourCheck(currentCell, gridX, gridSize){
-	if (currentCell % gridX == gridX - 1){
+	if (parseInt(currentCell) % parseInt(gridX) == parseInt(gridX) - 1){
 		var neighbourGrid = [
-		currentCell - gridX,
-		currentCell - 1,
-		currentCell + gridX
+		parseInt(currentCell) - parseInt(gridX),
+		parseInt(currentCell) - 1,
+		parseInt(currentCell) + parseInt(gridX)
 		];
-	} else if (currentCell % gridX == 0){
+	} else if (parseInt(currentCell) % parseInt(gridX) == 0){
 		var neighbourGrid = [
-		currentCell - gridX,
-		currentCell + 1,
-		currentCell + gridX
+		parseInt(currentCell) - parseInt(gridX),
+		parseInt(currentCell) + 1,
+		parseInt(currentCell) + parseInt(gridX)
 		];
 	} else {
 		var neighbourGrid = [
-		currentCell - gridX,
-		currentCell - 1,
-		currentCell+1,
-		currentCell + gridX,
+		parseInt(currentCell) - parseInt(gridX),
+		parseInt(currentCell) - 1,
+		parseInt(currentCell) + 1,
+		parseInt(currentCell) + parseInt(gridX)
 		];
 	}
 	neighbourGrid = neighbourGrid.filter(item => item >= 0);
-	neighbourGrid = neighbourGrid.filter(item => item < gridSize);
+	neighbourGrid = neighbourGrid.filter(item => item < parseInt(gridSize));
 	return neighbourGrid;
 }

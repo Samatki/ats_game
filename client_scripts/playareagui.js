@@ -54,7 +54,7 @@ function PlayerMat(props) {
     React.createElement("div", { className: "playerBoxMoneyCount" }, props.otherPlayers[i].currency)),
 
     React.createElement("div", { className: "playerBoxScore" },
-    React.createElement("div", { className: "playerBoxScoreCount" }, props.otherPlayers[i].playerScore))),
+    React.createElement("div", { className: "playerBoxScoreCount" }, props.otherPlayers[i].playerScore + props.otherPlayers[i].eg_score))),
 
 
     React.createElement("div", { className: "playerBoxRight" },
@@ -90,10 +90,10 @@ render(){
 
   React.createElement("div", { id: "ownPlayerBoxTop" },
   React.createElement("div", { id: "ownPlayerBoxMoney" },
-  React.createElement("div", { id: "ownPlayerBoxMoneyCount" }, this.props.currency )),
+  React.createElement("div", { id: "ownPlayerBoxMoneyCount", key : (parseInt(Math.random()*1000000000)) }, this.props.currency )),
 
   React.createElement("div", { id: "ownPlayerBoxScore" },
-  React.createElement("div", { id: "ownPlayerBoxScoreCount" }, this.props.curr_score))),
+  React.createElement("div", { id: "ownPlayerBoxScoreCount",key : (parseInt(Math.random()*1000000000)) }, this.props.curr_score + this.props.eg_score))),
 
 
   React.createElement("div", { id: "ownPlayerBoxBottom" },
@@ -113,7 +113,6 @@ class OtherPlayGrid extends React.Component {
 
     var cardMap = this.props.grid.map(function (card, index) {
 		var newRowStyle = (index % gridX) == 0 ? "newRowStyle" : "";
-			
 		if (card) {
 		 var powerAvail = null;
 		 var cardObj = {};
@@ -128,6 +127,8 @@ class OtherPlayGrid extends React.Component {
 			  
 		 var xx  = {__html : cardPrinter(cardObj,"game_card_board",powerAvail)}
 		 return React.createElement("div", { className: "stationCardSpace stationCardPlaced " + newRowStyle, "data-index": index, dangerouslySetInnerHTML : xx});
+		} else {
+			return React.createElement("div", { className: "stationCardSpace stationCardInvisible " + newRowStyle, "data-index": index});
 		}
     });
     return (
@@ -196,8 +197,6 @@ class GameReactHandler extends React.Component {
 		super(props);
 //		this.state.render = 0;
 		this.state = playerDataObj;
-		console.log("---------------");
-		console.log(this.state);
 	}
 	
 	componentWillMount(){
@@ -219,16 +218,14 @@ class GameReactHandler extends React.Component {
 	}
 
 	componentWillUnmount() {
-		console.log("TEST2");
+		//
+//		console.log("TEST2");
 	}
 	
 	processPlacement(e){
 		if(cardPlaced){
 			var cardObj = getCardObj(transferredCard);
 			requiredPowerSpend = cardObj.cardPowerCost;
-			console.log(cardObj);
-			console.log(transferredCard);
-			console.log(e.target.closest(".stationCardPlaceable").dataset.index);
 			if(requiredPowerSpend != 0){
 				accessiblePowerArray = getAvailablePowerIndeces(playerDataObj.playerStationArray, e.target.closest(".stationCardPlaceable").dataset.index,powerArray,2);
 				for(var i = 0; i < accessiblePowerArray.length; i++){
@@ -268,7 +265,7 @@ class GameReactHandler extends React.Component {
 	}
 	
 	powerDiscard(e){
-		transferredCard2 = transferredCard;
+		transferredCard2 = transferredCard;	
 		if(cardPowerDiscard && transferredCard[2] != "R" && e.button == 0){		
 			if(this.state.playerData.currency <= 1){
 				console.log("Not enough money");
@@ -295,6 +292,7 @@ class GameReactHandler extends React.Component {
 			optionMode = 2;
 			confirmationBoxFlag = true;
 			confirmationBoxLoader();
+
 		}
 	}
 	
@@ -308,7 +306,7 @@ class GameReactHandler extends React.Component {
 	
 	eoConfirmation(e){
 		embassyOfficePlayerSelect = document.querySelector('input[name="playerRadioSelect"]:checked').value;
-		console.log(embassyOfficePlayerSelect);
+//		console.log(embassyOfficePlayerSelect);
 		document.getElementById("embassyOfficeScreen").style.display = "";
 		optionMode = 7;
 		confirmationBoxFlag = true;
@@ -328,15 +326,20 @@ class GameReactHandler extends React.Component {
 		confirmationBoxFlag = false;
 		confirmationBoxLoader();
 		document.getElementById('waitingBox').style.display = '';
+		document.getElementById("ownPlayerBoxMoneyCount").innerHTML = this.state.playerData.currency;
+		document.getElementById("ownPlayerBoxScoreCount").innerHTML = this.state.playerData.curr_score + this.state.playerData.eg_score;	
 	}
 	
 	submitTurnButton(e){
 		socket.emit('submitTurnData',turnObject);
 		document.getElementById('waitingBox').style.display = 'block';
 		document.getElementById('turnConfirmationScreen').style.display = '';
+		document.getElementById("ownPlayerBoxMoneyCount").innerHTML = this.state.playerData.currency + currencyDelta;
+		document.getElementById("ownPlayerBoxScoreCount").innerHTML = this.state.playerData.curr_score + this.state.playerData.eg_score + scoreDelta;				
 	}
 		
 	componentDidUpdate(){
+		currencyDelta = 0;
 		playerDataObj = this.state;
 		handGen(this.state.playerHand);
 		discardListGen(this.state.discardPile.cards);
@@ -361,12 +364,17 @@ class GameReactHandler extends React.Component {
 		businessOfficesExtraSpend = 0;
 		embassyOfficePlayerSelect = "";
         placedCardIndex = null;
+		scoreDelta = 0;
 		turnObject = {};
-		if(this.state.playerHand.length == 0){
+		if(this.state.playerHand.length == 0 || this.state.playerHand.length == 0){
 			document.getElementById('waitingBox').style.display = 'block';
 		} else {
 			document.getElementById('waitingBox').style.display = '';			
 		}
+		document.getElementById('turnConfirmationScreen').style.display = '';
+		document.getElementById("ownPlayerBoxMoneyCount").innerHTML = this.state.playerData.currency;
+		document.getElementById("ownPlayerBoxScoreCount").innerHTML = this.state.playerData.curr_score + this.state.playerData.eg_score;		
+		
 		generateListeners();
 	}
 
@@ -388,9 +396,8 @@ class GameReactHandler extends React.Component {
 				React.createElement("div", {className:"playerRadioImage"},null),
 				React.createElement("label", {htmlfor:"none", className:"playerRadioNameLabel"},"None"),
 				React.createElement("input", {type:"radio", name:"playerRadioSelect", id:"None", value:"None", checked:"checked"},null)
-			)	);
-		
-		console.log(other_player_selectors);
+			)	
+		);
 		
 		return React.createElement("div", null,
 
