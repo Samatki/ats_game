@@ -1,4 +1,4 @@
-var cL = require('./cardLibrary');
+var cL = require('./cardlibrary');
 var rF = require('./randomFunction');
 var cF = require('./cardFunctions');
 

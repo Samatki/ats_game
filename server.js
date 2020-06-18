@@ -3,7 +3,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var fs = require('fs');
-var cL = require('./ATS_Server/cardLibrary');
+var cL = require('./ATS_Server/cardlibrary');
 var initialGameScript = require('./ATS_Server/gameSetupScript');
 var cF = require('./ATS_Server/cardFunctions');
 
