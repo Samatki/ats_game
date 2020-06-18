@@ -359,6 +359,14 @@ function processPlayerActions(){
 //	for(var k = 0; k<playerObjs.length; k++){
 //		playerObjs[k].updateEGScoring();
 //	}
+
+	currentCredits = [];
+	for (var j = 0; j<playerObjs.length; j++){
+		currentCredits.push(playerObjs[j].playerData.currency);
+		playerHandSwitchArray.push(playerObjs[j].playerHand);
+		playerObjs[j].incrementTurn();
+	}
+
 	for(var k = 0; k<playerObjs.length; k++){
 		var scoreDelta = (playerObjs[k].playerData.curr_score + playerObjs[k].playerData.eg_score) - (currentScores[k][0] + currentScores[k][1]);
 		for(var j = 0; j<playerObjs.length; j++){
@@ -369,12 +377,13 @@ function processPlayerActions(){
 			}
 		}
 	}
-	currentCredits = [];
-	for (var j = 0; j<playerObjs.length; j++){
-		currentCredits.push(playerObjs[j].playerData.currency);
-		playerHandSwitchArray.push(playerObjs[j].playerHand);
-		playerObjs[j].incrementTurn();
-	}
+
+
+	for(var k = 0; k<playerObjs.length; k++){
+		playerObjs[k].addGameLogTurnHeader()
+	}	
+
+
 	// Generate New Hands & Pass
 	if (playerObjs[0].gameData.round == 1){
 		initialHand();

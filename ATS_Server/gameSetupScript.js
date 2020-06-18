@@ -211,7 +211,7 @@ class playerObj{
 //				this.addGameLogEntry('You receive ' + this.boCard_credit_value + ' credits from Business Offices');
 //			}
 			this.playerData.boCard_credit_value = 0;
-			addGameLogTurnHeader()
+
 		} else if(this.gameData.round && this.gameData.turn){
 			// Needs to be updated if conflict cards included (7 turns)
 			this.gameData.round = this.gameData.round +1;
@@ -228,7 +228,6 @@ class playerObj{
 				if(this.playerData.abilities){
 					this.playerData.ability_available = true;
 				}
-				this.addGameLogTurnHeader();
 /*	
 				if(this.playerData.player_race == 'zehuti' && this.playerData.abilities){
 					this.addGameLogEntry('Your credits are set to 13 (Zehuti ability)');
@@ -237,7 +236,7 @@ class playerObj{
 				} 
 */
 			} else {
-				this.addGameLogTurnHeader();				
+				
 			}
 			this.updateEGScoring();
 		}
