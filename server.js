@@ -7,12 +7,12 @@ var cL = require('./ATS_Server/cardlibrary');
 var initialGameScript = require('./ATS_Server/gameSetupScript');
 var cF = require('./ATS_Server/cardFunctions');
 
-
+/*
 var playerDatabase = [{username:"Jeremy",userpassword:"PASSWORD123",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
 			  {username:"Seb",userpassword:"PASSWORD456",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
 			  {username:"Sam",userpassword:"PASSWORD000",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())}]
+*/
 
-/*
 var playerDatabase = [{username:"Jeremy",userpassword:"PASSWORD123",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
 			  {username:"Seb",userpassword:"PASSWORD456",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
 			  {username:"Logan",userpassword:"PASSWORD789",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
