@@ -182,7 +182,7 @@ function energyMarketCurrency(cardIndex,grid){
 	for(var j = 0; j<grid.length; j++){
 		for(var i = 0; i<reactorArray.length; i++){
 			if(grid[j] == reactorArray[i]){
-				count = count + 1;;
+				count = count + 1;
 			}
 			if(count>=3){
 				break;
@@ -215,7 +215,7 @@ function gardenScoring(gridA,startIndex){
 	for(var i = 0; i < gridA.grid.length; i++){
 		if(gridA.grid[i][5] == "R" || gridA.grid[i].toString().substring(0,8) == "B0R_X_VR"){
 			if(dijkstraAlgo(gridA,startIndex,i)<=3){
-				count = count - 1;;
+				count = count - 1;
 				break;
 			}
 		}
@@ -223,7 +223,7 @@ function gardenScoring(gridA,startIndex){
 	for(var i = 0; i < gridA.grid.length; i++){
 		if(gridA.grid[i][2] == "R"){
 			if(dijkstraAlgo(gridA,startIndex,i)<=2){
-				count = count - 1;;
+				count = count - 1;
 				break;
 			}
 		}
@@ -337,7 +337,7 @@ function medicalFacilityScoring(gridA,startIndex){
 	
 	for(var i = 0; i<powerIndeces.length; i++){
 		if(dijkstraAlgo(gridA,startIndex,powerIndeces[i])<=3){
-			count = count + 1;;
+			count = count + 1;
 		}
 	} 
 	return Math.min(count,4);
@@ -459,7 +459,7 @@ function bazaarScoring(gridA,startIndex){
 	for(var i = 0; i < gridA.grid.length; i++){
 		if(gridA.grid[i][4] == "G"){
 			if(dijkstraAlgo(gridA,startIndex,i)<=2){
-				count = count + 1;;
+				count = count + 1;
 			}
 		}
 	}
@@ -476,7 +476,7 @@ function councilRoomScoring(otherPlayers){
 	for(var i = 0; i < otherPlayers.length; i++){
 		for(var j = 0; j < otherPlayers[i].playerStationArray.grid.length; j++){
 			if(otherPlayers[i].playerStationArray.grid[j] == "B0B_G_CR"){
-				count = count - 1;;
+				count = count - 1;
 				break;
 			} 
 		}
@@ -489,7 +489,7 @@ function commandCentreScoring(grid){
 	var count = 0;
 	for(var i = 0; i<grid.length; i++){
 		if(grid[i][4] == "B" || grid[i].toString().substring(0,8) == "B0R_X_VR"){
-			count = count + 1;;
+			count = count + 1;
 		}
 	}
 	return Math.min(count,8);
@@ -517,10 +517,10 @@ function afbScoring(grid){
 	var rcount = 0;
 	for(var i = 0; i<grid.length; i++){
 		if(grid[i][4] == "G"){
-			gcount = gcount + 1;;
+			gcount = gcount + 1;
 		} 		
 		if(grid[i][4] == "R"){
-			rcount = rcount + 1;;
+			rcount = rcount + 1;
 		}
 	}
 	if(rcount > gcount){
@@ -535,7 +535,7 @@ function warRoomScoring(grid){
 	var count = 0;
 	for(var i = 0; i<grid.length; i++){
 		if(grid[i][4] == "R" || grid[i].toString().substring(0,8) == "B0R_X_VR"){
-			count = count + 1;;
+			count = count + 1;
 		}
 	}
 	return Math.min(count,5);
@@ -546,7 +546,7 @@ function galacticResortScoring(grid){
 	var count = 0;
 	for(var i = 0; i<grid.length; i++){
 		if(grid[i][4] == "P" || grid[i].toString().substring(0,8) == "B0R_X_VR"){
-			count = count + 1;;
+			count = count + 1;
 		}
 	}
 	return Math.min(count,5);	
@@ -565,7 +565,7 @@ function operaHouseScoring(cardIndex, gridX, grid){
 	for(var j = 0; j<typeGrid.length; j++){
 		for(var i = 0; i < neighbours.length; i++){
 			if(grid[neighbours[i]][4] == typeGrid[j]){
-				count = count + 1;;
+				count = count + 1;
 				break;
 			} 
 		}
@@ -578,7 +578,7 @@ function alienTempleScoring(grid){
 	var count = 0;
 	for(var i = 0; i<grid.length; i++){
 		if(grid[i][4] == "G" || grid[i].toString().substring(0,8) == "B0R_X_VR"){
-			count = count + 1;;
+			count = count + 1;
 		}
 	}
 	return Math.min(count,5);	
@@ -589,7 +589,7 @@ function allianceHQScoring(grid,otherPlayers){
 	var owncount = 0;
 	for(var i = 0; i<grid.length; i++){
 		if(grid[i][4] == "R" || grid[i].toString().substring(0,8) == "B0R_X_VR"){
-			owncount = owncount + 1;;
+			owncount = owncount + 1;
 		}
 	}
 	var otherPlayerCount = otherPlayers.length;
@@ -641,7 +641,7 @@ function lifeSupportSystemsScoring(grid){
 	var count = 0;
 	for(var i = 0; i<grid.length; i++){
 		if(grid[i]){
-			count = count + 1;;
+			count = count + 1;
 		}
 	}
 	return Math.floor(count/3);	

@@ -36,8 +36,8 @@ class playerObj{
 				player_race: playerRace,
 				color : playerColourStyles[playerNo - 1].color,
 				main_reactor_color : playerColourReactorStyles[playerNo - 1],
-				player_currency_turn_increase:	(playerRace == "zehuti" && raceAbilities)?0:10,
-				player_currency_discard_value: 	(playerRace == "sheptas" && raceAbilities)?4:3,
+				player_currency_turn_increase:	(playerRace == "zehuti" && raceAbilities)?13:10,
+				player_currency_discard_value: 	((playerRace=="zehuti" && raceAbilities) ? 0:(playerRace == "sheptas" && raceAbilities)?4:3),
 				boCard_credit_value : 0,
 				};
 		this.playerHand = [];		
@@ -219,7 +219,7 @@ class playerObj{
 				this.gameData.round = 1;
 				this.gameData.turn = this.gameData.turn + 1;
 				this.playerHand = [];
-				this.playerData.currency = (this.playerData.player_race == 'zehuti' && this.playerData.abilities)? 13 : this.playerData.currency + this.playerData.player_currency_turn_increase + this.playerData.boCard_credit_value;	
+				this.playerData.currency = (this.playerData.player_race == 'zehuti' && this.playerData.abilities)? this.playerData.player_currency_turn_increase : this.playerData.currency + this.playerData.player_currency_turn_increase + this.playerData.boCard_credit_value;	
 //				if(this.playerData.boCard_credit_value){
 //					this.addGameLogEntry('You receive ' + this.boCard_credit_value + ' credits from Business Offices');
 //				}

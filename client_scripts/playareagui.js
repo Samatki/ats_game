@@ -412,7 +412,7 @@ class GameReactHandler extends React.Component {
 		React.createElement("div", { id : "businessOfficeScreen", className : "gameMat modalScreen"},		
 		React.createElement("div", { id : "businessOfficeDialogueBox", className : "dialogueBox"  }, 
 		React.createElement("div", { id : "businessOfficeText",  className : "dialogueBoxInnerText"}, "Place up to 6 credits on card, +1 VP for every  2 credits on card (retrieve at end of year)" ),
-		React.createElement("input", { type:"range", id : "businessOfficeRange", min : "0", max : (Math.min(playerDataObj.playerData.currency - 1,6)).toString(), onChange:this.boSlider.bind(this), defaultValue:"0" } ),
+		React.createElement("input", { type:"range", id : "businessOfficeRange", min : "0", max : (Math.min(this.state.playerData.currency - 1,6)).toString(), onChange:this.boSlider.bind(this), defaultValue:"0" } ),
 		React.createElement("div", {id:"businessOfficeRangeValue" }, 0 ),
 		React.createElement("button", { id : "businessOfficeConfirmation", className : "confirmationBox", onClick : this.boConfirmation.bind(this)}, "Confirm" ),
 		),),
