@@ -600,7 +600,7 @@ function allianceHQScoring(grid,otherPlayers){
 				redcounter = redcounter + 1;
 			}
 			if(redcounter > owncount){
-				otherPlayercount = otherPlayercount - 1;
+				otherPlayerCount = otherPlayerCount - 1;
 				break;
 			}
 		}
