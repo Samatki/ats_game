@@ -67,7 +67,7 @@ var cardList = {
             "cardMaxPlayable": Infinity,
             "cardFunction": true,
             "cardLocationRestriction": [],
-            "cardDescription": "<span class='pointModifier'>+1</span> for each <i>Turret</i> on the Station",
+            "cardDescription": "<span class='pointModifier'>+1</span> for each other <i>Turret</i> on the Station",
             "cardId": "B0B_R_T"
         }, {
             "cardTitle": "Alien Bazaar",
@@ -455,7 +455,7 @@ var cardList = {
             "cardMaxPlayable": Infinity,
             "cardFunction": true,
             "cardLocationRestriction": [],
-            "cardDescription": "<span class='pointModifier'>+1</span> for each <i>Turret</i> on the Station",
+            "cardDescription": "<span class='pointModifier'>+1</span> for each other <i>Turret</i> on the Station",
             "cardId": "B0S_R_T"
         }, {
             "cardTitle": "War Room",

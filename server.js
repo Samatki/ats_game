@@ -35,6 +35,10 @@ var discardPile = [];
 var currentCredits = [0,0,0,0,0,0];
 initialHand();
 newTurnCreditsMessage();
+var currentScores = playerObjs.map(function(item){
+	return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score));
+});
+//console.log(currentScores);
 /* END GAME SCRIPTS */
 
 var app = express();
@@ -250,11 +254,9 @@ function processUserTurn(data){
 
 
 function processPlayerActions(){
-	var currentScores = [];
 	var playerHandSwitchArray = [];
 	for (var j = 0; j<playerObjs.length; j++){
 		// Regenerate Other Player Grids
-		currentScores.push([playerObjs[0].playerData.curr_score,playerObjs[0].playerData.eg_score]);
 		playerObjs[j].discardPile.cards = discardPile;
 		playerObjs[j].otherPlayersData.otherPlayers = [];
 //		console.log("Updating...")
@@ -280,6 +282,7 @@ function processPlayerActions(){
 						for(var k = 0; k<playerObjs.length; k++){
 							playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> discards <span class='logCard' data-cardid='"+actionedCard.cardId+"'>" + actionedCard.cardTitle +"</span> for " + playerObjs[j].playerData.player_currency_discard_value + " credits");
 						}
+						console.log(playerObjs[j].playerData.playerName + ": " + actionedCard.cardTitle + "  - Discarded for currency  = " + playerObjs[j].playerData.player_currency_discard_value);
 					} else {
 						console.log("Someone attempted to discard a reactor - Illegal!");
 					}
@@ -291,7 +294,8 @@ function processPlayerActions(){
 						var actionedCard = cL.getCardObj(playerSubmitActions[i].cardFromHand);
 						for(var k = 0; k<playerObjs.length; k++){
 							playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> discards <span class='logCard' data-cardid='"+actionedCard.cardId+"'>"+ actionedCard.cardTitle +"</span> and pays 1 credit to place a <span class='logCard' data-cardid='B0R_X_PR2'>Power Reactor</span> on their station");
-						}					
+						}
+						console.log(playerObjs[j].playerData.playerName + ": " + actionedCard.cardTitle + "  - Discarded for reactor");						
 					} else {
 						console.log("Someone attempted to discard a reactor - Illegal!");
 					}	
@@ -301,14 +305,16 @@ function processPlayerActions(){
 					playerObjs[j].currentPointsChange(8);
 					for(var k = 0; k<playerObjs.length; k++){
 						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' data-cardid='B0B_R_SG'>Shield Generator</span> for 1 power and 3 credits, paying an additional 2 power for an additional <span class='posScoreDelta'>+4VP</span>");
-					}					
+					}
+					console.log(playerObjs[j].playerData.playerName + ": Shield Generator - PlacementScore  = 4(+4)");					
 				} else if (playerSubmitActions[i].mode == 5) {
 					// Shield Generator Logic
 					playerObjs[j].currencyChange(-3);					
 					playerObjs[j].currentPointsChange(6);
 					for(var k = 0; k<playerObjs.length; k++){
 						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' data-cardid='B0B_R_SG'>Shield Generator</span> for 1 power and 3 credits, paying an additional 1 power for an additional <span class='posScoreDelta'>+2VP</span>");
-					}	
+					}
+					console.log(playerObjs[j].playerData.playerName + ": Shield Generator - PlacementScore  = 4(+2)");						
 				} else if (playerSubmitActions[i].mode == 6){
 					// Business office select
 					var boChanger = playerSubmitActions[i].extraData[0];
@@ -325,7 +331,8 @@ function processPlayerActions(){
 					playerObjs[j].currencyChange(-1);
 					for(var k = 0; k<playerObjs.length; k++){
 						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' data-cardid='B0S_Y_BO'>Business Offices</span> for 1 credit, paying an additional "+boChanger+" credits for an additional <span class='posScoreDelta'>+"+boChangerPoints+"VP</span>");
-					}					
+					}
+					console.log(playerObjs[j].playerData.playerName + ": Business Offices - PlacementScore  = 1(+"+boChangerPonts+")");						
 				} else if (playerSubmitActions[i].mode == 7){
 					// Embassy office select;
 					var selectedEOPlayer = '';
@@ -344,6 +351,11 @@ function processPlayerActions(){
 					for(var k = 0; k<playerObjs.length; k++){
 						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' data-cardid='B0B_G_EO'>Embassy Offices</span> for 2 credit to gain for +4VP, and gives <span style='color:"+selectedEOPlayerColor+"'>"+selectedEOPlayer+"</span> +1VP");
 					}
+					if(playerSubmitActions[i].extraData[0]){
+						console.log(playerObjs[j].playerData.playerName + ": Embaassy Offices - PlacementScore  = 2(+2)");							
+					} else {
+						console.log(playerObjs[j].playerData.playerName + ": Embaassy Offices - PlacementScore  = 2");							
+					}
 				} else {
 					var actionedCard = cL.getCardObj(playerSubmitActions[i].cardFromHand);
 					for(var k = 0; k<playerObjs.length; k++){
@@ -354,9 +366,10 @@ function processPlayerActions(){
 						}
 					}
 					cF.placementScoringCost(playerObjs,j,playerSubmitActions[i]);
-					if(playerObjs[j].playerStationArray.parameters.infinite){
-						playerObjs[j].gridResizer();
-					}
+				}
+				if(playerObjs[j].playerStationArray.parameters.infinite){
+					// Resize Grid
+					playerObjs[j].gridResizer();
 				}
 			}
 		}
@@ -373,7 +386,9 @@ function processPlayerActions(){
 	}
 
 	for(var k = 0; k<playerObjs.length; k++){
-		var scoreDelta = (playerObjs[k].playerData.curr_score + playerObjs[k].playerData.eg_score) - (currentScores[k][0] + currentScores[k][1]);
+//		console.log(currentScores);
+//		console.log(currentScores[k]);
+		var scoreDelta = (playerObjs[k].playerData.curr_score + playerObjs[k].playerData.eg_score) - (currentScores[k]);
 		for(var j = 0; j<playerObjs.length; j++){
 			if(scoreDelta >= 0){
 				playerObjs[j].addGameLogEntry("<span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"'s</span> score increases by <span class='posScoreDelta'>+"+scoreDelta+"VP</span> this round");
@@ -382,7 +397,9 @@ function processPlayerActions(){
 			}
 		}
 	}
-
+	currentScores = playerObjs.map(function(item){
+		return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score));
+	});
 
 	for(var k = 0; k<playerObjs.length; k++){
 		playerObjs[k].addGameLogTurnHeader()

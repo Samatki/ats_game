@@ -29,6 +29,7 @@ function placementScoring(cardObj,playerObj,cardIndex,cardid){
 	}else{
 		cardScore = cardIGScoring(playerObj,cardId,cardIGScore,cardIndex);
 	}
+	console.log(playerObj.playerData.playerName + ": " + cardObj.cardTitle + "  - Placement Score  = " + cardScore);
 	return cardScore;
 }
 
@@ -91,7 +92,7 @@ function cardIGScoring(playerObj,cardId,cardIGScore,cardIndex){
 			deltaScore = ptaScoring(cardIndex, gridX, grid);
 			break;
 		case "B0S_Y_TUH":
-			deltaScore = tuhScoring(cardIndex, gridX, grid);
+			deltaScore = tuhScoring(grid);
 			break;
 		case "B0S_P_SA":
 			deltaScore = sportsArenaScoring(playerObj);
@@ -125,7 +126,7 @@ var cardEGScoring = function(cardId,cardIndex,playerStationArray,otherPlayersDat
 	switch(cardId){
 		case "B0B_R_T":
 		case "B0S_R_T":
-			deltaScore = turretScoring(cardIndex, gridX, grid);
+			deltaScore = turretScoring(grid,cardIndex);
 			break;
 		case "B0B_Y_AB":
 			deltaScore = bazaarScoring(gridA,cardIndex);
@@ -138,7 +139,6 @@ var cardEGScoring = function(cardId,cardIndex,playerStationArray,otherPlayersDat
 			break;
 		case "B0B_B_SS":
 			deltaScore = securityStationScoring(cardIndex, gridX, grid);
-			console.log("Security Station Scores : " + deltaScore);
 			break;
 		case "B0S_R_AFB":
 			deltaScore = afbScoring(grid);
@@ -266,9 +266,6 @@ function restaurantScoring(grid){
 				return item;
 			}
 		});
-		console.log('Restaurant Set ' + reducedGrid)
-		console.log(reducedGrid.length);
-		console.log('should not contain any x')
 		return Math.min(reducedGrid.length,5);
 	}
 }
@@ -390,12 +387,11 @@ function ptaScoring(cardIndex, gridX, grid){
 	return count;
 }
 
-function tuhScoring(cardIndex, gridX, grid){
+function tuhScoring(grid){
 // +1 for each yellow location on the station, max 5
 	var count = 0;
-	var neighbours = neighbourCheck(cardIndex, gridX, grid.length);
-	for(var i = 0; i<neighbours.length; i++){
-		if(grid[neighbours[i]][5] == "Y" || grid[neighbours[i]].toString().substring(0,8) == "B0R_X_VR"){
+	for(var i = 0; i<grid.length; i++){
+		if(grid[i][5] == "Y" || grid[i].toString().substring(0,8) == "B0R_X_VR"){
 			count = count + 1;
 		}
 	}
@@ -441,13 +437,14 @@ function cargoHoldScoring(cardIndex, gridX, grid){
 	return count;
 }
 
-function turretScoring(cardIndex, gridX, grid){
-// +1 for every turret on the station
+function turretScoring(grid,cardIndex){
+// +1 for every other turret on the station
 	var count = 0;
-	var neighbours = neighbourCheck(cardIndex, gridX, grid.length);
-	for(var i = 0; i<neighbours.length; i++){
-		if(grid[neighbours[i]] == "B0B_R_T" || grid[neighbours[i]] == "B0S_R_T" ){
-			count = count + 1;
+	for(var i = 0; i<grid.length; i++){
+		if(i != parseInt(cardIndex)){
+			if(grid[i] == "B0B_R_T" || grid[i] == "B0S_R_T" ){
+				count = count + 1;
+			}
 		}
 	}
 	return count;

@@ -87,20 +87,26 @@ class playerObj{
 			if(checkedGrid[i]){
 				var cardObj = cL.getCardObj(checkedGrid[i]);
 				if(cardObj.cardEndGame){
-					this.playerData.eg_score = this.playerData.eg_score + cF.cardEGScoring(cardObj.cardId,i,this.playerStationArray,this.otherPlayersData);					
+					var scoreDelta = cF.cardEGScoring(cardObj.cardId,i,this.playerStationArray,this.otherPlayersData);
+					this.playerData.eg_score = parseInt(this.playerData.eg_score) + parseInt(scoreDelta);
+					console.log(this.playerData.playerName + ": " + cardObj.cardTitle + "  - Placement Score  = +" + scoreDelta);					
 				} else if (checkedGrid[i] == "B0R_X_VR0" || checkedGrid[i] == "B0R_X_MR0" || checkedGrid[i] == "B0R_X_ER0" || checkedGrid[i] == "B0R_X_PR0"){
 					this.playerData.eg_score = this.playerData.eg_score + 1;
+					console.log(this.playerData.playerName + " : Empty Reactor = +1");
 				}
 			}
 		}
 		if(this.playerData.player_race == "sheptas" && this.playerData.abilities){
 			if(this.playerData.currency <= 10){
-				this.playerData.eg_score = this.playerData.eg_score + Math.floor(this.playerData.currency / 2);		
+				this.playerData.eg_score = this.playerData.eg_score + Math.floor(this.playerData.currency / 2);
+				console.log(this.playerData.playerName + ": CoinScore = +" + Math.floor(this.playerData.currency / 2));				
 			} else {
-				this.playerData.eg_score = this.playerData.eg_score + 5 + Math.floor((this.playerData.currency - 10) / 3)
+				this.playerData.eg_score = this.playerData.eg_score + 5 + Math.floor((this.playerData.currency - 10) / 3);
+				console.log(this.playerData.playerName + ": CoinScore = +" + (5+ Math.floor(this.playerData.currency / 3)));
 			}
 		}else{
 			this.playerData.eg_score = this.playerData.eg_score + Math.floor(this.playerData.currency / 3);
+			console.log(this.playerData.playerName + ": CoinScore = +" + Math.floor(this.playerData.currency / 3));
 		}
 		
 		if(this.playerData.player_race == "humareen" && this.playerData.abilities){
