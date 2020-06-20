@@ -80,11 +80,12 @@ render(){
 
 class OwnPlayerMat extends React.Component {
 render(){
+	console.log(this.props.turnOrder);
   var returnedHTML = [];
   returnedHTML.push(
   React.createElement("div", { id: "playerScoreArea" },
   React.createElement("div", { id: "ownPlayerBox" },
-  React.createElement("div", { id: "turnOrderIcon", className : this.props.turnOrder ? "flipped" : ""}),
+  React.createElement("div", { id: "turnOrderIcon", className : (this.props.turnOrder ? "flipped" : "")}),
   React.createElement("div", { id: "ownPlayerNameBox" },
   React.createElement("div", { id: "ownPlayerName", Style : "color:" + this.props.color }, this.props.playerName )),
 
@@ -209,10 +210,7 @@ class GameReactHandler extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log("Mounted");
 		playerDataObj = this.state;
-		console.log("**********");
-		console.log(this.state);
 		discardListGen(this.state.discardPile.cards);
 		handGen(this.state.playerHand);
 	}
@@ -306,7 +304,6 @@ class GameReactHandler extends React.Component {
 	
 	eoConfirmation(e){
 		embassyOfficePlayerSelect = document.querySelector('input[name="playerRadioSelect"]:checked').value;
-//		console.log(embassyOfficePlayerSelect);
 		document.getElementById("embassyOfficeScreen").style.display = "";
 		optionMode = 7;
 		confirmationBoxFlag = true;
@@ -366,11 +363,17 @@ class GameReactHandler extends React.Component {
         placedCardIndex = null;
 		scoreDelta = '';
 		turnObject = {};
-		if(this.state.playerHand.length == 0 || this.state.playerHand.length == 0){
+		if(this.state.playerHand.length == 0){
 			document.getElementById('waitingBox').style.display = 'block';
 		} else {
 			document.getElementById('waitingBox').style.display = '';			
 		}
+		if(this.state.gameData.round == false){
+			document.getElementById('waitingBox').style.display = 'none';
+			document.getElementsByClassName('gameProgressBoxInner')[0].innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;GAME OVER";
+			document.getElementsByClassName('gameProgressBoxInner')[1].innerHTML = "";
+		}		
+
 		document.getElementById('turnConfirmationScreen').style.display = '';
 		document.getElementById("ownPlayerBoxMoneyCount").innerHTML = this.state.playerData.currency;
 		document.getElementById("ownPlayerBoxScoreCount").innerHTML = this.state.playerData.curr_score + this.state.playerData.eg_score;		
@@ -385,7 +388,7 @@ class GameReactHandler extends React.Component {
 		});
 		
 		var gameStatus = Boolean(this.state.gameData.round) && Boolean(this.state.playerHand.length);
-		var messageFlag = Boolean(this.state.playerHand.length)?'':'display :none';
+		var messageFlag = Boolean(this.state.playerHand.length) ? '' : 'display :none';
 		
 		var other_player_selectors = this.state.otherPlayersData.otherPlayers.map(function(playerItem){
 			return React.createElement("div", {className:"playerRadioContainer"},
@@ -436,7 +439,7 @@ class GameReactHandler extends React.Component {
 		React.createElement(PlayerMat,  {...this.state.otherPlayersData} )),
 	
 		React.createElement("div", { id: "gridReset" },"Reset Grid"),
-		React.createElement(OwnPlayerMat, {...this.state.playerData, turnOrder : playerDataObj.gameData.turnOrder}),
+		React.createElement(OwnPlayerMat, {...this.state.playerData, turnOrder : this.state.gameData.turnOrder}),
 		React.createElement("div", { key : (parseInt(Math.random()*1000000000)).toString(), id: "playGridroot", className: "gameMat", onMouseUp : this.processPlacement.bind(this) }, 
 		React.createElement(PlayGrid, {gameState:gameStatus, ...this.state.playerStationArray}), 
 		other_player_stations),

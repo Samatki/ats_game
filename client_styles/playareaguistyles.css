@@ -90,7 +90,7 @@ body{
   width:21.05%;
   top:6%;
   left:7%;
-  background-color:rgba(0,0,0,0.1);
+ // background-color:rgba(0,0,0,0.1);
 }
 
 #ownPlayerName{
@@ -288,9 +288,29 @@ body{
 #turnOrderIcon{
 	background-image: url("../ATS_Images/Game_Icons/spin_icon.png");
 	background-size:cover;
+	animation-name: unroll;
+	animation-duration: 1s;
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: 1;
 }
 
-.flipped{transform: scaleX(-1);}
+@keyframes unroll {
+	from{transform: scaleX(-1);}
+	to{transform:scaleX(1);}
+}
+
+.flipped{
+	animation-name: roll !important;
+	animation-duration: 1s !important;
+	animation-timing-function: ease-in-out !important;
+	animation-iteration-count: 1 !important;
+	transform:scaleX(-1) !important;
+}
+
+@keyframes roll {
+	from{transform: scaleX(1);}
+	to{transform:scaleX(-1);}
+}
 
 #ownPlayerBoxMoney{
 	background-image : url("../ATS_Images/Card_Details/coin2.png");
@@ -382,6 +402,11 @@ body{
   box-sizing:border-box;
   -moz-box-sizing:border-box;
   
+}
+
+.stationCardPlaced{
+	border-color:rgba(0,0,0,0);
+	background-color:rgba(0,0,0,0);
 }
 
 .newRowStyle{

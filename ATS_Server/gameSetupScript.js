@@ -3,11 +3,11 @@ var rF = require('./randomFunction');
 var cF = require('./cardFunctions');
 
 var races = ['zehuti','humareen','qualeen','minireen','gaarn','sheptas','sissaurian','vak'];
-var playerColourStyles = [{ color: "red" }, { color: "cyan" }, { color: "Magenta" }, { color: "SeaShell" }, { color: "Coral" }, { color: "Lime" }];
+var playerColourStyles = [{ color: "red" }, { color: "cyan" }, { color: "Magenta" }, { color: "Lime" }, { color: "Coral" }, { color: "SeaShell" }];
 var playerColourReactorStyles = [{ color: "red" }, { color: "blue" }, { color: "purple" }, { color: "green" }, { color: "yellow" }, { color: "" }];
 
 class playerObj{
-	constructor(noPlayers,objectives,raceAbilities,playerName,playerKey,playerRace,playerNo,gridInitial){
+	constructor(noPlayers,objectives,raceAbilities,playerName,playerKey,playerRace,playerNo,gridInitial,handSize){
 		var gridA = [];
 		if(gridInitial[0] == false){
 			for(var i = 0; i < (gridInitial[1] * gridInitial[2]); i++){
@@ -21,7 +21,8 @@ class playerObj{
 		this.gameData = {
 				round: 1,
 				turn: 1,
-				turnOrder : false
+				turnOrder : false,
+				handSize : handSize
 				};
 		this.playerData = {
 				playerName: playerName,
@@ -175,7 +176,7 @@ class playerObj{
 	}
 
 	addGameLogTurnHeader(){
-		if(this.gameData.round == 6 && this.gameData.turn == 4){
+		if(this.gameData.round == false && this.gameData.turn == false){
 			this.gameLog.push("<span class='logHeader'>Game Over</span>");
 		} else {	
 			this.gameLog.push('<span class="logHeader">YEAR ' + this.gameData.turn + " : ROUND " + this.gameData.round + "</span>");	
@@ -207,7 +208,7 @@ class playerObj{
 	}
 
 	incrementTurn(){
-		if(this.gameData.round == 6 && this.gameData.turn == 4){
+		if(this.gameData.round == this.gameData.handSize && this.gameData.turn == 4){
 			//End Game Check
 			this.gameData.round = false,
 			this.gameData.turn = false;
@@ -221,7 +222,7 @@ class playerObj{
 		} else if(this.gameData.round && this.gameData.turn){
 			// Needs to be updated if conflict cards included (7 turns)
 			this.gameData.round = this.gameData.round +1;
-			if (this.gameData.round > 6){
+			if (this.gameData.round > this.gameData.handSize){
 				this.gameData.round = 1;
 				this.gameData.turn = this.gameData.turn + 1;
 				this.playerHand = [];
@@ -276,14 +277,14 @@ class otherPlayerDataObject{
 	}
 }
 		
-var initiate = function(noPlayers,objectives,playerAbilities,players){
+var initiate = function(noPlayers,objectives,playerAbilities,players,handSize){
 //Generate player Objects
 	var race_list = rF(races);
 	var playersShuffled = rF(players);
 //	console.log(players);
 	var playerArray = [];
 	for(var i=0; i<players.length; i++){
-		playerArray.push(new playerObj(noPlayers,objectives,playerAbilities,playersShuffled[i].username,playersShuffled[i].playerKey,race_list[i],(i+1),[true,null,null]));
+		playerArray.push(new playerObj(noPlayers,objectives,playerAbilities,playersShuffled[i].username,playersShuffled[i].playerKey,race_list[i],(i+1),[true,null,null],handSize));
 	}
 	for(var i = 0; i<playerArray.length; i++){
 		for(var j = i + 1; j< i + playerArray.length; j++){

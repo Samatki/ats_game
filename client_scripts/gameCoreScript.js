@@ -608,7 +608,9 @@ function confirmationBoxLoader(){
 			turnObject.extraData.push(embassyOfficePlayerSelect);
 			turnObject.extraData.push(otherSelectedPlayerName);
 		} else {
-			innerText = "Place Embassy Offices on station for 2 credits."			
+			innerText = "Place Embassy Offices on station for 2 credits."
+			optionMode = 1;
+			turnObject.mode = optionMode;
 		}
 	}	
 	

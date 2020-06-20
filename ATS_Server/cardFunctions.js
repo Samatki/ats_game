@@ -290,11 +290,13 @@ function aqScoring(cardIndex, gridX, grid){
 	}
 	return count;
 }
-/*
+
 function eoScoring(chosenPlayerStatus,chosenPlayer){
-// you gain +2, chosen player gains +1;
+// You gain +2, chosen player gains +1
+// This is used for placement (and no additional spend) only
+	return 0
 }
-*/
+
 function cqScoring(cardIndex, gridX, grid){
 	//+2 if placed next to another Crew Quarters
 	var count = 0;
@@ -406,6 +408,7 @@ function sportsArenaScoring(playerObj){
 function backupReactorScoring(cardIndex, gridX, grid){
 	// add one energy to main reactor;
 	// +1 if placed next to main reactor;
+	var count = 0;
 	var neighbours = neighbourCheck(cardIndex, gridX, grid.length);
 	for(var i = 0; i<neighbours.length; i++){
 		if(grid[neighbours[i]].toString().substring(0,8) == "B0R_X_VR" || grid[neighbours[i]].toString().substring(0,8) == "B0R_X_MR"){

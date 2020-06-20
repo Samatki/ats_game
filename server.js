@@ -7,12 +7,6 @@ var cL = require('./ATS_Server/cardlibrary');
 var initialGameScript = require('./ATS_Server/gameSetupScript');
 var cF = require('./ATS_Server/cardFunctions');
 
-/*
-var playerDatabase = [{username:"Jeremy",userpassword:"PASSWORD123",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
-			  {username:"Seb",userpassword:"PASSWORD456",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
-			  {username:"Sam",userpassword:"PASSWORD000",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())}]
-*/
-
 var playerDatabase = [{username:"Jeremy",userpassword:"PASSWORD123",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
 			  {username:"Seb",userpassword:"PASSWORD456",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
 			  {username:"Logan",userpassword:"PASSWORD789",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
@@ -21,11 +15,11 @@ var playerDatabase = [{username:"Jeremy",userpassword:"PASSWORD123",playerKey:(M
 /* GAME INITIATORS */
 var players = playerDatabase.map(function(item){return {username:item.username, playerKey:item.playerKey}});
 var noPlayers = players.length;
-var handSize = 6;
+var handSize = 2;
 var objectives = false;
 var playerAbilities = false;
 var bannedCards = ["B0S_G_SoAC","B0S_G_GRC","B0S_Y_MP"];
-var playerObjs = initialGameScript.initiate(noPlayers,objectives,playerAbilities,players);
+var playerObjs = initialGameScript.initiate(noPlayers,objectives,playerAbilities,players,handSize);
 var gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
 var playerSubmitTracker = [];
 var playerSubmitActions = [];
@@ -36,6 +30,17 @@ newTurnCreditsMessage();
 var currentScores = playerObjs.map(function(item){
 	return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score));
 });
+var dummyArray = [];
+var tempDummyHand = [];
+if(noPlayers == 2){
+	for(var i = 0; i < 2; i++){
+		tempDummyHand = [];
+		for(var m = 0; m < handSize; m++){
+			tempDummyHand.push(gameDeck.pop())
+		}
+		dummyArray.push(tempDummyHand);
+	}
+}
 /* END GAME INITIATORS */
 
 var app = express();
@@ -117,26 +122,17 @@ app.route('/gameGenerator')
 			if(req.query.noPlayers && parseInt(req.query.noPlayers) > 1 && parseInt(req.query.noPlayers) <= 6 && req.query.players){
 				var playerCheck = true;
 				var tempPlayerList = req.query.players.split(',');
-				console.log(tempPlayerList);
-				console.log(req.query.noPlayers)
 				var tempPlayerArray = [];
 				var queryPlayerList = [...new Set(tempPlayerList)];
-				console.log(queryPlayerList);
 				if (queryPlayerList.length < parseInt(req.query.noPlayers)){
 					playerCheck = false;
 				} else {
-					console.log("A");
 					for (var i = 0; i < req.query.noPlayers ; i++){
 						var playerFilter = playerDatabase.find(function(item){ return item.username == queryPlayerList[i]});					
-//						var playerFilter = playerDatabase.filter(function(item){if(item.username == req.query.players[i]{return item}});
 						if (playerFilter){
-							console.log("B" + i);
 							tempPlayerArray.push(playerFilter);
 							if(tempPlayerArray.length == req.query.noPlayers){
-								console.log("C")
 								players = tempPlayerArray.map(function(item){return {username:item.username, playerKey:item.playerKey}});
-								console.log(players)
-//								players = tempPlayerArray;
 							}
 						} else {
 							playerCheck = false;
@@ -148,8 +144,7 @@ app.route('/gameGenerator')
 					console.log("D")
 					// Reset Data goes here
 		     		noPlayers = players.length;
-					handSize = 6;
-					playerObjs = initialGameScript.initiate(noPlayers,objectives,playerAbilities,players);
+					playerObjs = initialGameScript.initiate(noPlayers,objectives,playerAbilities,players,handSize);
 					gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
 					playerSubmitTracker = [];
 					playerSubmitActions = [];
@@ -158,6 +153,20 @@ app.route('/gameGenerator')
 					initialHand();
 					newTurnCreditsMessage();					
 					console.log("Starting new " + req.query.noPlayers + " player game");
+					currentScores = playerObjs.map(function(item){
+						return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score));
+					});
+					dummyArray = [];
+					tempDummyHand = [];
+					if(noPlayers == 2){
+						for(var i = 0; i < 2; i++){
+							tempDummyHand = [];
+							for(var m = 0; m < handSize; m++){
+								tempDummyHand.push(gameDeck.pop())
+							}
+							dummyArray.push(tempDummyHand);
+						}
+					}
 					io.to('ATS_Game_Room').emit('redirect','');
 					res.redirect('..');					
 				} else {
@@ -189,8 +198,7 @@ app.route('/reset')
 			console.log("Game Reset!");
 			players = playerObjs.map(function(item){return {username:item.playerData.playerName, playerKey:item.playerData.playerKey}});
 			noPlayers = players.length;
-			handSize = 6;
-			playerObjs = initialGameScript.initiate(noPlayers,objectives,playerAbilities,players);
+			playerObjs = initialGameScript.initiate(noPlayers,objectives,playerAbilities,players,handSize);
 			gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
 			playerSubmitTracker = [];
 			playerSubmitActions = [];
@@ -198,6 +206,20 @@ app.route('/reset')
 			currentCredits = [0,0,0,0,0,0];
 			initialHand();
 			newTurnCreditsMessage();
+			currentScores = playerObjs.map(function(item){
+				return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score));
+			});
+			dummyArray = [];
+			tempDummyHand = [];
+			if(noPlayers == 2){
+				for(var i = 0; i < 2; i++){
+					tempDummyHand = [];
+					for(var m = 0; m < handSize; m++){
+						tempDummyHand.push(gameDeck.pop())
+					}
+					dummyArray.push(tempDummyHand);
+				}
+			}
 			io.to('ATS_Game_Room').emit('redirect','');
 			res.redirect('..');
 		} else {
@@ -364,7 +386,7 @@ function processPlayerActions(){
 					for(var k = 0; k<playerObjs.length; k++){
 						playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' data-cardid='B0S_Y_BO'>Business Offices</span> for 1 credit, paying an additional "+boChanger+" credits for an additional <span class='posScoreDelta'>+"+boChangerPoints+"VP</span>");
 					}
-					console.log(playerObjs[j].playerData.playerName + ": Business Offices - PlacementScore  = 1(+"+boChangerPonts+")");						
+					console.log(playerObjs[j].playerData.playerName + ": Business Offices - PlacementScore  = 1(+"+boChangerPoints+")");						
 				} else if (playerSubmitActions[i].mode == 7){
 					// Embassy office select;
 					var selectedEOPlayer = '';
@@ -429,12 +451,20 @@ function processPlayerActions(){
 
 	for(var k = 0; k<playerObjs.length; k++){
 		playerObjs[k].addGameLogTurnHeader()
-	}	
-
+	}
 
 	// Generate New Hands & Pass
 	if (playerObjs[0].gameData.round == 1){
 		initialHand();
+		if(noPlayers == 2){
+			for(var i = 0; i < 2; i++){
+				tempDummyHand = [];
+				for(var m = 0; m < handSize; m++){
+					tempDummyHand.push(gameDeck.pop())
+				}
+				dummyArray.push(tempDummyHand);
+			}
+		}
 		newTurnCreditsMessage()
 		for (var j = 0; j<playerObjs.length; j++){
 			playerObjs[j].addGameLogEntry("<span color:orange><i>Hand pass order reversed<i></span>");
@@ -446,21 +476,42 @@ function processPlayerActions(){
 		var x = playerHandSwitchArray.pop();
 		playerHandSwitchArray.unshift(x);
 	}
-	if(playerObjs[0].gameData.round != 1){
+	if(playerObjs[0].gameData.round != 1 && playerObjs[0].gameData.round){
 		var passDirection = playerObjs[0].gameData.turnOrder ? 1 : -1;
-		for (var j = 0; j<playerObjs.length; j++ && playerObjs[0].gameData.round != 1){
-			var passIndex = ((j+passDirection) % playerObjs.length + playerObjs.length) % playerObjs.length;
-			var passedPlayer = playerObjs[passIndex].playerData.playerName;
-			var passedPlayerColour = playerObjs[passIndex].playerData.color;
-			playerObjs[j].updatePlayerHand(playerHandSwitchArray[j],true,[passedPlayer,passedPlayerColour])
-			for(var k = 0; k<playerObjs.length; k++){
-				passIndex = ((k+passDirection) % playerObjs.length + playerObjs.length) % playerObjs.length;
-				if(j==k){
-					continue;
-				} else {
-					playerObjs[j].addGameLogEntry("<span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span> receives cards from " + "<span style='color:"+playerObjs[passIndex].playerData.color+"'>"+playerObjs[passIndex].playerData.playerName+"</span>");
+		console.log(dummyArray);
+		for (var j = 0; j<playerObjs.length; j++){
+			console.log(playerObjs[j].playerHand);
+			if(noPlayers == 2){
+				var tempHand = dummyArray.pop();
+				var newPlayerHand = tempHand.splice(Math.floor(Math.random()*tempHand.length), 1);
+				var dummyPlayerCode = (passDirection == 1) ? "A" : "B";
+				var dummyPlayerCode2 = (dummyPlayerCode == "A") ? "B" : "A";
+				playerObjs[j].updatePlayerHand(newPlayerHand,true,[('Dummy Player ' + dummyPlayerCode),'black']);
+				for(var k = 0; k<playerObjs.length; k++){
+					if(j==k){
+						playerObjs[j].addGameLogEntry("<span style='color:black'>Dummy Player "+dummyPlayerCode2+"</span> receives cards from <span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span>");
+					} else {
+						playerObjs[j].addGameLogEntry("<span style='color:black'>Dummy Player "+dummyPlayerCode+"</span> receives cards from <span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span>");
+						playerObjs[j].addGameLogEntry("<span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span> receives cards from " + "<span style='color:black'>Dummy Player " +dummyPlayerCode2+"</span>");
+					}
+				}
+			}else{
+				var passIndex = ((j+passDirection) % playerObjs.length + playerObjs.length) % playerObjs.length;
+				var passedPlayer = playerObjs[passIndex].playerData.playerName;
+				var passedPlayerColour = playerObjs[passIndex].playerData.color;
+				playerObjs[j].updatePlayerHand(playerHandSwitchArray[j],true,[passedPlayer,passedPlayerColour])
+				for(var k = 0; k<playerObjs.length; k++){
+					passIndex = ((k+passDirection) % playerObjs.length + playerObjs.length) % playerObjs.length;
+					if(j==k){
+						continue;
+					} else {
+						playerObjs[j].addGameLogEntry("<span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span> receives cards from " + "<span style='color:"+playerObjs[passIndex].playerData.color+"'>"+playerObjs[passIndex].playerData.playerName+"</span>");
+					}
 				}
 			}
+		}
+		if(noPlayers = 2){
+			dummyArray = playerHandSwitchArray;
 		}
 	}
 	
@@ -472,7 +523,6 @@ function processPlayerActions(){
 			playerObjs[j].addOtherPlayer(currentPlayerObj.playerData.playerNo,currentPlayerObj.playerData.playerName,currentPlayerObj.playerData.currency,currentPlayerObj.playerData.playerNo.abilities,currentPlayerObj.playerData.player_race,currentPlayerObj.playerData.curr_score,currentPlayerObj.playerData.eg_score,currentPlayerObj.playerStationArray.grid,currentPlayerObj.playerStationArray.parameters.x);
 		}
 	}
-	
 	playerSubmitActions = [];
 }
 
@@ -488,19 +538,19 @@ function passData(){
 
 function initialHand(){
 	for (var j = 0; j < playerObjs.length; j++){
-	var hand = [];
-	for(var i = 0; i<handSize; i++){
-		hand.push(gameDeck.pop());
-	}
-	playerObjs[j].updatePlayerHand(hand,true);
-	for(var k = 0; k<playerObjs.length; k++){
-		if(j==k){
-			continue;
-		} else {
-			playerObjs[j].addGameLogEntry("<span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span> receives "+hand.length+" cards from the deck");
+		var hand = [];
+		for(var i = 0; i<handSize; i++){
+			hand.push(gameDeck.pop());
 		}
-	}
-}	
+		playerObjs[j].updatePlayerHand(hand,true);
+		for(var k = 0; k<playerObjs.length; k++){
+			if(j==k){
+				continue;
+			} else {
+				playerObjs[j].addGameLogEntry("<span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span> receives "+hand.length+" cards from the deck");
+			}
+		}
+	}	
 }
 
 function newTurnCreditsMessage(){
