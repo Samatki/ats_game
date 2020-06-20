@@ -18,11 +18,9 @@ var playerDatabase = [{username:"Jeremy",userpassword:"PASSWORD123",playerKey:(M
 			  {username:"Logan",userpassword:"PASSWORD789",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
 			  {username:"Sam",userpassword:"PASSWORD000",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())}]
 
-/* GAME SCRIPTS */
+/* GAME INITIATORS */
 var players = playerDatabase.map(function(item){return {username:item.username, playerKey:item.playerKey}});
 var noPlayers = players.length;
-//console.log(players);
-//console.log(noPlayers);
 var handSize = 6;
 var objectives = false;
 var playerAbilities = false;
@@ -38,8 +36,7 @@ newTurnCreditsMessage();
 var currentScores = playerObjs.map(function(item){
 	return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score));
 });
-//console.log(currentScores);
-/* END GAME SCRIPTS */
+/* END GAME INITIATORS */
 
 var app = express();
 
@@ -63,23 +60,18 @@ io.on('connection', (socket) => {
   socket.join('ATS_Game_Room');
   socket.on('pageLoader',function(data){
 		  try{
-//			  console.log(loginCheckFunction(socket))
 			  if(loginCheckFunction(socket)){
 				  if(playerSubmitTracker.includes(data.playerKey)){
 					for(var i=0; i<playerObjs.length; i++){
 						if(playerObjs[i].playerData.playerKey == data.playerKey){
 							x = {...playerObjs[i]};
 							x.playerHand = [];
-//							console.log("1")
 							socket.emit('pageLoader',JSON.parse(JSON.stringify(x)));  
 						}
 					}
 				  } else {
 					for(var i=0; i<playerObjs.length; i++){
-//						console.log(playerObjs[i].playerData.playerKey)
-//						console.log(data)
 						if(playerObjs[i].playerData.playerKey == data.playerKey && data.playerKey != undefined){
-//							console.log("2");
 							socket.emit('pageLoader',playerObjs[i]);  
 							break;
 						}
@@ -93,10 +85,8 @@ io.on('connection', (socket) => {
 	  });
   
     socket.on("submitTurnData",(data) =>{
-//		console.log("A");
-//		console.log(data);
-	   /* Data Object:
-	  {
+	/*
+	 {
 		playerKey : sdfwef,
 		mode : 1,2,3,4,5,6,7,
 		cardFromHand : '',
@@ -105,11 +95,8 @@ io.on('connection', (socket) => {
 	  }
 	  */
 	  try{
-//		  		console.log("B");
 		  if (loginCheckFunction(socket)){
-//			 console.log("C");
 			if(processUserTurn(data)){
-//						console.log("D1");
 				processPlayerActions()				
 				passData()
 			}
@@ -124,17 +111,85 @@ io.on('connection', (socket) => {
   });  
 });
 
+app.route('/gameGenerator')
+	.get(function(req,res){
+		if(req.session.loginStatus){
+			if(req.query.noPlayers && parseInt(req.query.noPlayers) > 1 && parseInt(req.query.noPlayers) <= 6 && req.query.players){
+				var playerCheck = true;
+				var tempPlayerList = req.query.players.split(',');
+				console.log(tempPlayerList);
+				console.log(req.query.noPlayers)
+				var tempPlayerArray = [];
+				var queryPlayerList = [...new Set(tempPlayerList)];
+				console.log(queryPlayerList);
+				if (queryPlayerList.length < parseInt(req.query.noPlayers)){
+					playerCheck = false;
+				} else {
+					console.log("A");
+					for (var i = 0; i < req.query.noPlayers ; i++){
+						var playerFilter = playerDatabase.find(function(item){ return item.username == queryPlayerList[i]});					
+//						var playerFilter = playerDatabase.filter(function(item){if(item.username == req.query.players[i]{return item}});
+						if (playerFilter){
+							console.log("B" + i);
+							tempPlayerArray.push(playerFilter);
+							if(tempPlayerArray.length == req.query.noPlayers){
+								console.log("C")
+								players = tempPlayerArray.map(function(item){return {username:item.username, playerKey:item.playerKey}});
+								console.log(players)
+//								players = tempPlayerArray;
+							}
+						} else {
+							playerCheck = false;
+							break;
+						}
+					}
+				}
+				if(playerCheck){
+					console.log("D")
+					// Reset Data goes here
+		     		noPlayers = players.length;
+					handSize = 6;
+					playerObjs = initialGameScript.initiate(noPlayers,objectives,playerAbilities,players);
+					gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
+					playerSubmitTracker = [];
+					playerSubmitActions = [];
+					discardPile = [];
+					currentCredits = [0,0,0,0,0,0];
+					initialHand();
+					newTurnCreditsMessage();					
+					console.log("Starting new " + req.query.noPlayers + " player game");
+					io.to('ATS_Game_Room').emit('redirect','');
+					res.redirect('..');					
+				} else {
+					// Do Nothing
+					res.redirect('..');
+				}
+			} else {
+				res.redirect('..');
+			}
+		} else {
+			res.redirect('..');
+		}
+	});
+
+app.route('/logout')
+	.get(function(req,res){
+		if(req.session.loginStatus){
+			console.log(req.session.username + " logged out");
+			req.session.destroy();
+			res.redirect('..');
+		} else {
+			res.redirect('..');
+		}
+	});
 
 app.route('/reset')
 	.get(function(req,res){
 		if(req.session.loginStatus){
 			console.log("Game Reset!");
-			players = playerDatabase.map(function(item){return {username:item.username, playerKey:item.playerKey}});
+			players = playerObjs.map(function(item){return {username:item.playerData.playerName, playerKey:item.playerData.playerKey}});
 			noPlayers = players.length;
 			handSize = 6;
-			objectives = false;
-			playerAbilities = false;
-			bannedCards = ["B0S_G_SoAC","B0S_G_GRC","B0S_Y_MP"];
 			playerObjs = initialGameScript.initiate(noPlayers,objectives,playerAbilities,players);
 			gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
 			playerSubmitTracker = [];
@@ -145,15 +200,14 @@ app.route('/reset')
 			newTurnCreditsMessage();
 			io.to('ATS_Game_Room').emit('redirect','');
 			res.redirect('..');
+		} else {
+			res.redirect('..');
 		}
-		res.end();
-//		res.sendFile(__dirname + 'index.html');
 	});
 
 app.route('*')
 	.get(function(req,res){
 		if(req.session.loginStatus){
-//			console.log("This HTTP session id is " + req.session.id);
 			res.write('<script>var playerKey ='+req.session.playerKey+'</script>')
 			fs.readFile(('./index.html'),function(err,data){res.write(data);res.end()});
 		} else {
@@ -172,7 +226,6 @@ app.route('*')
 			console.log(req.body.username + " has logged in");
 			req.session.loginStatus = true;
 			req.session.username = req.body.username;	
-//			console.log("This HTTP session id is " + req.session.id);
 			res.redirect(req.protocol + '://' + req.get('host'));
 		} else {
 			console.log("Login Failure");
@@ -185,26 +238,21 @@ app.route('*')
 function loginCheckFunction(socket){
 	var result = true;
 	socket.on("loginCheck",(data) =>{
-//	  console.log(result)
 	  playerDatabase.forEach(function(item){
 		  if(item.playerKey == data){
 			  result = false;
 			}
 		})
-//		console.log(result)
 		if(result){
 		  console.log("Sending for redirect")
 		  var destination = '';
 		  socket.emit('redirect', destination);
 		  result = false;
 		} else {
-//		  console.log("Passed login check")
 		  playerDatabase.forEach(function(item){
-//			  console.log(item.playerKey == data)
 			  if(item.playerKey == data){
 				  item.socketKey = socket.id;
 				  result = true;
-//				  console.log(result)
 				}
 			})		
 		}
@@ -213,23 +261,13 @@ function loginCheckFunction(socket){
 }
 
 function processUserTurn(data){
-//	console.log("D")
 	if(! playerSubmitTracker.includes(data.playerKey)){
-//		console.log("E")
 		for(var i = 0; i<playerDatabase.length; i++){
 			if(playerDatabase[i].playerKey == data.playerKey){
-//				console.log("F")
 				playerSubmitTracker.push(data.playerKey);
 					for(var i = 0; i<playerObjs.length; i++){
 						if(playerObjs[i].playerData.playerKey == data.playerKey){
-//							console.log("G")
-//							console.log(data.cardFromHand)
-//							console.log(playerObjs[i].playerHand)
 							if(playerObjs[i].playerHand.includes(data.cardFromHand) || data.cardFromHand == "B0R_X_PR2"){
-//								console.log("H")
-//								console.log(playerObjs[i].playerData.playerName);
-//								console.log(playerObjs[i].playerHand);
-//								console.log(data.cardFromHand);
 								//Remove played card from player hand
 								var hand = playerObjs[i].playerHand;
 								hand.splice(hand.indexOf(data.cardFromHand),1);
@@ -259,14 +297,8 @@ function processPlayerActions(){
 		// Regenerate Other Player Grids
 		playerObjs[j].discardPile.cards = discardPile;
 		playerObjs[j].otherPlayersData.otherPlayers = [];
-//		console.log("Updating...")
-//		console.log(playerObjs[j].playerData.playerName)
-//		console.log(playerObjs[j].playerData.playerNo);
-//		console.log('.....')
 		for(var k = j + 1 ; k< j + playerObjs.length ; k++){
 			currentPlayerObj = playerObjs[(k % playerObjs.length + playerObjs.length) % playerObjs.length];
-//			console.log(currentPlayerObj.playerData.playerName);
-//			console.log(currentPlayerObj.playerData.playerNo);
 			playerObjs[j].addOtherPlayer(currentPlayerObj.playerData.playerNo,currentPlayerObj.playerData.playerName,currentPlayerObj.playerData.currency,currentPlayerObj.playerData.playerNo.abilities,currentPlayerObj.playerData.player_race,currentPlayerObj.playerData.curr_score,currentPlayerObj.playerData.eg_score,currentPlayerObj.playerStationArray.grid,currentPlayerObj.playerStationArray.parameters.x);
 		}
 	}
@@ -374,10 +406,6 @@ function processPlayerActions(){
 			}
 		}
 	}
-//	for(var k = 0; k<playerObjs.length; k++){
-//		playerObjs[k].updateEGScoring();
-//	}
-
 	currentCredits = [];
 	for (var j = 0; j<playerObjs.length; j++){
 		currentCredits.push(playerObjs[j].playerData.currency);
@@ -386,8 +414,6 @@ function processPlayerActions(){
 	}
 
 	for(var k = 0; k<playerObjs.length; k++){
-//		console.log(currentScores);
-//		console.log(currentScores[k]);
 		var scoreDelta = (playerObjs[k].playerData.curr_score + playerObjs[k].playerData.eg_score) - (currentScores[k]);
 		for(var j = 0; j<playerObjs.length; j++){
 			if(scoreDelta >= 0){
@@ -443,8 +469,6 @@ function processPlayerActions(){
 		playerObjs[j].otherPlayersData.otherPlayers = [];
 		for(var k = j + 1 ; k< j + playerObjs.length ; k++){
 			currentPlayerObj = playerObjs[(k % playerObjs.length + playerObjs.length) % playerObjs.length];
-//			console.log(currentPlayerObj.playerData.playerName);
-//			console.log(currentPlayerObj.playerData.playerNo);
 			playerObjs[j].addOtherPlayer(currentPlayerObj.playerData.playerNo,currentPlayerObj.playerData.playerName,currentPlayerObj.playerData.currency,currentPlayerObj.playerData.playerNo.abilities,currentPlayerObj.playerData.player_race,currentPlayerObj.playerData.curr_score,currentPlayerObj.playerData.eg_score,currentPlayerObj.playerStationArray.grid,currentPlayerObj.playerStationArray.parameters.x);
 		}
 	}
@@ -456,7 +480,6 @@ function passData(){
 	for (var i = 0; i<playerObjs.length; i++){
 		for (var j = 0; j<playerDatabase.length; j++){
 			if(playerObjs[i].playerData.playerKey == playerDatabase[j].playerKey){
-//				console.log("3");
 				io.to(playerDatabase[j].socketKey).emit('pageLoader',playerObjs[i]);
 			}
 		}

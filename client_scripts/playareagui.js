@@ -327,15 +327,15 @@ class GameReactHandler extends React.Component {
 		confirmationBoxLoader();
 		document.getElementById('waitingBox').style.display = '';
 		document.getElementById("ownPlayerBoxMoneyCount").innerHTML = this.state.playerData.currency;
-		document.getElementById("ownPlayerBoxScoreCount").innerHTML = this.state.playerData.curr_score + this.state.playerData.eg_score;	
+		document.getElementById("ownPlayerBoxScoreCount").innerHTML = (this.state.playerData.curr_score + this.state.playerData.eg_score);	
 	}
 	
 	submitTurnButton(e){
 		socket.emit('submitTurnData',turnObject);
 		document.getElementById('waitingBox').style.display = 'block';
 		document.getElementById('turnConfirmationScreen').style.display = '';
-		document.getElementById("ownPlayerBoxMoneyCount").innerHTML = this.state.playerData.currency + currencyDelta;
-		document.getElementById("ownPlayerBoxScoreCount").innerHTML = this.state.playerData.curr_score + this.state.playerData.eg_score + scoreDelta;				
+		document.getElementById("ownPlayerBoxMoneyCount").innerHTML = (this.state.playerData.currency + parseInt(currencyDelta));
+		document.getElementById("ownPlayerBoxScoreCount").innerHTML = (this.state.playerData.curr_score + this.state.playerData.eg_score) + scoreDelta;				
 	}
 		
 	componentDidUpdate(){
@@ -364,7 +364,7 @@ class GameReactHandler extends React.Component {
 		businessOfficesExtraSpend = 0;
 		embassyOfficePlayerSelect = "";
         placedCardIndex = null;
-		scoreDelta = 0;
+		scoreDelta = '';
 		turnObject = {};
 		if(this.state.playerHand.length == 0 || this.state.playerHand.length == 0){
 			document.getElementById('waitingBox').style.display = 'block';

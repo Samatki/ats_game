@@ -5,6 +5,10 @@
   user-select:none;
 }
 
+a {
+  text-decoration: none; /* no underline */
+}
+
 body{
   background-color:black;
   white-space: nowrap;
