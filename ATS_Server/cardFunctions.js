@@ -200,7 +200,7 @@ function customsCurrency(cardIndex, gridX, grid){
 	var neighbours = neighbourCheck(cardIndex, gridX, grid.length);
 	var count = 0;
 	for(var i = 0; i<neighbours.length; i++){
-		if(grid[neighbours[i]][5] == "Y" || grid[neighbours[i]].toString().substring(0,8) == "B0R_X_VR"){
+		if(grid[neighbours[i]][4] == "Y" || grid[neighbours[i]].toString().substring(0,8) == "B0R_X_VR"){
 			count = count + 1;
 		}
 	}
@@ -213,7 +213,7 @@ function gardenScoring(gridA,startIndex){
 	//Note: gridA is playerStationArray
 	var count = 2;
 	for(var i = 0; i < gridA.grid.length; i++){
-		if(gridA.grid[i][5] == "R" || gridA.grid[i].toString().substring(0,8) == "B0R_X_VR"){
+		if(gridA.grid[i][4] == "R" || gridA.grid[i].toString().substring(0,8) == "B0R_X_VR"){
 			if(dijkstraAlgo(gridA,startIndex,i)<=3){
 				count = count - 1;
 				break;
@@ -391,7 +391,7 @@ function tuhScoring(grid){
 // +1 for each yellow location on the station, max 5
 	var count = 0;
 	for(var i = 0; i<grid.length; i++){
-		if(grid[i][5] == "Y" || grid[i].toString().substring(0,8) == "B0R_X_VR"){
+		if(grid[i][4] == "Y" || grid[i].toString().substring(0,8) == "B0R_X_VR"){
 			count = count + 1;
 		}
 	}

@@ -179,13 +179,13 @@ class PlayGrid extends React.Component {
         }
       }
 
-      if (visibility) {
-        return React.createElement("div", { className: "stationCardSpace stationCardPlaceable "+ newRowStyle, "data-index": index }, index);
+      if (visibility && this.props.gameState) {
+        return React.createElement("div", { className: "stationCardSpace stationCardPlaceable "+ newRowStyle, "data-index": index },null);
       } else {
-        return React.createElement("div", { className: "stationCardSpace stationCardInvisible "+ newRowStyle, "data-index": index }, index);
+        return React.createElement("div", { className: "stationCardSpace stationCardInvisible "+ newRowStyle, "data-index": index },null);
       }
 
-    });
+    }.bind(this));
     return (
       React.createElement("div", { id: "gridContainer", Style: "transform:scale(1);" },
       cardMap));
@@ -384,6 +384,9 @@ class GameReactHandler extends React.Component {
 			return React.createElement(OtherPlayGrid, {...playerItem.playerStationArray, playerNo : playerItem.playerNo}, null)
 		});
 		
+		var gameStatus = Boolean(this.state.gameData.round) && Boolean(this.state.playerHand.length);
+		var messageFlag = Boolean(this.state.playerHand.length)?'':'display :none';
+		
 		var other_player_selectors = this.state.otherPlayersData.otherPlayers.map(function(playerItem){
 			return React.createElement("div", {className:"playerRadioContainer"},
 				React.createElement("div", {className:"playerRadioImage"},null),
@@ -426,7 +429,7 @@ class GameReactHandler extends React.Component {
 		React.createElement("button", { id : "turnConfirmationBoxCancel", onClick : this.cancelButton.bind(this), className : "confirmationBox"}, "Cancel" )
 		),),
 
-		React.createElement("div", { id : "waitingBox"},"Waiting for other players..."),
+		React.createElement("div", { id : "waitingBox", Style:messageFlag},"Waiting for other players..."),
 		React.createElement(TurnTracker, {...this.state.gameData}),
 	
 		React.createElement("div", { id: "topBarFlexContainer" },
@@ -435,7 +438,7 @@ class GameReactHandler extends React.Component {
 		React.createElement("div", { id: "gridReset" },"Reset Grid"),
 		React.createElement(OwnPlayerMat, {...this.state.playerData, turnOrder : playerDataObj.gameData.turnOrder}),
 		React.createElement("div", { key : (parseInt(Math.random()*1000000000)).toString(), id: "playGridroot", className: "gameMat", onMouseUp : this.processPlacement.bind(this) }, 
-		React.createElement(PlayGrid, {...this.state.playerStationArray}), 
+		React.createElement(PlayGrid, {gameState:gameStatus, ...this.state.playerStationArray}), 
 		other_player_stations),
 
 		React.createElement("div", { key : (parseInt(Math.random()*1000000000)), id : "discardForPowerBox", className : "discardBox", onMouseUp : this.powerDiscard.bind(this)}, "Discard for Reactor"),
