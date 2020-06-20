@@ -67,6 +67,7 @@
     text-indent: 30px;
 	margin-left:20px;
 	font-size:small;
+	padding-top:4px;
 }
 
 .gameLogEntry:first-line {

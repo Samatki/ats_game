@@ -437,7 +437,7 @@ function processPlayerActions(){
 		initialHand();
 		newTurnCreditsMessage()
 		for (var j = 0; j<playerObjs.length; j++){
-			playerObjs[j].addGameLogEntry("Hand pass order reversed");
+			playerObjs[j].addGameLogEntry("<span color:orange><i>Hand pass order reversed<i></span>");
 		}
 	} else if(playerObjs[0].gameData.turnOrder){
 		var x = playerHandSwitchArray.shift();

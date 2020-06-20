@@ -176,7 +176,7 @@ class playerObj{
 
 	addGameLogTurnHeader(){
 		if(this.gameData.round == 6 && this.gameData.turn == 4){
-			this.gameLog.push("Game Over");
+			this.gameLog.push("<span class='logHeader'>Game Over</span>");
 		} else {	
 			this.gameLog.push('<span class="logHeader">YEAR ' + this.gameData.turn + " : ROUND " + this.gameData.round + "</span>");	
 		}		

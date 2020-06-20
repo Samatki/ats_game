@@ -629,4 +629,5 @@ function renderGameLog(logArray){
 		gameLogHTMLWrite = gameLogHTMLWrite + "<div class='gameLogEntry'>" + logArray[i] + "</div>"
 	}
 	gameLogHTML.innerHTML = gameLogHTMLWrite;
+	document.getElementById('infoArea').scrollTop = document.getElementById('infoArea').scrollHeight;
 }

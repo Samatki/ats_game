@@ -261,6 +261,7 @@ body{
 }
 
 .logHeader{
+	color:orange;
 	display:block;
 	padding-top:10px;
 	padding-bottom:5px;
@@ -275,6 +276,7 @@ body{
 	font-size:small;
 	word-wrap:normal;
 	white-space:normal;
+	padding-bottom:30px;
 }
 
 #objArea{
@@ -286,10 +288,9 @@ body{
 #turnOrderIcon{
 	background-image: url("../ATS_Images/Game_Icons/spin_icon.png");
 	background-size:cover;
-	transform: scaleX(-1);
 }
 
-.flipped{transform: scaleX(1);}
+.flipped{transform: scaleX(-1);}
 
 #ownPlayerBoxMoney{
 	background-image : url("../ATS_Images/Card_Details/coin2.png");
