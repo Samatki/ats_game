@@ -15,7 +15,7 @@ var playerDatabase = [{username:"Jeremy",userpassword:"PASSWORD123",playerKey:(M
 /* GAME INITIATORS */
 var players = playerDatabase.map(function(item){return {username:item.username, playerKey:item.playerKey}});
 var noPlayers = players.length;
-var handSize = 2;
+var handSize = 6;
 var objectives = false;
 var playerAbilities = false;
 var bannedCards = ["B0S_G_SoAC","B0S_G_GRC","B0S_Y_MP"];
