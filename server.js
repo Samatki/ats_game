@@ -6,20 +6,25 @@ var fs = require('fs');
 var cL = require('./ATS_Server/cardlibrary');
 var initialGameScript = require('./ATS_Server/gameSetupScript');
 var cF = require('./ATS_Server/cardFunctions');
+var oL = require('./ATS_Server/objectives');
 
-var playerDatabase = [{username:"Jeremy",userpassword:"PASSWORD123",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
+
+var playerDatabase = [
+			  {username:"Jeremy",userpassword:"PASSWORD123",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
 			  {username:"Seb",userpassword:"PASSWORD456",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
 			  {username:"Logan",userpassword:"PASSWORD789",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
-			  {username:"Sam",userpassword:"PASSWORD000",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())}]
+			  {username:"Sam",userpassword:"PASSWORD000",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())}
+]
 
 /* GAME INITIATORS */
 var players = playerDatabase.map(function(item){return {username:item.username, playerKey:item.playerKey}});
 var noPlayers = players.length;
+var bannedObjectives = [];
+var gameObjectives = oL.generateObjectives(noPlayers, bannedObjectives);
 var handSize = 6;
-var objectives = false;
 var playerAbilities = false;
 var bannedCards = ["B0S_G_SoAC","B0S_G_GRC","B0S_Y_MP"];
-var playerObjs = initialGameScript.initiate(noPlayers,objectives,playerAbilities,players,handSize);
+var playerObjs = initialGameScript.initiate(noPlayers,gameObjectives,playerAbilities,players,handSize);
 var gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
 var playerSubmitTracker = [];
 var playerSubmitActions = [];
@@ -28,7 +33,7 @@ var currentCredits = [0,0,0,0,0,0];
 initialHand();
 newTurnCreditsMessage();
 var currentScores = playerObjs.map(function(item){
-	return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score));
+	return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score)+parseInt(item.playerData.obj_score));
 });
 var dummyArray = [];
 var tempDummyHand = [];
@@ -41,6 +46,7 @@ if(noPlayers == 2){
 		dummyArray.push(tempDummyHand);
 	}
 }
+
 /* END GAME INITIATORS */
 
 var app = express();
@@ -144,7 +150,8 @@ app.route('/gameGenerator')
 					console.log("D")
 					// Reset Data goes here
 		     		noPlayers = players.length;
-					playerObjs = initialGameScript.initiate(noPlayers,objectives,playerAbilities,players,handSize);
+					gameObjectives = oL.generateObjectives(noPlayers, bannedObjectives);
+					playerObjs = initialGameScript.initiate(noPlayers,gameObjectives,playerAbilities,players,handSize);
 					gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
 					playerSubmitTracker = [];
 					playerSubmitActions = [];
@@ -154,7 +161,7 @@ app.route('/gameGenerator')
 					newTurnCreditsMessage();					
 					console.log("Starting new " + req.query.noPlayers + " player game");
 					currentScores = playerObjs.map(function(item){
-						return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score));
+						return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score) + parseInt(item.playerData.obj_score));
 					});
 					dummyArray = [];
 					tempDummyHand = [];
@@ -165,6 +172,7 @@ app.route('/gameGenerator')
 								tempDummyHand.push(gameDeck.pop())
 							}
 							dummyArray.push(tempDummyHand);
+							console.log(dummyArray);
 						}
 					}
 					io.to('ATS_Game_Room').emit('redirect','');
@@ -195,10 +203,11 @@ app.route('/logout')
 app.route('/reset')
 	.get(function(req,res){
 		if(req.session.loginStatus){
+			noPlayers = players.length;
+			gameObjectives = oL.generateObjectives(noPlayers, bannedObjectives);
 			console.log("Game Reset!");
 			players = playerObjs.map(function(item){return {username:item.playerData.playerName, playerKey:item.playerData.playerKey}});
-			noPlayers = players.length;
-			playerObjs = initialGameScript.initiate(noPlayers,objectives,playerAbilities,players,handSize);
+			playerObjs = initialGameScript.initiate(noPlayers,gameObjectives,playerAbilities,players,handSize);
 			gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
 			playerSubmitTracker = [];
 			playerSubmitActions = [];
@@ -207,7 +216,7 @@ app.route('/reset')
 			initialHand();
 			newTurnCreditsMessage();
 			currentScores = playerObjs.map(function(item){
-				return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score));
+				return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score) + parseInt(item.playerData.obj_score));
 			});
 			dummyArray = [];
 			tempDummyHand = [];
@@ -321,7 +330,7 @@ function processPlayerActions(){
 		playerObjs[j].otherPlayersData.otherPlayers = [];
 		for(var k = j + 1 ; k< j + playerObjs.length ; k++){
 			currentPlayerObj = playerObjs[(k % playerObjs.length + playerObjs.length) % playerObjs.length];
-			playerObjs[j].addOtherPlayer(currentPlayerObj.playerData.playerNo,currentPlayerObj.playerData.playerName,currentPlayerObj.playerData.currency,currentPlayerObj.playerData.playerNo.abilities,currentPlayerObj.playerData.player_race,currentPlayerObj.playerData.curr_score,currentPlayerObj.playerData.eg_score,currentPlayerObj.playerStationArray.grid,currentPlayerObj.playerStationArray.parameters.x);
+			playerObjs[j].addOtherPlayer(currentPlayerObj.playerData.playerNo,currentPlayerObj.playerData.playerName,currentPlayerObj.playerData.currency,currentPlayerObj.playerData.playerNo.abilities,currentPlayerObj.playerData.player_race,currentPlayerObj.playerData.curr_score,currentPlayerObj.playerData.eg_score,currentPlayerObj.playerData.obj_score,currentPlayerObj.playerStationArray.grid,currentPlayerObj.playerStationArray.parameters.x);
 		}
 	}
 	for(var i = 0; i<playerSubmitActions.length; i++){
@@ -435,8 +444,11 @@ function processPlayerActions(){
 		playerObjs[j].incrementTurn();
 	}
 
+	// OBJECTIVES LOGIC //
+	oL.objectiveScorer(playerObjs, gameObjectives);
+
 	for(var k = 0; k<playerObjs.length; k++){
-		var scoreDelta = (playerObjs[k].playerData.curr_score + playerObjs[k].playerData.eg_score) - (currentScores[k]);
+		var scoreDelta = (playerObjs[k].playerData.curr_score + playerObjs[k].playerData.eg_score + playerObjs[k].playerData.obj_score) - (currentScores[k]);
 		for(var j = 0; j<playerObjs.length; j++){
 			if(scoreDelta >= 0){
 				playerObjs[j].addGameLogEntry("<span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"'s</span> score increases by <span class='posScoreDelta'>+"+scoreDelta+"VP</span> this round");
@@ -446,7 +458,7 @@ function processPlayerActions(){
 		}
 	}
 	currentScores = playerObjs.map(function(item){
-		return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score));
+		return (parseInt(item.playerData.curr_score) + parseInt(item.playerData.eg_score) + parseInt(item.playerData.obj_score));
 	});
 
 	for(var k = 0; k<playerObjs.length; k++){
@@ -469,6 +481,8 @@ function processPlayerActions(){
 		for (var j = 0; j<playerObjs.length; j++){
 			playerObjs[j].addGameLogEntry("<span color:orange><i>Hand pass order reversed<i></span>");
 		}
+	} else if (noPlayers == 2){
+		var dummyArray2 = playerObjs.map(function(item){return item.playerHand});
 	} else if(playerObjs[0].gameData.turnOrder){
 		var x = playerHandSwitchArray.shift();
 		playerHandSwitchArray.push(x);
@@ -480,19 +494,20 @@ function processPlayerActions(){
 		var passDirection = playerObjs[0].gameData.turnOrder ? 1 : -1;
 		console.log(dummyArray);
 		for (var j = 0; j<playerObjs.length; j++){
-			console.log(playerObjs[j].playerHand);
+//			console.log(playerObjs[j].playerHand);
 			if(noPlayers == 2){
 				var tempHand = dummyArray.pop();
-				var newPlayerHand = tempHand.splice(Math.floor(Math.random()*tempHand.length), 1);
+				tempHand.splice(Math.floor(Math.random()*tempHand.length), 1);
+				var newPlayerHand = tempHand;
 				var dummyPlayerCode = (passDirection == 1) ? "A" : "B";
 				var dummyPlayerCode2 = (dummyPlayerCode == "A") ? "B" : "A";
-				playerObjs[j].updatePlayerHand(newPlayerHand,true,[('Dummy Player ' + dummyPlayerCode),'black']);
+				playerObjs[j].updatePlayerHand(newPlayerHand,true,[('Dummy Player ' + dummyPlayerCode),'lightgrey']);
 				for(var k = 0; k<playerObjs.length; k++){
 					if(j==k){
-						playerObjs[j].addGameLogEntry("<span style='color:black'>Dummy Player "+dummyPlayerCode2+"</span> receives cards from <span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span>");
+						playerObjs[j].addGameLogEntry("<span style='color:lightgrey'>Dummy Player "+dummyPlayerCode2+"</span> receives cards from <span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span>");
 					} else {
-						playerObjs[j].addGameLogEntry("<span style='color:black'>Dummy Player "+dummyPlayerCode+"</span> receives cards from <span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span>");
-						playerObjs[j].addGameLogEntry("<span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span> receives cards from " + "<span style='color:black'>Dummy Player " +dummyPlayerCode2+"</span>");
+						playerObjs[j].addGameLogEntry("<span style='color:lightgrey'>Dummy Player "+dummyPlayerCode+"</span> receives cards from <span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span>");
+						playerObjs[j].addGameLogEntry("<span style='color:lightgrey"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span> receives cards from " + "<span style='color:lightgrey'>Dummy Player " +dummyPlayerCode2+"</span>");
 					}
 				}
 			}else{
@@ -510,8 +525,10 @@ function processPlayerActions(){
 				}
 			}
 		}
-		if(noPlayers = 2){
-			dummyArray = playerHandSwitchArray;
+		if(noPlayers == 2){
+			dummyArray = dummyArray2;
+			console.log("DUMMY ARRAY")
+			console.log(dummyArray)
 		}
 	}
 	
@@ -520,7 +537,7 @@ function processPlayerActions(){
 		playerObjs[j].otherPlayersData.otherPlayers = [];
 		for(var k = j + 1 ; k< j + playerObjs.length ; k++){
 			currentPlayerObj = playerObjs[(k % playerObjs.length + playerObjs.length) % playerObjs.length];
-			playerObjs[j].addOtherPlayer(currentPlayerObj.playerData.playerNo,currentPlayerObj.playerData.playerName,currentPlayerObj.playerData.currency,currentPlayerObj.playerData.playerNo.abilities,currentPlayerObj.playerData.player_race,currentPlayerObj.playerData.curr_score,currentPlayerObj.playerData.eg_score,currentPlayerObj.playerStationArray.grid,currentPlayerObj.playerStationArray.parameters.x);
+			playerObjs[j].addOtherPlayer(currentPlayerObj.playerData.playerNo,currentPlayerObj.playerData.playerName,currentPlayerObj.playerData.currency,currentPlayerObj.playerData.playerNo.abilities,currentPlayerObj.playerData.player_race,currentPlayerObj.playerData.curr_score,currentPlayerObj.playerData.eg_score,currentPlayerObj.playerData.obj_score,currentPlayerObj.playerStationArray.grid,currentPlayerObj.playerStationArray.parameters.x);
 		}
 	}
 	playerSubmitActions = [];

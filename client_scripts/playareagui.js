@@ -4,12 +4,14 @@ var playerDataObj = {
     gameData: {
         round: null,
         turn: null,
-		turnOrder : false
+		turnOrder : false,
+		objectives:[]
     },
     playerData: {
 		playerName: "",
 		playerNo : 1,
         curr_score: 0,
+		obj_score: 0,
         eg_score: 0,
         currency: 0,
         secret_obj: null,
@@ -54,7 +56,7 @@ function PlayerMat(props) {
     React.createElement("div", { className: "playerBoxMoneyCount" }, props.otherPlayers[i].currency)),
 
     React.createElement("div", { className: "playerBoxScore" },
-    React.createElement("div", { className: "playerBoxScoreCount" }, props.otherPlayers[i].playerScore + props.otherPlayers[i].eg_score))),
+    React.createElement("div", { className: "playerBoxScoreCount" }, props.otherPlayers[i].playerScore + props.otherPlayers[i].eg_score + props.otherPlayers[i].obj_score))),
 
 
     React.createElement("div", { className: "playerBoxRight" },
@@ -94,7 +96,14 @@ render(){
   React.createElement("div", { id: "ownPlayerBoxMoneyCount", key : (parseInt(Math.random()*1000000000)) }, this.props.currency )),
 
   React.createElement("div", { id: "ownPlayerBoxScore" },
-  React.createElement("div", { id: "ownPlayerBoxScoreCount",key : (parseInt(Math.random()*1000000000)) }, this.props.curr_score + this.props.eg_score))),
+  React.createElement("div", { id: "ownPlayerBoxScoreCount",key : (parseInt(Math.random()*1000000000)) }, (this.props.curr_score + this.props.eg_score + this.props.obj_score)),
+  React.createElement("div", { id: "ownPlayerBoxScoreHoverContainer"},
+  React.createElement("div", { id: "ownPlayerBoxScoreHoverContainerArrow" }, null),
+  React.createElement("div", { id: "ownPlayerBoxScoreHoverContainerBlock"}, 
+  React.createElement("div", { className: "ownPlayerScoreBoxHoverInner"}, "I : " + this.props.curr_score),
+  React.createElement("div", { className: "ownPlayerScoreBoxHoverInner"}, "E : " + this.props.eg_score),
+  React.createElement("div", { className: "ownPlayerScoreBoxHoverInner"}, "O : " + this.props.obj_score)
+  )))),
 
 
   React.createElement("div", { id: "ownPlayerBoxBottom" },
@@ -265,7 +274,7 @@ class GameReactHandler extends React.Component {
 	powerDiscard(e){
 		transferredCard2 = transferredCard;	
 		if(cardPowerDiscard && transferredCard[2] != "R" && e.button == 0){		
-			if(this.state.playerData.currency <= 1){
+			if(this.state.playerData.currency < 1){
 				console.log("Not enough money");
 				document.getElementById("discardForPowerBox").innerHTML = "";
 				handGen(this.state.playerHand,"game_card_hand");
@@ -332,7 +341,7 @@ class GameReactHandler extends React.Component {
 		document.getElementById('waitingBox').style.display = 'block';
 		document.getElementById('turnConfirmationScreen').style.display = '';
 		document.getElementById("ownPlayerBoxMoneyCount").innerHTML = (this.state.playerData.currency + parseInt(currencyDelta));
-		document.getElementById("ownPlayerBoxScoreCount").innerHTML = (this.state.playerData.curr_score + this.state.playerData.eg_score) + scoreDelta;				
+		document.getElementById("ownPlayerBoxScoreCount").innerHTML = (this.state.playerData.curr_score + this.state.playerData.eg_score + this.state.playerData.obj_score) + scoreDelta;				
 	}
 		
 	componentDidUpdate(){
@@ -376,9 +385,10 @@ class GameReactHandler extends React.Component {
 
 		document.getElementById('turnConfirmationScreen').style.display = '';
 		document.getElementById("ownPlayerBoxMoneyCount").innerHTML = this.state.playerData.currency;
-		document.getElementById("ownPlayerBoxScoreCount").innerHTML = this.state.playerData.curr_score + this.state.playerData.eg_score;		
+		document.getElementById("ownPlayerBoxScoreCount").innerHTML = this.state.playerData.curr_score + this.state.playerData.eg_score + this.state.playerData.obj_score;		
 		
 		generateListeners();
+		ObjPrinter(this.state.gameData.objectives);
 	}
 
 	render() {

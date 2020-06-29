@@ -77,3 +77,26 @@ function handGen(cardHandList){
 	document.getElementById("playerHandModal").innerHTML = cardPrint; 
 }
 // End
+
+function ObjPrinter(objectives){
+
+	document.getElementById("objListArea").innerHTML = "";
+	var objectiveText = ""
+	for(var i = 0; i < objectives.length; i++){
+		var claimedStatus = objectives[i].Objective_Claimed_Status ? "claimedObj" : "";
+		var claimees = objectives[i].Objective_Owner;
+		var claimeeBoxClass = "objClaimees"
+		if(claimees.length == 0){
+			claimeeBoxClass = claimeeBoxClass + " unclaimed";
+		}
+		objectiveText = objectiveText + `
+				<div class="objective">
+					<div class="objTitle">${objectives[i].Objective_Title}</div>
+					<div class="objPoints ${claimedStatus}">${objectives[i].Objective_Points}</div>
+					<div class="objDescription">${objectives[i].Objective_Description}</div>
+					<div class="${claimeeBoxClass}"></div>
+				</div>
+			`
+	}
+	document.getElementById("objListArea").innerHTML = objectiveText;	
+}

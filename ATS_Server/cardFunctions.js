@@ -700,6 +700,8 @@ function dijkstraAlgo(gridA,startIndex,finishIndex){
 	return dijkstraGrid[finishIndex][2];
 }
 
+module.exports.dijkstraAlgo = dijkstraAlgo;
+
 function findNextMinCell(arr) {
 //	console.log(arr);
 	var filteredArr = arr.filter(function(item){if(item[1] != true){return item}});

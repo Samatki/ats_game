@@ -16,6 +16,8 @@ function getCardObj(cardid){
 		powerTransferred = parseInt(cardid[cardid.length - 1]);
 	} else if (cardid[2] == "C"){
 		cardObj = cardList.cards.s_locations.find(x => x.cardId === cardid);					
+	} else {
+		return null;
 	}
 	return cardObj;
 }

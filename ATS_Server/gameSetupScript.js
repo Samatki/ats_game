@@ -22,12 +22,14 @@ class playerObj{
 				round: 1,
 				turn: 1,
 				turnOrder : false,
-				handSize : handSize
+				handSize : handSize,
+				objectives : objectives
 				};
 		this.playerData = {
 				playerName: playerName,
 				playerKey: playerKey,
 				playerNo : playerNo,
+				obj_score :0,
 				curr_score: 0,
 				eg_score: 0,
 				currency: 	(playerRace == "zehuti" && raceAbilities)?13:10,
@@ -59,9 +61,9 @@ class playerObj{
 		this.updateEGScoring();
 	}
 	
-	addOtherPlayer(otherPlayerNumber,otherPlayerName,otherPlayerCurrency,otherPlayerAbility,otherPlayerRace,currentScore,eg_score,gridM=false,xVal=3){
+	addOtherPlayer(otherPlayerNumber,otherPlayerName,otherPlayerCurrency,otherPlayerAbility,otherPlayerRace,currentScore,eg_score,obj_score,gridM=false,xVal=3){
 		var gridP = [];
-		var newOtherPlayerObj = new otherPlayerDataObject(otherPlayerNumber,otherPlayerName,otherPlayerCurrency,otherPlayerAbility,otherPlayerRace,currentScore,eg_score);
+		var newOtherPlayerObj = new otherPlayerDataObject(otherPlayerNumber,otherPlayerName,otherPlayerCurrency,otherPlayerAbility,otherPlayerRace,currentScore,eg_score,obj_score);
 		newOtherPlayerObj.playerStationArray.parameters.infinite = this.playerStationArray.parameters.infinite;
 		if(gridM){
 			gridP = gridM;
@@ -256,12 +258,13 @@ class playerObj{
 }	
 
 class otherPlayerDataObject{
-	constructor(playerNumber,playerName,playerCurrency,playerAbility,playerRace,playerScore,playerEGScore){
+	constructor(playerNumber,playerName,playerCurrency,playerAbility,playerRace,playerScore,playerEGScore,playerObjScore){
 		this.playerNo = playerNumber,
 		this.playerName = playerName,
 		this.playerScore = playerScore,
 		this.currency = playerCurrency,
 		this.eg_score = playerEGScore,
+		this.obj_score = playerObjScore,
 		this.ability_available = playerAbility,
 		this.player_race = playerRace,
 		this.color = playerColourStyles[playerNumber - 1].color,
@@ -289,7 +292,7 @@ var initiate = function(noPlayers,objectives,playerAbilities,players,handSize){
 	for(var i = 0; i<playerArray.length; i++){
 		for(var j = i + 1; j< i + playerArray.length; j++){
 			var	currentOtherPlayerObj = playerArray[(j % playerArray.length + playerArray.length) % playerArray.length];
-			playerArray[i].addOtherPlayer(currentOtherPlayerObj.playerData.playerNo,currentOtherPlayerObj.playerData.playerName,currentOtherPlayerObj.playerData.currency,currentOtherPlayerObj.playerData.abilities,currentOtherPlayerObj.playerData.player_race, currentOtherPlayerObj.playerData.curr_score, currentOtherPlayerObj.playerData.eg_score);
+			playerArray[i].addOtherPlayer(currentOtherPlayerObj.playerData.playerNo,currentOtherPlayerObj.playerData.playerName,currentOtherPlayerObj.playerData.currency,currentOtherPlayerObj.playerData.abilities,currentOtherPlayerObj.playerData.player_race, currentOtherPlayerObj.playerData.curr_score, currentOtherPlayerObj.playerData.eg_score, currentOtherPlayerObj.playerData.obj_score);
 		}
 	}
 	return playerArray;

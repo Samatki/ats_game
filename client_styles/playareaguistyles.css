@@ -139,6 +139,45 @@ body{
   top:10%;
 }
 
+#ownPlayerBoxScoreHoverContainer{
+	display:none;
+	position:absolute;
+	left:70px;
+	bottom:-40px;
+}
+
+#ownPlayerBoxScoreHoverContainerArrow{
+  width: 0px; 
+  height: 20px; 
+  border-top: 30px solid transparent;
+  border-bottom: 30px solid transparent; 
+  border-right:20px solid rgba(0,0,0,0.5);
+  background-color:none;
+  display:inline-block;
+  
+}
+
+#ownPlayerBoxScoreHoverContainerBlock{
+	height:80px;
+	width:50px;
+	position:relative;
+	background-color:rgba(0,0,0,0.5);
+	top:-17px;
+	display:inline-block;
+	box-sizing:border-box;
+	padding-top:10px;
+	padding-right:10px;
+}
+
+#ownPlayerBoxScore:hover #ownPlayerBoxScoreHoverContainer{
+	display:block;
+}
+
+.ownPlayerScoreBoxHoverInner{
+	color:white;
+	text-align:right;
+}
+
 #ownPlayerBoxBottom {
   width:90%;
   height: 53%;
