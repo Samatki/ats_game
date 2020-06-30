@@ -247,8 +247,8 @@ class playerObj{
 			} else {
 				
 			}
-			this.updateEGScoring();
 		}
+		this.updateEGScoring();
 	}
 	
 	businessOfficeCurrency(delta){

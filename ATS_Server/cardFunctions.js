@@ -261,11 +261,14 @@ function restaurantScoring(grid){
 		return 5;
 	} else {
 		reducedGrid = [...new Set(reducedGrid)];
+		console.log("Restaurant gives " + reducedGrid.length + " points");
+		console.log(reducedGrid);
 		reducedGrid = reducedGrid.filter(function(item){
 			if(item != "X" && item != null){
 				return item;
 			}
 		});
+		console.log(reducedGrid);
 		return Math.min(reducedGrid.length,5);
 	}
 }
@@ -592,7 +595,9 @@ function allianceHQScoring(grid,otherPlayers){
 			owncount = owncount + 1;
 		}
 	}
+	console.log("Player has " + owncount + " red locations");
 	var otherPlayerCount = otherPlayers.length;
+	var playerCounter = 0;
 	for(var i = 0; i < otherPlayerCount; i++){
 		var redcounter = 0;
 		for(var j = 0; j < otherPlayers[i].playerStationArray.grid.length; j++){
@@ -600,12 +605,12 @@ function allianceHQScoring(grid,otherPlayers){
 				redcounter = redcounter + 1;
 			}
 			if(redcounter > owncount){
-				otherPlayerCount = otherPlayerCount - 1;
+				playerCounter = playerCounter + 1;
 				break;
 			}
 		}
 	}
-	return otherPlayerCount;
+	return playerCounter;
 }
 
 function communicationsBeaconScoring(placedCardIndex,gridA,startIndex){

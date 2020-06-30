@@ -479,7 +479,7 @@ function processPlayerActions(){
 		}
 		newTurnCreditsMessage()
 		for (var j = 0; j<playerObjs.length; j++){
-			playerObjs[j].addGameLogEntry("<span color:orange><i>Hand pass order reversed<i></span>");
+			playerObjs[j].addGameLogEntry("<span color='orange'><i>Hand pass order reversed</i></span>");
 		}
 	} else if (noPlayers == 2){
 		var dummyArray2 = playerObjs.map(function(item){return item.playerHand});

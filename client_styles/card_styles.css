@@ -142,8 +142,6 @@ i{
 	width:300px;
 	position:absolute;
 	z-index:4;
-	animation: glow 5s ease-in-out infinite;
-	-webkit-animation: glow 5s ease-in-out infinite;
 }
 
 .blue_card{

@@ -292,8 +292,10 @@ function ObjWarPrep(playerObjs, objective){
 			objective.Objective_Claimed_Status = true;
 			var msg = "Multiple players achieved the War Preparations Objective, no points awarded";
 		}
-		for(var i = 0; i< playerObjs.length; i++){
-			playerObjs[i].addGameLogEntry(msg);
+		if(objTracker.length >= 1){
+			for(var i = 0; i< playerObjs.length; i++){
+				playerObjs[i].addGameLogEntry(msg);
+			}
 		}
 	} else {
 		if(objective.Objective_Owner.length == 1){
@@ -335,7 +337,7 @@ function ObjAC(playerObjs, objective){
 	if(objective.Objective_Claimed_Status == false && playerObjs[0].gameData.round != false){
 		var objTracker = [];
 		for(var i = 0; i<playerObjs.length; i++){
-			if (playerObjs[i].playerData.curr_score <= 50){
+			if (playerObjs[i].playerData.curr_score >= 50){
 				objTracker.push([i,playerObjs[i].playerData.curr_score]);
 			}
 		}
@@ -364,8 +366,10 @@ function ObjAC(playerObjs, objective){
 			}
 			objective.Objective_Claimed_Status = true;
 		}
-		for(var i = 0; i< playerObjs.length; i++){
-			playerObjs[i].addGameLogEntry(msg);
+		if(objTracker.length >= 1){
+			for(var i = 0; i< playerObjs.length; i++){
+				playerObjs[i].addGameLogEntry(msg);
+			}
 		}
 	} else {
 		if(objective.Objective_Owner.length == 1){
@@ -514,16 +518,16 @@ function ObjFO(playerObjs, objective){
 	//Build at least 12 different Basic Locations. This objective may be completed by more than one player
 	for(var i = 0; i < playerObjs.length; i++){
 		var count = 0;
-		for(var j = 0; j < playerObjs[i].playerStationArray.grid; j++){
-			if(playerObjs.playerStationArray.grid[j][2] == "B"){
+		for(var j = 0; j < playerObjs[i].playerStationArray.grid.length; j++){
+			if(playerObjs[i].playerStationArray.grid[j][2] == "B"){
 				count++;
 			}
 		}
 		if(count >= 12){
 			playerObjs[i].playerData.obj_score = playerObjs[i].playerData.obj_score + objective.Objective_Points;			
-			if(!objective.Objective_Owner.includes([i,playerObjs[i].playerData.playerName])){
+			if(!objective.Objective_Owner.includes([playerObjs[i].playerData.playerName,i])){
 				var msg = "<span style='color:"+playerObjs[i].playerData.color+"'>"+playerObjs[i].playerData.playerName+"</span> has achieved the Fully Operational Objective!"
-				objective.Objective_Owner = [[playerObjs[i].playerData.playerName,i]];
+				objective.Objective_Owner.push([playerObjs[i].playerData.playerName,i]);
 				for(var j = 0; j< playerObjs.length; j++){
 					playerObjs[j].addGameLogEntry(msg);
 				}	
@@ -547,13 +551,13 @@ function ObjRFTS(playerObjs, objective){
 		}
 		for(var j = 0; j<playerGrid.grid.length; j++){
 			var distance = cF.dijkstraAlgo(playerGrid,MRLocation,j);
-			if(distance >= maxDistance){
+			if(distance >= maxDistance && distance != Infinity){
 				maxDistance = distance;
 			}
 		}
 		objTracker.push(maxDistance);
 	}
-	var objTracker2 = [...objTracker]
+	var objTracker2 = [...objTracker];
 	objTracker2.sort().reverse();
 	if(objTracker2[0] != objTracker2[1]){
 		var playerIndex = objTracker.indexOf(objTracker2[0]);
@@ -573,74 +577,75 @@ function ObjMP(playerObjs, objective){
 	//Be the first to build 2 locations of each type. If on the same turn, more than two players complete this Objective, no bonus is given
 	if(objective.Objective_Claimed_Status == false){
 		var objTracker = [];
-		for(var i = 0; i<playerObjs.length; i++){		
+		for(var i = 0; i<playerObjs.length; i++){
 			var checkFlag = true;
 			var count = 0;
-			for(var j = 0; j < playerObjs[i].playerStationArray.grid; j++){
+			for(var j = 0; j < playerObjs[i].playerStationArray.grid.length; j++){
 				if(playerObjs[i].playerStationArray.grid[j][4] == "G" || playerObjs[i].playerStationArray.grid[j].toString().substring(0,8) == "B0R_X_VR"){
-					count++;
+					count = count + 1;
 				}
-				if(count < 2){
-					checkFlag = false;
-				}
+			}
+			if(count < 2){
+				checkFlag = false;
 			}
 			count = 0;
-			for(var j = 0; j < playerObjs[i].playerStationArray.grid; j++){
+			for(var j = 0; j < playerObjs[i].playerStationArray.grid.length; j++){
 				if(playerObjs[i].playerStationArray.grid[j][4] == "R" || playerObjs[i].playerStationArray.grid[j].toString().substring(0,8) == "B0R_X_VR"){
-					count++;
-				}
-				if(count < 2){
-					checkFlag = false;
+					count = count + 1;
 				}
 			}
+			if(count < 2){
+				checkFlag = false;
+			}			
 			count = 0;		
-			for(var j = 0; j < playerObjs[i].playerStationArray.grid; j++){
+			for(var j = 0; j < playerObjs[i].playerStationArray.grid.length; j++){
 				if(playerObjs[i].playerStationArray.grid[j][4] == "Y" || playerObjs[i].playerStationArray.grid[j].toString().substring(0,8) == "B0R_X_VR"){
-					count++;
-				}
-				if(count < 2){
-					checkFlag = false;
+					count = count + 1;
 				}
 			}
+			if(count < 2){
+				checkFlag = false;			
+			}			
 			count = 0;		
-			for(var j = 0; j < playerObjs[i].playerStationArray.grid; j++){
+			for(var j = 0; j < playerObjs[i].playerStationArray.grid.length; j++){
 				if(playerObjs[i].playerStationArray.grid[j][4] == "B" || playerObjs[i].playerStationArray.grid[j].toString().substring(0,8) == "B0R_X_VR"){
-					count++;
-				}
-				if(count < 2){
-					checkFlag = false;
+					count = count + 1;
 				}
 			}
+			if(count < 2){
+				checkFlag = false;	
+			}			
 			count = 0;		
-			for(var j = 0; j < playerObjs[i].playerStationArray.grid; j++){
+			for(var j = 0; j < playerObjs[i].playerStationArray.grid.length; j++){
 				if(playerObjs[i].playerStationArray.grid[j][4] == "P" || playerObjs[i].playerStationArray.grid[j].toString().substring(0,8) == "B0R_X_VR"){
-					count++;
-				}
-				if(count < 2){
-					checkFlag = false;
+					count = count + 1;
 				}
 			}
+			if(count < 2){
+				checkFlag = false;
+			}			
 			objTracker.push(checkFlag);
 		}
 		var resultCount = 0;
 		for(var i = 0; i<objTracker.length; i++){
-			if(objTracker == true){
+			if(objTracker[i] == true){
 				resultCount++
 			}
 		}	
 		if(resultCount == 1){
 			objective.Objective_Claimed_Status = true;
 			var playerIndex = objTracker.indexOf(true);
-			objective.Objective_Owner = [[playerIndex,playerObjs[playerIndex].playerData.playerName]];
-			playerObjs[objTracker[playerIndex]].playerData.obj_score = playerObjs[objTracker[playerIndex]].playerData.obj_score + (objective.Objective_Points);
-			var msg = "<span style='color:"+playerObjs[objTracker[playerIndex]].playerData.color+"'>"+playerObjs[objTracker[playerIndex]].playerData.playerName+"</span> has achieved the Multi-Purpose Objective!";	
-			objective.Objective_Owner = objTracker;
+			objective.Objective_Owner = [[playerObjs[playerIndex].playerData.playerName,playerIndex]];
+			playerObjs[playerIndex].playerData.obj_score = playerObjs[playerIndex].playerData.obj_score + (objective.Objective_Points);
+			var msg = "<span style='color:"+playerObjs[playerIndex].playerData.color+"'>"+playerObjs[playerIndex].playerData.playerName+"</span> has achieved the Multi-Purpose Objective!";	
 		} else if (resultCount > 1){
 			objective.Objective_Claimed_Status = true;
 			var msg = "Multiple players achieved the Multi-Purpose Objective, no points awarded";
-		}
-		for(var i = 0; i< playerObjs.length; i++){
-			playerObjs[i].addGameLogEntry(msg);
+		} 
+		if(resultCount >= 1){
+			for(var i = 0; i< playerObjs.length; i++){
+				playerObjs[i].addGameLogEntry(msg);
+			}
 		}
 	} else {
 		if(objective.Objective_Owner.length == 1){
@@ -652,17 +657,17 @@ function ObjMP(playerObjs, objective){
 function ObjSFE(playerObjs, objective){
 	//Build at least 8 different Special Locations. This objective may be completed by more than 1 player
 	for(var i = 0; i < playerObjs.length; i++){
-		var count = 0;
-		for(var j = 0; j < playerObjs[i].playerStationArray.grid; j++){
-			if(playerObjs[i].playerStationArray.grid[j][2] == "S" && !countGrid.includes(playerObjs[i].playerStationArray.grid[j][2])){
-				count++;
+		var sGrid = [];
+		for(var j = 0; j < playerObjs[i].playerStationArray.grid.length; j++){
+			if(playerObjs[i].playerStationArray.grid[j][2] == "S"){
+				sGrid.push(playerObjs[i].playerStationArray.grid[j]);
 			}
 		}
-		if(count >= 8){
+		if([...new Set(sGrid)].length >= 8){
 			playerObjs[i].playerData.obj_score = playerObjs[i].playerData.obj_score + objective.Objective_Points;			
-			if(!objective.Objective_Owner.includes([i,playerObjs[i].playerData.playerName])){
+			if(!objective.Objective_Owner.includes([playerObjs[i].playerData.playerName, i])){
 				var msg = "<span style='color:"+playerObjs[i].playerData.color+"'>"+playerObjs[i].playerData.playerName+"</span> has achieved the Something For Everyone Objective!"
-				objective.Objective_Owner = [[playerObjs[i].playerData.playerName,i]];
+				objective.Objective_Owner.push([playerObjs[i].playerData.playerName,i]);
 				for(var j = 0; j< playerObjs.length; j++){
 					playerObjs[j].addGameLogEntry(msg);
 				}	
@@ -741,12 +746,12 @@ function ObjEO(playerObjs, objective){
 		for(var i = 0; i<playerObjs.length; i++){
 			var gridCount = [];
 			for(var j = 0; j<playerObjs[i].playerStationArray.grid.length; j++){
-				if (playerObjs[i].playerStationArray.grid[j][4] == "X" && playerObjs[i].playerStationArray.grid[j][4] == "8"){
+				if (playerObjs[i].playerStationArray.grid[j][4] == "X" && playerObjs[i].playerStationArray.grid[j][8] == "0"){
 					gridCount.push(playerObjs[i].playerStationArray.grid[j]);
 				}
 			}
 			if(gridCount.length >= 3){
-				objTracker.push([playerObjs[i].playerData.playerName,j]);
+				objTracker.push([playerObjs[i].playerData.playerName,i]);
 			}
 		}
 		if(objTracker.length == 1){
@@ -759,8 +764,10 @@ function ObjEO(playerObjs, objective){
 			objective.Objective_Claimed_Status = true;
 			var msg = "Multiple players achieved the Energy Optimisation Objective, no points awarded";
 		}
-		for(var i = 0; i< playerObjs.length; i++){
-			playerObjs[i].addGameLogEntry(msg);
+		if(objTracker.length >= 1){
+			for(var i = 0; i< playerObjs.length; i++){
+				playerObjs[i].addGameLogEntry(msg);
+			}
 		}
 	} else {
 		if(objective.Objective_Owner.length == 1){
@@ -774,50 +781,50 @@ function ObjCAN(playerObjs, objective){
 	for(var i = 0; i < playerObjs.length; i++){
 		var checkFlag = true;
 		var count = 0;
-		for(var j = 0; j < playerObjs[i].playerStationArray.grid; j++){
+		for(var j = 0; j < playerObjs[i].playerStationArray.grid.length; j++){
 			if(playerObjs[i].playerStationArray.grid[j][4] == "G" || playerObjs[i].playerStationArray.grid[j].toString().substring(0,8) == "B0R_X_VR"){
 				count++;
 			}
-			if(count < 3){
-				checkFlag = false;
-			}
 		}
+		if(count < 3){
+			checkFlag = false;
+		}		
 		count = 0;
-		for(var j = 0; j < playerObjs[i].playerStationArray.grid; j++){
+		for(var j = 0; j < playerObjs[i].playerStationArray.grid.length; j++){
 			if(playerObjs[i].playerStationArray.grid[j][4] == "R" || playerObjs[i].playerStationArray.grid[j].toString().substring(0,8) == "B0R_X_VR"){
 				count++;
 			}
-			if(count < 3){
-				checkFlag = false;
-			}
 		}
+		if(count < 3){
+			checkFlag = false;
+		}		
 		count = 0;		
-		for(var j = 0; j < playerObjs[i].playerStationArray.grid; j++){
+		for(var j = 0; j < playerObjs[i].playerStationArray.grid.length; j++){
 			if(playerObjs[i].playerStationArray.grid[j][4] == "Y" || playerObjs[i].playerStationArray.grid[j].toString().substring(0,8) == "B0R_X_VR"){
 				count++;
 			}
-			if(count < 3){
-				checkFlag = false;
-			}
 		}
+		if(count < 3){
+			checkFlag = false;
+		}		
 		count = 0;		
-		for(var j = 0; j < playerObjs[i].playerStationArray.grid; j++){
+		for(var j = 0; j < playerObjs[i].playerStationArray.grid.length; j++){
 			if(playerObjs[i].playerStationArray.grid[j][4] == "B" || playerObjs[i].playerStationArray.grid[j].toString().substring(0,8) == "B0R_X_VR"){
 				count++;
 			}
-			if(count < 3){
-				checkFlag = false;
-			}
+		}
+		if(count < 3){
+			checkFlag = false;
 		}
 		count = 0;		
-		for(var j = 0; j < playerObjs[i].playerStationArray.grid; j++){
+		for(var j = 0; j < playerObjs[i].playerStationArray.grid.length; j++){
 			if(playerObjs[i].playerStationArray.grid[j][4] == "P" || playerObjs[i].playerStationArray.grid[j].toString().substring(0,8) == "B0R_X_VR"){
 				count++;
 			}
-			if(count < 3){
-				checkFlag = false;
-			}
-		}			
+		}
+		if(count < 3){
+			checkFlag = false;
+		}		
 		if(checkFlag){
 			playerObjs[i].playerData.obj_score = playerObjs[i].playerData.obj_score + objective.Objective_Points;			
 			if(!objective.Objective_Owner.includes([playerObjs[i].playerData.playerName,i])){
