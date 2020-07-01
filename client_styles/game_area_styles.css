@@ -279,13 +279,15 @@
 	}
 
 #discardForCurrencyBox{
-/*	display:none; */
 	bottom:350px;
 }
 
 #discardForPowerBox{
-/*	display:none; */
 	bottom:235px;
+}
+
+#conflictCardPlaceBox{
+	bottom:465px;
 }
 
 .discardBox{
@@ -396,6 +398,10 @@
 	display:none;
 }
 
+#conflictScreen{
+	display:none;
+}
+
 .playerRadioContainer{
 	position: relative;
 	width:75px;
@@ -411,6 +417,11 @@
 }
 
 #embassyOfficeConfirmation{
+	margin-top:0px;
+	left:160px;
+}
+
+#conflictConfirmation{
 	margin-top:0px;
 	left:160px;
 }

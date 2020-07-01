@@ -162,6 +162,15 @@ i{
 	z-index:4;
 }
 
+.conflict_card{
+	background-image:url("../ATS_Images/Card_Details/conflict_card_border.png");
+	background-size:cover;
+	height:300px;
+	width:300px;
+	position:absolute;
+	z-index:4;
+}
+
 .multi_card{
 	background-image:url("../ATS_Images/Card_Details/multi_card_border.png");
 	background-size:cover;
@@ -201,6 +210,13 @@ i{
 
 .yellow_class{
 	background-image:url("../ATS_Images/Card_Details/yellow_category.png");
+	background-size:cover;
+	animation: glow 5s ease-in-out infinite;
+	-webkit-animation: glow 5s ease-in-out infinite;
+}
+
+.white_class{
+	background-image:url("../ATS_Images/Card_Details/white_category.png");
 	background-size:cover;
 	animation: glow 5s ease-in-out infinite;
 	-webkit-animation: glow 5s ease-in-out infinite;
@@ -500,6 +516,8 @@ i{
 	opacity:0.75;
 }
 
+
+
 .midSpacer{
 	position:absolute;
 	left:calc(50% - 10px);
@@ -637,3 +655,56 @@ div[data-cardid*="B0R_X_VR"] .card_image{
 	height:50px;
 }
 
+.conflict_card_title{
+	z-index: 4;
+	opacity:0.9;
+}
+
+.conflictMaxBox{
+	left: 30px;
+	top:175px;
+}
+
+.conflict_description{
+	position:absolute;
+	left: 40px;
+	top:207px;
+	width:220px;
+	height:55px;
+	z-index:6;
+	word-wrap: break-all;
+	white-space:normal;
+	font-size: 10px;
+	line-height:15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    text-shadow:
+        0.05em 0 #adadad,
+        0 0.05em #adadad,
+        -0.05em 0 #adadad,
+        0 -0.05em #adadad,
+        -0.05em -0.05em #adadad,
+        -0.05em 0.05em #adadad,
+        0.05em -0.05em #adadad,
+        0.05em 0.05em #adadad;
+}
+
+.conflict_description div{
+	text-align:center;
+}
+
+.conflict_desc_box{
+	width:240px;
+	height:70px;
+	position:absolute;
+	top:200px;
+	left:30px;
+	z-index:3;
+	box-sizing: border-box;
+	-moz-box-sizing:border-box;
+	border-radius: 8px;
+	border: 1px black solid;
+	box-shadow: 3px 3px 10px black;
+	opacity:0.75;
+}

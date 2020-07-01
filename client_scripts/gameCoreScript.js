@@ -29,14 +29,9 @@ function generateListeners(){
 		document.getElementsByClassName("logCard")[i].addEventListener("contextmenu", function(e){
 			document.getElementById("rCModal").style.display = "block";
 			document.getElementById("rCModal").innerHTML = "";		
-//			closestElement.style.transform = "scale(1.33)";
-			document.getElementById("rCModal").innerHTML = cardPrinter(getCardObj(e.currentTarget.dataset.cardid),"game_card_list game_card_log");
-			
+			document.getElementById("rCModal").innerHTML = cardPrinter(getCardObj(e.currentTarget.dataset.cardid),"game_card_list game_card_log");		
 		}, false);
 	}
-	
-	
-		
 	
 //Hand Card Viewer
 	for (var i=0; i<document.getElementsByClassName("game_card_hand").length; i++){
@@ -108,9 +103,14 @@ function generateListeners(){
 					document.getElementById("discardForPowerBox").style.display = "inline-block";
 				} else if (cardCurrencyDiscard){	
 					document.getElementById("discardForCurrencyBox").style.display = "inline-block";
+				} else if (conflictCardPlace){
+					document.getElementById("conflictCardPlaceBox").style.display = "inline-block";					
 				} else {
 					document.getElementById("discardForPowerBox").style.display = "inline-block";
 					document.getElementById("discardForCurrencyBox").style.display = "inline-block";
+					if(transferredCard[2] == "C"){
+						document.getElementById("conflictCardPlaceBox").style.display = "inline-block";
+					}
 				}
 			}
 		}, false);
@@ -213,7 +213,6 @@ function generateListeners(){
 }
 
 // Artwork Only Toggle
-
 document.addEventListener('keydown', function(event) {
   if (event.ctrlKey && event.key === 'm') {
 	  artworktoggle = artworktoggle ? false : true;
@@ -279,16 +278,19 @@ document.body.addEventListener('mouseup',function(e){
 			}, false);
 			cardPlaced = true;
 		} else if (e.target.classList.contains("discardBox")){
-			if(e.target.id == "discardForCurrencyBox" && !cardCurrencyDiscard && !cardPowerDiscard){
+			if(e.target.id == "discardForCurrencyBox" && !cardCurrencyDiscard && !cardPowerDiscard && !conflictCardPlace){
 				cardCurrencyDiscard = true;
 				document.getElementById("draggableCardArea").style.display = "";
 				document.getElementById("draggableCardArea").innerHTML = "";
 				document.getElementById("discardForPowerBox").style.display = "";
+				document.getElementById("conflictCardPlaceBox").style.display = "";
 				var cardObj = {};
 				if(transferredCard[2] == "B"){
 					cardObj = cardList.cards.basic_locations.find(x => x.cardId === transferredCard);
 				} else if (transferredCard[2] == "S"){
 					cardObj = cardList.cards.s_locations.find(x => x.cardId === transferredCard);			
+				} else if (transferredCard[2] == "C"){
+					cardObj = cardList.cards.conflict_cards.find(x => x.cardId === transferredCard);			
 				}
 				e.target.innerHTML = cardPrinter(cardObj,"game_card_discard");
 				e.target.classList.add("discardBoxPlaced");
@@ -301,17 +303,20 @@ document.body.addEventListener('mouseup',function(e){
 					closestElement.style.transform = "scale(1.33)";
 					document.getElementById("rCModal").appendChild(closestElement);
 				}, false)				
-			} else if (e.target.id == "discardForPowerBox" && !cardCurrencyDiscard && !cardPowerDiscard && playerDataObj.playerData.currency >= 1){
+			} else if (e.target.id == "discardForPowerBox" && !conflictCardPlace && !cardCurrencyDiscard && !cardPowerDiscard && playerDataObj.playerData.currency >= 1){
 				cardPowerDiscard = true;
-//				console.log("Discarding for power");		
+				console.log("Discarding for power");		
 				document.getElementById("draggableCardArea").style.display = "";
 				document.getElementById("draggableCardArea").innerHTML = "";	
 				document.getElementById("discardForCurrencyBox").style.display = "";
+				document.getElementById("conflictCardPlaceBox").style.display = "";				
 				var cardObj = {};
 				if(transferredCard[2] == "B"){
 					cardObj = cardList.cards.basic_locations.find(x => x.cardId === transferredCard);
 				} else if (transferredCard[2] == "S"){
 					cardObj = cardList.cards.s_locations.find(x => x.cardId === transferredCard);			
+				} else if (transferredCard[2] == "C"){
+					cardObj = cardList.cards.conflict_cards.find(x => x.cardId === transferredCard);			
 				}
 				e.target.innerHTML = cardPrinter(cardObj,"game_card_discard");
 				e.target.classList.add("discardBoxPlaced");
@@ -324,6 +329,25 @@ document.body.addEventListener('mouseup',function(e){
 					closestElement.style.transform = "scale(1.33)";
 					document.getElementById("rCModal").appendChild(closestElement);
 				}, false)								
+			} else if(e.target.id == "conflictCardPlaceBox" && transferredCard[2] == "C" && !conflictCardPlace && !cardCurrencyDiscard && !cardPowerDiscard && playerDataObj.playerData.currency >= 1){
+				conflictCardPlace = true;
+				document.getElementById("draggableCardArea").style.display = "";
+				document.getElementById("draggableCardArea").innerHTML = "";
+				document.getElementById("discardForPowerBox").style.display = "";
+				document.getElementById("discardForCurrencyBox").style.display = "";				
+				var cardObj = {};
+				cardObj = cardList.cards.conflict_cards.find(x => x.cardId === transferredCard);			
+				e.target.innerHTML = cardPrinter(cardObj,"game_card_discard");
+				e.target.classList.add("discardBoxPlaced");
+				e.target.addEventListener("contextmenu", function(e){
+					var closestElement = e.target.closest(".game_card_discard").cloneNode(true);
+					document.getElementById("rCModal").style.display = "block";
+					closestElement.classList.remove("game_card_board");
+					closestElement.classList.add("game_card_list") ;
+					document.getElementById("rCModal").innerHTML = "";		
+					closestElement.style.transform = "scale(1.33)";
+					document.getElementById("rCModal").appendChild(closestElement);
+				}, false)							
 			} else {
 				for (var l=0; l<document.getElementsByClassName("game_card_hand").length; l++){
 					document.getElementsByClassName("game_card_hand")[l].style.display = "block";
@@ -335,6 +359,9 @@ document.body.addEventListener('mouseup',function(e){
 			}
 			if(!cardPowerDiscard){
 				document.getElementById("discardForPowerBox").style.display = "";
+			}
+			if(!conflictCardPlace){
+				document.getElementById("conflictCardPlaceBox").style.display = "";
 			}
 			document.getElementById("draggableCardArea").style.display = "";
 			document.getElementById("draggableCardArea").innerHTML = "";
@@ -393,11 +420,11 @@ function positionCheck(cardid,placedIndex,playerObj){
 		cardObj = cardList.cards.reactors.find(x => x.cardId === transferredCard.slice(0,8));
 		powerTransferred = parseInt(transferredCard[transferredCard.length - 1]);
 	}
-	var cardCreditCost = cardObj.cardCreditCost; //
-	var cardPowerCost = cardObj.cardPowerCost; //
-	var cardMaxPlayable = cardObj.cardMaxPlayable; //
+	var cardCreditCost = cardObj.cardCreditCost; 
+	var cardPowerCost = cardObj.cardPowerCost; 
+	var cardMaxPlayable = cardObj.cardMaxPlayable; 
 	var cardLocationRestriction = cardObj.cardLocationRestriction;
-	var currPlayerCredits = playerObj.playerData.currency; //
+	var currPlayerCredits = playerObj.playerData.currency; 
 	var cardArray = playerObj.playerStationArray.grid;
 	var cardArrayDijkstra = playerObj.playerStationArray;
 
@@ -483,7 +510,7 @@ function getCardObj(cardid){
 		cardObj = cardList.cards.reactors.find(x => x.cardId === cardid.slice(0,8));
 		powerTransferred = parseInt(cardid[cardid.length - 1]);
 	} else if (cardid[2] == "C"){
-		cardObj = cardList.cards.s_locations.find(x => x.cardId === cardid);					
+		cardObj = cardList.cards.conflict_cards.find(x => x.cardId === cardid);					
 	}
 	return cardObj;
 }
@@ -492,7 +519,6 @@ function removePower(event){
 	var targetCard = event.currentTarget;
 	var targetCardId = event.currentTarget.firstElementChild.dataset.cardid;
 	var powerAvailable = parseInt(targetCardId[8]);
-//	console.log(targetCardId);
 	if(powerAvailable != 0){
 		targetCard.innerHTML = "";
 		targetCard.innerHTML = cardPrinter(getCardObj(targetCardId.slice(0,8)),"game_card_board",powerAvailable-1);
@@ -611,6 +637,15 @@ function confirmationBoxLoader(){
 			innerText = "Place Embassy Offices on station for 2 credits."
 			optionMode = 1;
 			turnObject.mode = optionMode;
+		}
+	} else if (optionMode == 8){
+		currencyDelta = -1;
+		if(conflictPlayerSelect != "None"){
+			var otherSelectedPlayerName = playerDataObj.otherPlayersData.otherPlayers.find(function(item){if(item.playerNo == conflictPlayerSelect){return item}}).playerName
+			innerText = "Play "+getCardObj(transferredCard).cardTitle+" against " + otherSelectedPlayerName + "'s station?"
+			turnObject.updatedGrid = [];
+			turnObject.extraData.push(conflictPlayerSelect);
+			turnObject.extraData.push(otherSelectedPlayerName);
 		}
 	}	
 	

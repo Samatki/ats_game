@@ -15,7 +15,7 @@ function getCardObj(cardid){
 		cardObj = cardList.cards.reactors.find(x => x.cardId === cardid.slice(0,8));
 		powerTransferred = parseInt(cardid[cardid.length - 1]);
 	} else if (cardid[2] == "C"){
-		cardObj = cardList.cards.s_locations.find(x => x.cardId === cardid);					
+		cardObj = cardList.cards.conflict_cards.find(x => x.cardId === cardid);					
 	} else {
 		return null;
 	}
@@ -871,6 +871,61 @@ var cardList = {
             "cardDescription": "Choose up to 2 other players. Get a combination of <span class='creditModifier2'>2</span> from them",
             "cardId": "B0S_Y_MP"
         }],
+		conflict_cards : [{
+			cardTitle: "Dispute (Green)",
+			cardDescription: "Choose another player and count the number of green location in each of your Space Stations. If you have more, gain VP equal to the difference. They lose the same amount",
+			cardCost: 1,
+			cardDeck: "Base",
+			type : "Conflict",
+			conflictType: "Dispute",
+			cardMax: "3",
+			cardId: "B0C_D_001"
+		},{
+			cardTitle: "Dispute (Red)",
+			cardDescription: "Choose another player and count the number of red location in each of your Space Stations. If you have more, gain VP equal to the difference. They lose the same amount",
+			cardCost: 1,
+			cardDeck: "Base",
+			type : "Conflict",
+			conflictType: "Dispute",
+			cardMax: "3",
+			cardId: "B0C_D_002"
+		},{
+			cardTitle: "Dispute (Yellow)",
+			cardDescription: "Choose another player and count the number of yellow location in each of your Space Stations. If you have more, gain VP equal to the difference. They lose the same amount",
+			cardCost: 1,
+			cardDeck: "Base",
+			type : "Conflict",			
+			conflictType: "Dispute",
+			cardMax: "3",
+			cardId: "B0C_D_003"
+		},{
+			cardTitle: "Dispute (Blue)",
+			cardDescription: "Choose another player and count the number of blue location in each of your Space Stations. If you have more, gain VP equal to the difference. They lose the same amount",
+			cardCost: 1,
+			cardDeck: "Base",
+			type : "Conflict",			
+			conflictType: "Dispute",
+			cardMax: "3",
+			cardId: "B0C_D_004"
+		},{
+			cardTitle: "Dispute (Purple)",
+			cardDescription: "Choose another player and count the number of purple location in each of your Space Stations. If you have more, gain VP equal to the difference. They lose the same amount",
+			cardCost: 1,
+			cardDeck: "Base",
+			type : "Conflict",			
+			conflictType: "Dispute",
+			cardMax: "3",
+			cardId: "B0C_D_005"
+		},{
+			cardTitle: "Dispute (Reactors)",
+			cardDescription: "Choose another player and count the number of Power Reactors in each of your Space Stations. If you have more, gain VP equal to the difference. They lose the same amount",
+			cardCost: 1,
+			cardDeck: "Base",
+			type : "Conflict",			
+			conflictType: "Dispute",
+			cardMax: "3",
+			cardId: "B0C_D_006"
+		}]
     }
 }
 

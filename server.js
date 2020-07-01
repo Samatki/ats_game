@@ -7,26 +7,29 @@ var cL = require('./ATS_Server/cardlibrary');
 var initialGameScript = require('./ATS_Server/gameSetupScript');
 var cF = require('./ATS_Server/cardFunctions');
 var oL = require('./ATS_Server/objectives');
-
+var cC = require('./ATS_Server/conflicts')
 
 var playerDatabase = [
-			  {username:"Jeremy",userpassword:"PASSWORD123",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
+//			  {username:"Jeremy",userpassword:"PASSWORD123",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
 			  {username:"Seb",userpassword:"PASSWORD456",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
-			  {username:"Logan",userpassword:"PASSWORD789",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
+//			  {username:"Logan",userpassword:"PASSWORD789",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
 			  {username:"Sam",userpassword:"PASSWORD000",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())}
 ]
 
 /* GAME INITIATORS */
+var conflictStatus = true;
+var objectiveStatus = true;
 var players = playerDatabase.map(function(item){return {username:item.username, playerKey:item.playerKey}});
 var noPlayers = players.length;
 var bannedObjectives = [];
-var gameObjectives = oL.generateObjectives(noPlayers, bannedObjectives);
-var handSize = 6;
+var gameObjectives = objectiveStatus ? oL.generateObjectives(noPlayers, bannedObjectives) : [];
+var handSize = 2;
 var playerAbilities = false;
 var bannedCards = ["B0S_G_SoAC","B0S_G_GRC","B0S_Y_MP"];
 var playerObjs = initialGameScript.initiate(noPlayers,gameObjectives,playerAbilities,players,handSize);
 var gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
 var playerSubmitTracker = [];
+var optionMode = null;
 var playerSubmitActions = [];
 var discardPile = [];
 var currentCredits = [0,0,0,0,0,0];
@@ -140,6 +143,16 @@ app.route('/gameGenerator')
 							if(tempPlayerArray.length == req.query.noPlayers){
 								players = tempPlayerArray.map(function(item){return {username:item.username, playerKey:item.playerKey}});
 							}
+							if(req.query.objectiveStatus == 1){
+								objectiveStatus = true;
+							} else if(req.query.objectiveStatus == 0){
+								objectiveStatus = false;								
+							}
+							if(req.query.conflictStatus == 1){
+								conflictStatus = true;
+							} else if(req.query.conflictStatus == 0){
+								conflictStatus = false;								
+							}										
 						} else {
 							playerCheck = false;
 							break;
@@ -150,7 +163,8 @@ app.route('/gameGenerator')
 					console.log("D")
 					// Reset Data goes here
 		     		noPlayers = players.length;
-					gameObjectives = oL.generateObjectives(noPlayers, bannedObjectives);
+					handSize = 6;
+					gameObjectives = objectiveStatus ? oL.generateObjectives(noPlayers, bannedObjectives) : [];
 					playerObjs = initialGameScript.initiate(noPlayers,gameObjectives,playerAbilities,players,handSize);
 					gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
 					playerSubmitTracker = [];
@@ -204,8 +218,9 @@ app.route('/reset')
 	.get(function(req,res){
 		if(req.session.loginStatus){
 			noPlayers = players.length;
-			gameObjectives = oL.generateObjectives(noPlayers, bannedObjectives);
+			gameObjectives = objectiveStatus ? oL.generateObjectives(noPlayers, bannedObjectives) : [];
 			console.log("Game Reset!");
+			handSize = 6;
 			players = playerObjs.map(function(item){return {username:item.playerData.playerName, playerKey:item.playerData.playerKey}});
 			playerObjs = initialGameScript.initiate(noPlayers,gameObjectives,playerAbilities,players,handSize);
 			gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
@@ -419,6 +434,24 @@ function processPlayerActions(){
 					} else {
 						console.log(playerObjs[j].playerData.playerName + ": Embaassy Offices - PlacementScore  = 2");							
 					}
+				} else if (playerSubmitActions[i].mode == 8){
+					console.log(playerSubmitActions[i]);
+					playerObjs[j].currencyChange(-1);
+					var selectedEOPlayer = '';
+					var selectedEOPlayerColor = '';
+					for(var m = 0; m < playerObjs.length; m++){
+						if(playerObjs[m].playerData.playerNo == playerSubmitActions[i].extraData[0]){
+							var conflictResult = cC.conflictResolver(playerSubmitActions[i].cardFromHand,playerObjs[j],playerObjs[m])
+							var selectedCPlayer = playerObjs[m].playerData.playerName;
+							var selectedCPlayerColor = playerObjs[m].playerData.color;
+							playerObjs[j].currentPointsChange(conflictResult[0]);
+							playerObjs[m].currentPointsChange(conflictResult[1]);
+							for(var k = 0; k<playerObjs.length; k++){
+								playerObjs[k].addGameLogEntry("<span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span> plays <span class='logCard' data-cardid='"+playerSubmitActions[i].cardFromHand+"'>"+cL.getCardObj(playerSubmitActions[i].cardFromHand).cardTitle+"</span> for 1 credit against <span style='color:"+selectedCPlayerColor+"'>"+selectedCPlayer+"</span>, (<span class='posScoreDelta'>+"+conflictResult[0]+"VP</span>, <span class='negScoreDelta'>-"+conflictResult[1]+"VP</span>)");
+							}
+							break;
+						}
+					}
 				} else {
 					var actionedCard = cL.getCardObj(playerSubmitActions[i].cardFromHand);
 					for(var k = 0; k<playerObjs.length; k++){
@@ -467,6 +500,13 @@ function processPlayerActions(){
 
 	// Generate New Hands & Pass
 	if (playerObjs[0].gameData.round == 1){
+		if(conflictStatus && playerObjs[0].gameData.turn == 2){
+			handSize = 7;
+			for(var m = 0; m<playerObjs.length; m++){
+				playerObjs[m].gameData.handSize = handSize;
+			}
+			gameDeck = cC.conflictAddition(noPlayers,gameDeck);
+		}
 		initialHand();
 		if(noPlayers == 2){
 			for(var i = 0; i < 2; i++){
@@ -479,7 +519,7 @@ function processPlayerActions(){
 		}
 		newTurnCreditsMessage()
 		for (var j = 0; j<playerObjs.length; j++){
-			playerObjs[j].addGameLogEntry("<span color='orange'><i>Hand pass order reversed</i></span>");
+			playerObjs[j].addGameLogEntry("<span style='color:orange'><i>Hand pass order reversed</i></span>");
 		}
 	} else if (noPlayers == 2){
 		var dummyArray2 = playerObjs.map(function(item){return item.playerHand});
@@ -507,7 +547,7 @@ function processPlayerActions(){
 						playerObjs[j].addGameLogEntry("<span style='color:lightgrey'>Dummy Player "+dummyPlayerCode2+"</span> receives cards from <span style='color:"+playerObjs[j].playerData.color+"'>"+playerObjs[j].playerData.playerName+"</span>");
 					} else {
 						playerObjs[j].addGameLogEntry("<span style='color:lightgrey'>Dummy Player "+dummyPlayerCode+"</span> receives cards from <span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span>");
-						playerObjs[j].addGameLogEntry("<span style='color:lightgrey"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span> receives cards from " + "<span style='color:lightgrey'>Dummy Player " +dummyPlayerCode2+"</span>");
+						playerObjs[j].addGameLogEntry("<span style='color:"+playerObjs[k].playerData.color+"'>"+playerObjs[k].playerData.playerName+"</span> receives cards from " + "<span style='color:lightgrey'>Dummy Player " +dummyPlayerCode2+"</span>");
 					}
 				}
 			}else{

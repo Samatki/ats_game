@@ -798,8 +798,61 @@ var cardList = {
             "cardDescription": "Provides two Power<br>Counts as <i>Power Reactor</i><br>Counts as a location of every colour type",
             "cardId": "B0R_X_VR"
 		}],
-        conflict: [],
-        objectives: [],
+        conflict_cards : [{
+			cardTitle: "Dispute (Green)",
+			cardDescription: "Choose another player and count the number of green location in each of your Space Stations. If you have more, gain VP equal to the difference. They lose the same amount",
+			cardCreditCost: 1,
+			cardDeck: "Base",
+			type : "Conflict",
+			conflictType: "Dispute",
+			cardMax: "3",
+			cardId: "B0C_D_001"
+		},{
+			cardTitle: "Dispute (Red)",
+			cardDescription: "Choose another player and count the number of red location in each of your Space Stations. If you have more, gain VP equal to the difference. They lose the same amount",
+			cardCreditCost: 1,
+			type : "Conflict",			
+			cardDeck: "Base",
+			conflictType: "Dispute",
+			cardMax: "3",
+			cardId: "B0C_D_002"
+		},{
+			cardTitle: "Dispute (Yellow)",
+			cardDescription: "Choose another player and count the number of yellow location in each of your Space Stations. If you have more, gain VP equal to the difference. They lose the same amount",
+			cardCreditCost: 1,
+			type : "Conflict",			
+			cardDeck: "Base",
+			conflictType: "Dispute",
+			cardMax: "3",
+			cardId: "B0C_D_003"
+		},{
+			cardTitle: "Dispute (Blue)",
+			cardDescription: "Choose another player and count the number of blue location in each of your Space Stations. If you have more, gain VP equal to the difference. They lose the same amount",
+			cardCreditCost: 1,
+			cardDeck: "Base",
+			type : "Conflict",			
+			conflictType: "Dispute",
+			cardMax: "3",
+			cardId: "B0C_D_004"
+		},{
+			cardTitle: "Dispute (Purple)",
+			cardDescription: "Choose another player and count the number of purple location in each of your Space Stations. If you have more, gain VP equal to the difference. They lose the same amount",
+			cardCreditCost: 1,
+			cardDeck: "Base",
+			type : "Conflict",			
+			conflictType: "Dispute",
+			cardMax: "3",
+			cardId: "B0C_D_005"
+		},{
+			cardTitle: "Dispute (Reactors)",
+			cardDescription: "Choose another player and count the number of Power Reactors in each of your Space Stations. If you have more, gain VP equal to the difference. They lose the same amount",
+			cardCreditCost: 1,
+			cardDeck: "Base",
+			type : "Conflict",			
+			conflictType: "Dispute",
+			cardMax: "3",
+			cardId: "B0C_D_006"
+		}],
 		banned :[{
             "cardTitle": "Galactic Research Council",
             "cardImage": "galactic_research_facility.png",

@@ -15,14 +15,14 @@ for(var i = 0; i < cardList.cards.reactors.length; i++){
 	cardPrint = cardPrint + cardPrinter(cardList.cards.reactors[i], "game_card_list");
 }
 
-cardPrint = (cardList.cards.banned.length !=0)? cardPrint + "<div style='width:100%; text-align:center; margin-top:30px; margin-bottom:30px;'><span class='cardListHeader'>Banned Cards</span></div>":""
+cardPrint = (cardList.cards.banned.length !=0)? cardPrint + "<div style='width:100%; text-align:center; margin-top:30px; margin-bottom:30px;'><span class='cardListHeader'>Banned Location Cards</span></div>":""
 for(var i = 0; i < cardList.cards.banned.length; i++){
 	cardPrint = cardPrint + cardPrinter(cardList.cards.banned[i], "game_card_list");
 }
 
-(cardList.cards.conflict.length !=0)? cardList = cardList + "<div style='width:100%; text-align:center; margin-top:30px; margin-bottom:30px;'><span class='cardListHeader'>Conflict Cards</span></div>":""
-for(var i = 0; i < cardList.cards.conflict.length; i++){
-	cardPrint = cardPrint + cardPrinter(cardList.cards.conflict[i], "game_card_list");
+cardPrint = (cardList.cards.conflict_cards.length !=0)? cardPrint + "<div style='width:100%; text-align:center; margin-top:30px; margin-bottom:30px;'><span class='cardListHeader'>Conflict Cards</span></div>":""
+for(var i = 0; i < cardList.cards.conflict_cards.length; i++){
+	cardPrint = cardPrint + cardPrinter(cardList.cards.conflict_cards[i], "game_card_list");
 }
 document.getElementById("cardListArea").innerHTML = cardPrint; 
 // End
@@ -43,7 +43,7 @@ function discardListGen(cardDiscardList){
 		} else if (card[2] == "R") {
 			cardDiscardObjList.push(cardList.cards.reactors.find(x => x.cardId === card));	
 		} else if (card[2] == "C") {
-			return null;
+			cardDiscardObjList.push(cardList.cards.conflict_cards.find(x => x.cardId === card));
 		}
 	});
 	
@@ -66,7 +66,7 @@ function handGen(cardHandList){
 		} else if (card[2] == "R") {
 			cardHandObjList.push(cardList.cards.reactors.find(x => x.cardId === card.slice(0,8)));	
 		} else if (card[2] == "C") {
-			return null;
+			cardHandObjList.push(cardList.cards.conflict_cards.find(x => x.cardId === card));
 		}
 	});
 

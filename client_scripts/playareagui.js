@@ -205,7 +205,6 @@ class GameReactHandler extends React.Component {
 	
 	constructor(props) {
 		super(props);
-//		this.state.render = 0;
 		this.state = playerDataObj;
 	}
 	
@@ -225,8 +224,7 @@ class GameReactHandler extends React.Component {
 	}
 
 	componentWillUnmount() {
-		//
-//		console.log("TEST2");
+
 	}
 	
 	processPlacement(e){
@@ -254,7 +252,7 @@ class GameReactHandler extends React.Component {
 			} else if(transferredCard == "B0B_G_EO"){
 				document.getElementById("embassyOfficeScreen").style.display = "flex";						
 			} else if(transferredCard == "B0S_Y_BO" && this.state.playerData.currency > 1){
-				document.getElementById("businessOfficeScreen").style.display = "flex";			
+				document.getElementById("businessOfficeScreen").style.display = "flex";					
 			} else {
 				optionMode = 1;
 				confirmationBoxFlag = true;
@@ -277,6 +275,7 @@ class GameReactHandler extends React.Component {
 			if(this.state.playerData.currency < 1){
 				console.log("Not enough money");
 				document.getElementById("discardForPowerBox").innerHTML = "";
+				document.getElementById("discardForPowerBox").style.display = "";				
 				handGen(this.state.playerHand,"game_card_hand");
 				generateListeners();
 			} else {
@@ -296,10 +295,30 @@ class GameReactHandler extends React.Component {
 			handMouseDown = false;
 			handLock = true;
 			cardForDiscard = transferredCard;
-			optionMode = 2;
 			confirmationBoxFlag = true;
-			confirmationBoxLoader();
+			if(optionMode == null){
+				optionMode = 2;
+				confirmationBoxLoader();
+			}
+		}
+	}
 
+	playConflict(e){
+		if(conflictCardPlace && transferredCard[2] == "C" && e.button == 0){
+			if(this.state.playerData.currency < 1){
+				document.getElementById("conflictCardPlaceBox").innerHTML = "";
+				document.getElementById("conflictCardPlaceBox").style.display = "";				
+				handGen(this.state.playerHand,"game_card_hand");
+				generateListeners();
+			} else {
+				handMouseDown = false;
+				handLock = true;
+				confirmationBoxFlag = true;
+				if(optionMode == null){
+					optionMode = 8;
+					document.getElementById("conflictScreen").style.display = "flex";						
+				}
+			} 
 		}
 	}
 	
@@ -318,6 +337,16 @@ class GameReactHandler extends React.Component {
 		confirmationBoxFlag = true;
 		confirmationBoxLoader();		
 	}
+	
+	conflictConfirmation(e){
+		conflictPlayerSelect = document.querySelector('input[name="conflictPlayerRadioSelect"]:checked').value;
+		if(conflictPlayerSelect){
+			document.getElementById("conflictScreen").style.display = "";
+			optionMode = 8;
+			confirmationBoxFlag = true;
+			confirmationBoxLoader();				
+		}
+	}
 
 	boSlider(e){
 		document.getElementById("businessOfficeRangeValue").innerHTML = document.getElementById("businessOfficeRange").value;
@@ -328,9 +357,10 @@ class GameReactHandler extends React.Component {
 	}
 
 	cancelButton(e){
-		this.setState({render: this.state.render + 1});
+		this.setState({render: this.state.render + 1 || 1});
+		optionMode = null;
 		confirmationBoxFlag = false;
-		confirmationBoxLoader();
+//		confirmationBoxLoader();
 		document.getElementById('waitingBox').style.display = '';
 		document.getElementById("ownPlayerBoxMoneyCount").innerHTML = this.state.playerData.currency;
 		document.getElementById("ownPlayerBoxScoreCount").innerHTML = (this.state.playerData.curr_score + this.state.playerData.eg_score);	
@@ -346,6 +376,8 @@ class GameReactHandler extends React.Component {
 		
 	componentDidUpdate(){
 		currencyDelta = 0;
+		conflictCardPlace = false;
+		optionMode = null;
 		playerDataObj = this.state;
 		handGen(this.state.playerHand);
 		discardListGen(this.state.discardPile.cards);
@@ -362,6 +394,7 @@ class GameReactHandler extends React.Component {
 		displayedArea = 0;
 		handLock = false;
 		requiredPowerSpend = 0;
+		conflictPlayerSelect = "";
 		powerSpendArray = [];
 		accessiblePowerArray = [];
 		confirmationBoxFlag = false;
@@ -415,8 +448,22 @@ class GameReactHandler extends React.Component {
 			)	
 		);
 		
+		var conflict_player_selectors = this.state.otherPlayersData.otherPlayers.map(function(playerItem){
+			return React.createElement("div", {className:"playerRadioContainer"},
+				React.createElement("div", {className:"playerRadioImage"},null),
+				React.createElement("label", {htmlfor:((playerItem.playerName).toString() + playerItem.playerNo.toString()), className:"playerRadioNameLabel"},playerItem.playerName),
+				React.createElement("input", {type:"radio", name:"conflictPlayerRadioSelect", id:("C"+(playerItem.playerName).toString() + playerItem.playerNo.toString()), value:playerItem.playerNo},null)
+			)	
+		})
+		
 		return React.createElement("div", null,
 
+		React.createElement("div", { id : "conflictScreen", className : "gameMat modalScreen"},		
+		React.createElement("div", { id : "conflictDialogueBox", className : "dialogueBox"  }, 
+		React.createElement("div", { id : "conflictText",  className : "dialogueBoxInnerText"}, "Choose another player to play Conflict Card against" ),
+		conflict_player_selectors,
+		React.createElement("button", { id : "conflictConfirmation", className : "confirmationBox", onClick : this.conflictConfirmation.bind(this)}, "Confirm" ),
+		),null),
 	
 		React.createElement("div", { id : "embassyOfficeScreen", className : "gameMat modalScreen"},		
 		React.createElement("div", { id : "embassyOfficeDialogueBox", className : "dialogueBox"  }, 
@@ -454,6 +501,7 @@ class GameReactHandler extends React.Component {
 		React.createElement(PlayGrid, {gameState:gameStatus, ...this.state.playerStationArray}), 
 		other_player_stations),
 
+		React.createElement("div", { key : (parseInt(Math.random()*1000000000)), id : "conflictCardPlaceBox", className : "discardBox", onMouseUp : this.playConflict.bind(this)}, "Play Conflict"),
 		React.createElement("div", { key : (parseInt(Math.random()*1000000000)), id : "discardForPowerBox", className : "discardBox", onMouseUp : this.powerDiscard.bind(this)}, "Discard for Reactor"),
 		React.createElement("div", { key : (parseInt(Math.random()*1000000000)), id : "discardForCurrencyBox", className : "discardBox", onMouseUp : this.currencyDiscard.bind(this)}, "Discard for Currency"),
 

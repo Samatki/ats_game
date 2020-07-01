@@ -32,6 +32,6 @@ function getCardObj(cardid){
 		cardObj = cardList.cards.reactors.find(x => x.cardId === cardid.slice(0,8));
 		powerTransferred = parseInt(cardid[cardid.length - 1]);
 	} else if (cardid[2] == "C"){
-		cardObj = cardList.cards.s_locations.find(x => x.cardId === cardid);					
+		cardObj = cardList.cards.conflict_cards.find(x => x.cardId === cardid);					
 	}
 }

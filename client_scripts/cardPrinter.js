@@ -93,6 +93,33 @@ function cardPrinter(cardData, cardSet, cardPowerCount = 2){
 				<div class="desc_box card_igmode"></div>
 				<div class="power_description"><div>${cardData.cardDescription}</div></div>
 			</div>`
+	} else if (cardData.type == "Conflict"){
+	
+		var cCostHTML = ""
+		if(cardData.cardCreditCost){
+			cCostHTML = '<div class="card_ccost">'+cardData.cardCreditCost+'</div>'
+		}
+		
+		var maxBoxHTML = "";
+		if (cardData.cardMax != Infinity){
+			maxBoxHTML = '<div class="maxbox conflictMaxBox"><div class="maxBoxInner card_igmode"></div><b>MAX</b>'
+			if (cardData.cardMax != Infinity){
+				maxBoxHTML = maxBoxHTML + '<div class="maxPoints">+' + cardData.cardMax + '</div>' 
+			}
+			maxBoxHTML = maxBoxHTML + '</div>'
+		}
+
+		var cardHTML =  `	
+			<div class="${cardSet}" tabindex="-1" data-cardId="${cardData.cardId}" >
+				<div class="conflict_card" ></div>
+				<div class="card_classification white_class"></div>
+				<div class="card_title conflict_card_title"><b>${cardData.cardTitle}</b></div>
+				${cCostHTML}
+				<div class="card_image" style="background-image:url('ATS_Images/Artwork/Cards/conflict.png')"></div>
+				${maxBoxHTML?maxBoxHTML:""}
+				<div class="desc_box card_igmode conflict_desc_box"></div>
+				<div class="conflict_description"><div>${cardData.cardDescription}</div></div>
+			</div>`
 	}
 	return cardHTML;
 }
