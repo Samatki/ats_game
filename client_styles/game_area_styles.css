@@ -1,4 +1,4 @@
-html, body {margin: 0; height: 100%; /*overflow: hidden*/}
+html, body {margin: 0; height: 100%; overflow: hidden}
 
 html {
   touch-action:none;
@@ -67,7 +67,7 @@ html {
 
 .loadingContainer{
   background-color:black;
-  height:100vh;
+  height:calc(100vh -  env(safe-area-inset-bottom, 0px));
   width:100vw;
   position:fixed;
   top:0;
@@ -181,7 +181,7 @@ html {
 #playerHandModal{
 	position:fixed;
 	right:450px;
-	top: calc(100vh - 260px);
+	top: calc(100vh - 260px -  env(safe-area-inset-bottom, 20px));
 	white-space:no-wrap !important;
 	text-align:left !important;
 	display:flex;
@@ -268,7 +268,7 @@ html {
 
 .gameMat{
 	width: calc(100vw - 300px);
-	height:calc(100vh - 50px);
+	height:calc(100vh - 50px -  env(safe-area-inset-bottom, 0px));
 }
 
 #cardListArea{
