@@ -160,7 +160,7 @@ app.route('/gameGenerator')
 					}
 				}
 				if(playerCheck){
-					console.log("D")
+//					console.log("D")
 					// Reset Data goes here
 		     		noPlayers = players.length;
 					handSize = 6;
@@ -186,7 +186,7 @@ app.route('/gameGenerator')
 								tempDummyHand.push(gameDeck.pop())
 							}
 							dummyArray.push(tempDummyHand);
-							console.log(dummyArray);
+//							console.log(dummyArray);
 						}
 					}
 					io.to('ATS_Game_Room').emit('redirect','');
@@ -435,13 +435,15 @@ function processPlayerActions(){
 						console.log(playerObjs[j].playerData.playerName + ": Embaassy Offices - PlacementScore  = 2");							
 					}
 				} else if (playerSubmitActions[i].mode == 8){
-					console.log(playerSubmitActions[i]);
+//					console.log(playerSubmitActions[i]);
 					playerObjs[j].currencyChange(-1);
 					var selectedEOPlayer = '';
 					var selectedEOPlayerColor = '';
 					for(var m = 0; m < playerObjs.length; m++){
 						if(playerObjs[m].playerData.playerNo == playerSubmitActions[i].extraData[0]){
-							var conflictResult = cC.conflictResolver(playerSubmitActions[i].cardFromHand,playerObjs[j],playerObjs[m])
+							var conflictResult = cC.conflictResolver(playerSubmitActions[i].cardFromHand,playerObjs[j],playerObjs[m]);
+							console.log("Conflict!")
+							console.log(conflictResult);
 							var selectedCPlayer = playerObjs[m].playerData.playerName;
 							var selectedCPlayerColor = playerObjs[m].playerData.color;
 							playerObjs[j].currentPointsChange(conflictResult[0]);
@@ -532,7 +534,7 @@ function processPlayerActions(){
 	}
 	if(playerObjs[0].gameData.round != 1 && playerObjs[0].gameData.round){
 		var passDirection = playerObjs[0].gameData.turnOrder ? 1 : -1;
-		console.log(dummyArray);
+//		console.log(dummyArray);
 		for (var j = 0; j<playerObjs.length; j++){
 //			console.log(playerObjs[j].playerHand);
 			if(noPlayers == 2){
@@ -567,8 +569,8 @@ function processPlayerActions(){
 		}
 		if(noPlayers == 2){
 			dummyArray = dummyArray2;
-			console.log("DUMMY ARRAY")
-			console.log(dummyArray)
+//			console.log("DUMMY ARRAY")
+//			console.log(dummyArray)
 		}
 	}
 	
