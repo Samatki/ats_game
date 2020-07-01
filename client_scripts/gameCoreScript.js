@@ -1,11 +1,10 @@
 // RightClick Zoom Functions
 
-document.addEventListener("touchstart", touch2Mouse, false);
-document.addEventListener("touchmove", touch2Mouse, false);
-document.addEventListener("touchend", touch2Mouse, false);
+document.addEventListener("touchstart", touch2Mouse, true);
+document.addEventListener("touchmove", touch2Mouse, true);
+document.addEventListener("touchend", touch2Mouse, true);
 
-function touch2Mouse(e)
-{
+function touch2Mouse(e){
   var theTouch = e.changedTouches[0];
   var mouseEv;
 
@@ -16,12 +15,16 @@ function touch2Mouse(e)
     case "touchmove":  mouseEv="mousemove"; break;
     default: return;
   }
+  
+  var targetObject = document.elementFromPoint(theTouch.screenX, theTouch.screenY).closest(".stationCardPlaceable") || document.elementFromPoint(theTouch.screenX, theTouch.screenY).closest(".discardBox");
+  console.log(targetObject);
 
+  console.log(e);
   var mouseEvent = document.createEvent("MouseEvent");
   mouseEvent.initMouseEvent(mouseEv, true, true, window, 1, theTouch.screenX, theTouch.screenY, theTouch.clientX, theTouch.clientY, false, false, false, false, 0, null);
   theTouch.target.dispatchEvent(mouseEvent);
 
-  e.preventDefault();
+
 }
 
 
