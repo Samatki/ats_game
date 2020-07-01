@@ -268,7 +268,7 @@ html {
 
 .gameMat{
 	width: calc(100vw - 300px);
-	height:calc(100vh - 50px -  env(safe-area-inset-bottom, 0px));
+	height:calc(100vh);
 }
 
 #cardListArea{
