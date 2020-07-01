@@ -1,12 +1,15 @@
 // RightClick Zoom Functions
 
 document.addEventListener("touchstart", touch2Mouse, true);
-document.addEventListener("touchmove", touch2Mouse, true);
 document.addEventListener("touchend", touch2Mouse, true);
 
 function touch2Mouse(e){
+//  e.preventDefault();
   var theTouch = e.changedTouches[0];
   var mouseEv;
+
+  document.getElementById('mapZoomIn').style.display = "block";
+  document.getElementById('mapZoomOut').style.display = "block";
 
   switch(e.type)
   {
@@ -16,17 +19,10 @@ function touch2Mouse(e){
     default: return;
   }
   
-  var targetObject = document.elementFromPoint(theTouch.screenX, theTouch.screenY).closest(".stationCardPlaceable") || document.elementFromPoint(theTouch.screenX, theTouch.screenY).closest(".discardBox");
-  console.log(targetObject);
-
-  console.log(e);
   var mouseEvent = document.createEvent("MouseEvent");
   mouseEvent.initMouseEvent(mouseEv, true, true, window, 1, theTouch.screenX, theTouch.screenY, theTouch.clientX, theTouch.clientY, false, false, false, false, 0, null);
   theTouch.target.dispatchEvent(mouseEvent);
-
-
 }
-
 
 document.addEventListener("contextmenu", function(e){
     e.preventDefault();
@@ -49,7 +45,6 @@ for (var i=0; i<document.getElementsByClassName("game_card_list").length; i++){
 		document.getElementById("rCModal").appendChild(closestElement);
 	}, false);
 }
-
 
 function generateListeners(){
 
@@ -144,7 +139,47 @@ function generateListeners(){
 			}
 		}, false);
 	}
-
+	
+	document.getElementById('mapZoomOut').addEventListener('click',function(e){
+		if(displayedArea){
+			for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+				if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
+					var elementS = document.getElementsByClassName("otherGridContainer")[i];	
+				}
+			}	    
+		}else{
+			var elementS = document.getElementById("gridContainer");
+		}		
+	  mouseDown = false;
+	  elementS.style.cursor = "";
+	  e.preventDefault();
+	  m = elementS.style.transform.split('').slice(6,-1).join('');
+	  var newScale = ((m/1 - 0.2) < 0.2)? 0.2:(m/1 - 0.2);
+	  elementS.style.transform = "scale("+ (newScale).toString() +")";
+	  initialgridPositionX = elementS.getBoundingClientRect().left;
+	  initialgridPositionY = elementS.getBoundingClientRect().top;
+	});
+	
+	document.getElementById('mapZoomIn').addEventListener('click',function(e){
+		if(displayedArea){
+			for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
+				if(document.getElementsByClassName("otherGridContainer")[i].dataset.player == displayedArea){
+					var elementS = document.getElementsByClassName("otherGridContainer")[i];	
+				}
+			}	    
+		}else{
+			var elementS = document.getElementById("gridContainer");
+		}		
+	  mouseDown = false;
+	  elementS.style.cursor = "";
+	  e.preventDefault();
+	  m = elementS.style.transform.split('').slice(6,-1).join('');
+	  var newScale = m/1 + 0.2;
+	  elementS.style.transform = "scale("+ (newScale).toString() +")";
+	  initialgridPositionX = elementS.getBoundingClientRect().left;
+	  initialgridPositionY = elementS.getBoundingClientRect().top;
+	});
+	
 	document.getElementById("playGridroot").addEventListener('wheel',function(e){
 		if(displayedArea){
 			for (var i = 0; i < document.getElementsByClassName("otherGridContainer").length; i++){
@@ -156,15 +191,14 @@ function generateListeners(){
 			var elementS = document.getElementById("gridContainer");
 		}		
 	  mouseDown = false;
-	  elementS.style.cursor = ""
-	  e.preventDefault();;
+	  elementS.style.cursor = "";
+	  e.preventDefault();
 	  m = elementS.style.transform.split('').slice(6,-1).join('');
 	  var newScale = ((m/1 - Math.sign(e.deltaY)*0.2) < 0.2)? 0.2:(m/1 - Math.sign(e.deltaY)*0.2);
 	  elementS.style.transform = "scale("+ (newScale).toString() +")";
 	  initialgridPositionX = elementS.getBoundingClientRect().left;
 	  initialgridPositionY = elementS.getBoundingClientRect().top;
 	})
-
 
 	document.querySelector("#playGridroot").addEventListener('mousedown',function(e){
 		if(displayedArea){
@@ -194,6 +228,7 @@ function generateListeners(){
 	  mouseDown = true;
 	});
 
+	document.getElementById("playGridroot").addEventListener("touchmove", touch2Mouse, true);
 	document.getElementById("playGridroot").addEventListener('mousemove',function(e){
 	  if(mouseDown){
 		if(displayedArea){

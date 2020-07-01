@@ -418,8 +418,8 @@ class GameReactHandler extends React.Component {
 
 		document.getElementById('turnConfirmationScreen').style.display = '';
 		document.getElementById("ownPlayerBoxMoneyCount").innerHTML = this.state.playerData.currency;
-		document.getElementById("ownPlayerBoxScoreCount").innerHTML = this.state.playerData.curr_score + this.state.playerData.eg_score + this.state.playerData.obj_score;		
-		
+		document.getElementById("ownPlayerBoxScoreCount").innerHTML = this.state.playerData.curr_score + this.state.playerData.eg_score + this.state.playerData.obj_score;
+
 		generateListeners();
 		ObjPrinter(this.state.gameData.objectives);
 	}
