@@ -10,9 +10,9 @@ var oL = require('./ATS_Server/objectives');
 var cC = require('./ATS_Server/conflicts')
 
 var playerDatabase = [
-//			  {username:"Jeremy",userpassword:"PASSWORD123",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
+			  {username:"Jeremy",userpassword:"PASSWORD123",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
 			  {username:"Seb",userpassword:"PASSWORD456",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
-//			  {username:"Logan",userpassword:"PASSWORD789",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
+			  {username:"Logan",userpassword:"PASSWORD789",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())},
 			  {username:"Sam",userpassword:"PASSWORD000",playerKey:(Math.floor(Math.random()*1000000000000) + (new Date).getTime())}
 ]
 
@@ -23,7 +23,7 @@ var players = playerDatabase.map(function(item){return {username:item.username, 
 var noPlayers = players.length;
 var bannedObjectives = [];
 var gameObjectives = objectiveStatus ? oL.generateObjectives(noPlayers, bannedObjectives) : [];
-var handSize = 2;
+var handSize = 6;
 var playerAbilities = false;
 var bannedCards = ["B0S_G_SoAC","B0S_G_GRC","B0S_Y_MP"];
 var playerObjs = initialGameScript.initiate(noPlayers,gameObjectives,playerAbilities,players,handSize);
