@@ -74,37 +74,37 @@ var conflictResolver = function(card,playerObj,targetplayerObj){
 	switch(card){
 		case "B0C_D_001":
 			// G
-			conflictDelta = Math.min(conflictCalc(playerObj.playerStationArray.grid,playerObj.playerStationArray.grid,"G"),conflictCardObj.cardMax);
+			conflictDelta = Math.min(conflictCalc(playerObj.playerStationArray.grid,targetplayerObj.playerStationArray.grid,"G"),conflictCardObj.cardMax);
 			targetScoreDelta = (-1)*conflictDelta;
 			playerScoreDelta = conflictDelta;
 			break;
 		case "B0C_D_002":
 			// R
-			conflictDelta = Math.min(conflictCalc(playerObj.playerStationArray.grid,playerObj.playerStationArray.grid,"R"),conflictCardObj.cardMax);
+			conflictDelta = Math.min(conflictCalc(playerObj.playerStationArray.grid,targetplayerObj.playerStationArray.grid,"R"),conflictCardObj.cardMax);
 			targetScoreDelta = (-1)*conflictDelta;
 			playerScoreDelta = conflictDelta;			
 			break;
 		case "B0C_D_003":
 			// Y
-			conflictDelta = Math.min(conflictCalc(playerObj.playerStationArray.grid,playerObj.playerStationArray.grid,"Y"),conflictCardObj.cardMax);
+			conflictDelta = Math.min(conflictCalc(playerObj.playerStationArray.grid,targetplayerObj.playerStationArray.grid,"Y"),conflictCardObj.cardMax);
 			targetScoreDelta = (-1)*conflictDelta;
 			playerScoreDelta = conflictDelta;				
 			break;			
 		case "B0C_D_004":
 			// B
-			conflictDelta = Math.min(conflictCalc(playerObj.playerStationArray.grid,playerObj.playerStationArray.grid,"B"),conflictCardObj.cardMax);
+			conflictDelta = Math.min(conflictCalc(playerObj.playerStationArray.grid,targetplayerObj.playerStationArray.grid,"B"),conflictCardObj.cardMax);
 			targetScoreDelta = (-1)*conflictDelta;
 			playerScoreDelta = conflictDelta;				
 			break;		
 		case "B0C_D_005":
 			// P
-			conflictDelta = Math.min(conflictCalc(playerObj.playerStationArray.grid,playerObj.playerStationArray.grid,"P"),conflictCardObj.cardMax);
+			conflictDelta = Math.min(conflictCalc(playerObj.playerStationArray.grid,targetplayerObj.playerStationArray.grid,"P"),conflictCardObj.cardMax);
 			targetScoreDelta = (-1)*conflictDelta;
 			playerScoreDelta = conflictDelta;		
 			break;
 		case "B0C_D_006":
 			// Reactors
-			conflictDelta = Math.min(conflictCalc(playerObj.playerStationArray.grid,playerObj.playerStationArray.grid,"X"),conflictCardObj.cardMax);
+			conflictDelta = Math.min(conflictCalc(playerObj.playerStationArray.grid,targetplayerObj.playerStationArray.grid,"X"),conflictCardObj.cardMax);
 			targetScoreDelta = (-1)*conflictDelta;
 			playerScoreDelta = conflictDelta;					
 			break;
@@ -124,7 +124,7 @@ function conflictCalc(playerGrid,otherPlayerGrid,identifier){
 	var value = 0;
 	var playerCount = 0;
 	var otherPlayerCount = 0;
-	
+
 	for(var i = 0; i < playerGrid.length; i++){
 		if(identifier == "X" && playerGrid[i][4] == "X"){
 			playerCount = playerCount + 1;
@@ -140,7 +140,7 @@ function conflictCalc(playerGrid,otherPlayerGrid,identifier){
 			otherPlayerCount = otherPlayerCount + 1;
 		}
 	}
-	
+
 	if(playerCount > otherPlayerCount){
 		value = playerCount - otherPlayerCount;
 	}
