@@ -1,8 +1,8 @@
 // RightClick Zoom Functions
 
-document.addEventListener("touchstart", touch2Mouse, true);
-document.addEventListener("touchmove", touch2Mouse, true);
-document.addEventListener("touchend", touch2Mouse, true);
+document.addEventListener("touchstart", touch2Mouse, false);
+document.addEventListener("touchmove", touch2Mouse, false);
+document.addEventListener("touchend", touch2Mouse, false);
 
 function touch2Mouse(e)
 {
