@@ -181,7 +181,7 @@ html {
 #playerHandModal{
 	position:fixed;
 	right:450px;
-	bottom: 260px;
+	bottom: -50px;
 	white-space:no-wrap !important;
 	text-align:left !important;
 	display:flex;
