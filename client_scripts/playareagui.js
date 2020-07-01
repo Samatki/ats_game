@@ -262,6 +262,10 @@ class GameReactHandler extends React.Component {
 				optionMode = 3;
 				confirmationBoxFlag = true;
 				confirmationBoxLoader();
+			} else {
+				document.getElementById('discardForPowerBox').style.display = '';
+				document.getElementById('discardForCurrencyBox').style.display = '';
+				document.getElementById('conflictCardPlaceBox').style.display = '';
 			}
 			cardPlaced = false;
 			handLock = true;
