@@ -22,7 +22,6 @@ function getCardObj(cardid){
 	return cardObj;
 }
 
-
 var cardList = {
     cards: {
         basic_locations: [{
@@ -764,6 +763,60 @@ var cardList = {
             "cardLocationRestriction": [],
             "cardDescription": "<span class='pointModifier'>+1</span> for each <i>Transportation Plaform</i> in the Station",
             "cardId": "B0S_B_TP"
+        },{
+            "cardTitle": "Galactic Research Council",
+            "cardImage": "galactic_research_facility.png",
+            "cardColour": "G",
+            "type": "S",
+            "cardDeck": "Base",
+            "cardQuantity": 2,
+            "cardEndGame": false,
+			"cardResolution":2,			
+            "im_score": 3,
+            "cardCreditCost": 3,
+            "cardPowerCost": 1,
+            "cardMaxAdditionalPoints": Infinity,
+            "cardMaxPlayable": Infinity,
+            "cardFunction": true,
+            "cardLocationRestriction": [],
+            "cardDescription": "Each <b>other</b> player secretly chooses up to <span class='creditModifier2'>3</span> to pay and gains that amount in <span class='pointModifier2'>  </span><br>You gain <span class='pointModifier2'>  </span> equal to the highest amount paid, plus one",
+            "cardId": "B0S_G_GRC"
+        },{
+            "cardTitle": "School of Alien Culture",
+            "cardImage": "school_of_alien_cultures.png",
+            "cardColour": "G",
+            "type": "S",
+            "cardDeck": "Base",
+            "cardQuantity": 2,
+            "cardEndGame": false,
+			"cardResolution":2,			
+            "im_score": 2,
+            "cardCreditCost": 3,
+            "cardPowerCost": 0,
+            "cardMaxAdditionalPoints": Infinity,
+            "cardMaxPlayable": Infinity,
+            "cardFunction": true,
+            "cardLocationRestriction": [],
+            "cardDescription": "Each other player secretly chooses to either pay <span class='creditModifier2'>1</span> or lose <span class='pointModifier'> 2 </span>.  You get <span class='pointModifier'>+2</span> for each <span class='creditModifier2'>1</span> paid",
+            "cardId": "B0S_G_SoAC"
+        },{
+            "cardTitle": "Market Place",
+            "cardImage": "market_place.png",
+            "cardColour": "Y",
+            "type": "S",
+            "cardDeck": "Base",
+            "cardQuantity": 2,
+            "cardEndGame": false,
+			"cardResolution":2,			
+            "im_score": 2,
+            "cardCreditCost": 3,
+            "cardPowerCost": 0,
+            "cardMaxAdditionalPoints": Infinity,
+            "cardMaxPlayable": Infinity,
+            "cardFunction": true,
+            "cardLocationRestriction": [],
+            "cardDescription": "Choose up to 2 other players. Get a combination of <span class='creditModifier2'>2</span> from them",
+            "cardId": "B0S_Y_MP"
         }],
 		reactors: [{
 		    "cardTitle": "Power Reactor",
@@ -816,61 +869,7 @@ var cardList = {
             "cardLocationRestriction": [],
             "cardDescription": "Provides two Power<br>Counts as <i>Power Reactor</i><br>Counts as a location of every colour type",
             "cardId": "B0R_X_VR"
-		},{
-            "cardTitle": "Galactic Research Council",
-            "cardImage": "galactic_research_facility.png",
-            "cardColour": "G",
-            "type": "S",
-            "cardDeck": "Base",
-            "cardQuantity": 2,
-            "cardEndGame": false,
-			"cardResolution":2,			
-            "im_score": 3,
-            "cardCreditCost": 3,
-            "cardPowerCost": 1,
-            "cardMaxAdditionalPoints": Infinity,
-            "cardMaxPlayable": Infinity,
-            "cardFunction": true,
-            "cardLocationRestriction": [],
-            "cardDescription": "Each <b>other</b> player secretly chooses up to <span class='creditModifier2'>3</span> to pay and gains that amount in <span class='pointModifier2'>  </span><br>You gain <span class='pointModifier2'>  </span> equal to the highest amount paid, plus one",
-            "cardId": "B0S_G_GRC"
-        },{
-            "cardTitle": "School of Alien Culture",
-            "cardImage": "school_of_alien_cultures.png",
-            "cardColour": "G",
-            "type": "S",
-            "cardDeck": "Base",
-            "cardQuantity": 2,
-            "cardEndGame": false,
-			"cardResolution":2,			
-            "im_score": 2,
-            "cardCreditCost": 3,
-            "cardPowerCost": 0,
-            "cardMaxAdditionalPoints": Infinity,
-            "cardMaxPlayable": Infinity,
-            "cardFunction": true,
-            "cardLocationRestriction": [],
-            "cardDescription": "Each other player secretly chooses to either pay <span class='creditModifier2'>1</span> or lose <span class='pointModifier'> 2 </span>.  You get <span class='pointModifier'>+2</span> for each <span class='creditModifier2'>1</span> paid",
-            "cardId": "B0S_G_SoAC"
-        }, {
-            "cardTitle": "Market Place",
-            "cardImage": "market_place.png",
-            "cardColour": "Y",
-            "type": "S",
-            "cardDeck": "Base",
-            "cardQuantity": 2,
-            "cardEndGame": false,
-			"cardResolution":2,			
-            "im_score": 2,
-            "cardCreditCost": 3,
-            "cardPowerCost": 0,
-            "cardMaxAdditionalPoints": Infinity,
-            "cardMaxPlayable": Infinity,
-            "cardFunction": true,
-            "cardLocationRestriction": [],
-            "cardDescription": "Choose up to 2 other players. Get a combination of <span class='creditModifier2'>2</span> from them",
-            "cardId": "B0S_Y_MP"
-        }],
+		}],
 		conflict_cards : [{
 			cardTitle: "Dispute (Green)",
 			cardDescription: "Choose another player and count the number of green location in each of your Space Stations. If you have more, gain VP equal to the difference. They lose the same amount",

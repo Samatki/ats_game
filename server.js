@@ -19,15 +19,18 @@ var playerDatabase = [
 /* GAME INITIATORS */
 var conflictStatus = true;
 var objectiveStatus = true;
+var playerAbilities = false; 
 var players = playerDatabase.map(function(item){return {username:item.username, playerKey:item.playerKey}});
 var noPlayers = players.length;
 var bannedObjectives = [];
 var gameObjectives = objectiveStatus ? oL.generateObjectives(noPlayers, bannedObjectives) : [];
 var handSize = 6;
-var playerAbilities = false;
 var bannedCards = ["B0S_G_SoAC","B0S_G_GRC","B0S_Y_MP"];
 var playerObjs = initialGameScript.initiate(noPlayers,gameObjectives,playerAbilities,players,handSize);
-var gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
+var gameDecks = initialGameScript.generateDeck(noPlayers,bannedCards);
+var gameDeck = gameDecks[0];
+var qualeenObjectives = playerAbilities ? oL.generateQualeenObjectives(playerObjs) : [];
+var additionalSCards = playerAbilities ? gameDecks[1] : [];
 var playerSubmitTracker = [];
 var optionMode = null;
 var playerSubmitActions = [];
@@ -86,7 +89,10 @@ io.on('connection', (socket) => {
 				  } else {
 					for(var i=0; i<playerObjs.length; i++){
 						if(playerObjs[i].playerData.playerKey == data.playerKey && data.playerKey != undefined){
-							socket.emit('pageLoader',playerObjs[i]);  
+							socket.emit('pageLoader',playerObjs[i]);
+							if(playerAbilities && playerObjs[i].gameData.round == 1 && playerObjs[i].gameData.turn == 1 && playerObjs[i].playerData.player_race == "qualeen" && playerObjs[i].playerData.secret_obj == null){
+								socket.emit('qualeenObjectiveSelect',JSON.stringify(qualeenObjectives));
+							}
 							break;
 						}
 					}		  
@@ -97,7 +103,62 @@ io.on('connection', (socket) => {
 			  console.log(e);
 		  }
 	  });
-  
+/*	  
+	socket.on("submitGaarnAbility",(data) =>{
+	  try{
+		  if (loginCheckFunction(socket)){
+			if(processUserTurn(data)){
+				processPlayerActions()				
+				passData()
+			}
+		  }	
+	  } catch(e){
+		  console.log('Something went wrong processing Gaarn ability submit');
+		  console.log(e);
+	  }
+	}); 
+*/
+	socket.on("submitQualeenAbility",(data) =>{
+	  try{
+		  if (loginCheckFunction(socket)){
+			if(processUserTurn(data)){
+				processPlayerActions()				
+				passData()
+			}
+		  }	
+	  } catch(e){
+		  console.log('Something went wrong processing Qualeen ability submit');
+		  console.log(e);
+	  }
+	});
+/*
+	socket.on("submitSissaurianAbility",(data) =>{
+	  try{
+		  if (loginCheckFunction(socket)){
+			if(processUserTurn(data)){
+				processPlayerActions()				
+				passData()
+			}
+		  }	
+	  } catch(e){
+		  console.log('Something went wrong processing Sissaurian ability submit');
+		  console.log(e);
+	  }
+	});
+	socket.on("submitMinireenAbility",(data) =>{
+	  try{
+		  if (loginCheckFunction(socket)){
+			if(processUserTurn(data)){
+				processPlayerActions()				
+				passData()
+			}
+		  }	
+	  } catch(e){
+		  console.log('Something went wrong processing Sissaurian ability submit');
+		  console.log(e);
+	  }
+	});  	  	
+	*/
     socket.on("submitTurnData",(data) =>{
 	/*
 	 {
@@ -120,6 +181,8 @@ io.on('connection', (socket) => {
 		  console.log(e);
 	  }
 	});
+	
+	
   socket.on('disconnect', () => {
     console.log('User Disconnected');
   });  
@@ -166,7 +229,10 @@ app.route('/gameGenerator')
 					handSize = 6;
 					gameObjectives = objectiveStatus ? oL.generateObjectives(noPlayers, bannedObjectives) : [];
 					playerObjs = initialGameScript.initiate(noPlayers,gameObjectives,playerAbilities,players,handSize);
-					gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
+					gameDecks = initialGameScript.generateDeck(noPlayers,bannedCards);
+					gameDeck = gameDecks[0];
+					qualeenObjectives = playerAbilities ? oL.generateQualeenObjectives(playerObjs) : [];
+					additionalSCards = playerAbilities ? gameDecks[1] : [];
 					playerSubmitTracker = [];
 					playerSubmitActions = [];
 					discardPile = [];
@@ -223,7 +289,10 @@ app.route('/reset')
 			handSize = 6;
 			players = playerObjs.map(function(item){return {username:item.playerData.playerName, playerKey:item.playerData.playerKey}});
 			playerObjs = initialGameScript.initiate(noPlayers,gameObjectives,playerAbilities,players,handSize);
-			gameDeck = initialGameScript.generateDeck(noPlayers,bannedCards);
+			gameDecks = initialGameScript.generateDeck(noPlayers,bannedCards);
+			gameDeck = gameDecks[0];
+			qualeenObjectives = playerAbilities ? oL.generateQualeenObjectives(playerObjs) : [];
+			additionalSCards = playerAbilities ? gameDecks[1] : [];
 			playerSubmitTracker = [];
 			playerSubmitActions = [];
 			discardPile = [];
@@ -482,6 +551,13 @@ function processPlayerActions(){
 
 	// OBJECTIVES LOGIC //
 	oL.objectiveScorer(playerObjs, gameObjectives);
+	if(playerAbilities){
+		for(var k = 0; k<playerObjs.length; k++){
+			if(playerObjs[k].playerData.player_race == "qualeen"){
+				ol.checkQualeenObjective(playerObjs,k);
+			}
+		}
+	}
 
 	for(var k = 0; k<playerObjs.length; k++){
 		var scoreDelta = (playerObjs[k].playerData.curr_score + playerObjs[k].playerData.eg_score + playerObjs[k].playerData.obj_score) - (currentScores[k]);

@@ -18,6 +18,9 @@
 	  });
 	  socket.on('redirect', function(destination) {
 		window.location.href = destination;
+	  });
+	  socket.on('qualeenObjectiveSelect', function(qualeenObjs) {
+		console.log(qualeenObjs);
 	  });	  
 	 // socket.emit('on connection')
 	</script>	

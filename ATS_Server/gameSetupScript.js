@@ -34,7 +34,7 @@ class playerObj{
 				eg_score: 0,
 				currency: 	(playerRace == "zehuti" && raceAbilities)?13:10,
 				secret_obj: null,
-				ability_available: null,
+				ability_available: (playerRace == "Gaarn" || playerRace == "Minireen" || playerRace == "Sissaurians") ? true : false,
 				abilities: raceAbilities,
 				player_race: playerRace,
 				color : playerColourStyles[playerNo - 1].color,
@@ -107,16 +107,33 @@ class playerObj{
 				this.playerData.eg_score = this.playerData.eg_score + 5 + Math.floor((this.playerData.currency - 10) / 3);
 				console.log(this.playerData.playerName + ": CoinScore = +" + (5+ Math.floor(this.playerData.currency / 3)));
 			}
-		}else{
+		} else {
 			this.playerData.eg_score = this.playerData.eg_score + Math.floor(this.playerData.currency / 3);
 			console.log(this.playerData.playerName + ": CoinScore = +" + Math.floor(this.playerData.currency / 3));
 		}
 		
 		if(this.playerData.player_race == "humareen" && this.playerData.abilities){
 			//Humareen Ability - count the number of location types that you have the least, then gain that many in points + 1 (max 5VP)
-			this.playerData.eg_score = this.playerData.eg_score;
+			var greenCount = 0;
+			var redCount = 0;
+			var blueCount = 0;
+			var yellowCount = 0;
+			var purpleCount = 0;
+			for(var i = 0; i<this.playerStationArray.grid.length; i++){
+				if(this.playerStationArray.grid[i][4] == "R" || this.playerStationArray.grid[i].toString().substring(0,8) == "B0R_X_VR"){
+					redCount = redCount + 1;
+				} else if(this.playerStationArray.grid[i][4] == "G" || this.playerStationArray.grid[i].toString().substring(0,8) == "B0R_X_VR"){
+					greenCount = greenCount + 1;
+				} else if(this.playerStationArray.grid[i][4] == "B" || this.playerStationArray.grid[i].toString().substring(0,8) == "B0R_X_VR"){
+					blueCount = blueCount + 1;
+				}  else if(this.playerStationArray.grid[i][4] == "Y" || this.playerStationArray.grid[i].toString().substring(0,8) == "B0R_X_VR"){
+					yellowCount = yellowCount + 1;
+				}  else if(this.playerStationArray.grid[i][4] == "P" || this.playerStationArray.grid[i].toString().substring(0,8) == "B0R_X_VR"){
+					purpleCount = purpleCount + 1;
+				}
+			}
+			this.playerData.eg_score = this.playerData.eg_score + Math.min(Math.min(redCount,greenCount,blueCount,yellowCount,purpleCount)+1,5);
 		}
-		
 	}
 
 	updatePlayerHand(cardArray,message = false,person = "deck"){
@@ -191,7 +208,6 @@ class playerObj{
 				this.playerStationArray.grid[newCards[i][0]] = newCards[i][1];
 			}
 		}
-		
 	}
 	currencyYearlyChange(delta){
 		if(this.playerData.ability_available && this.playerData.player_race == "zehuti"){
@@ -216,34 +232,22 @@ class playerObj{
 			this.gameData.turn = false;
 			this.playerHand = [];
 			this.playerData.currency = this.playerData.currency + this.playerData.boCard_credit_value;
-//			if(this.playerData.boCard_credit_value){
-//				this.addGameLogEntry('You receive ' + this.boCard_credit_value + ' credits from Business Offices');
-//			}
 			this.playerData.boCard_credit_value = 0;
 
 		} else if(this.gameData.round && this.gameData.turn){
-			// Needs to be updated if conflict cards included (7 turns)
 			this.gameData.round = this.gameData.round +1;
 			if (this.gameData.round > this.gameData.handSize){
 				this.gameData.round = 1;
 				this.gameData.turn = this.gameData.turn + 1;
+				this.playerData.ability_available = (this.playerData.abilities && (playerRace == "Gaarn" || playerRace == "Minireen" || playerRace == "Sissaurians")) ? true : false;
 				this.playerHand = [];
 				this.playerData.currency = (this.playerData.player_race == 'zehuti' && this.playerData.abilities)? this.playerData.player_currency_turn_increase : this.playerData.currency + this.playerData.player_currency_turn_increase + this.playerData.boCard_credit_value;	
-//				if(this.playerData.boCard_credit_value){
-//					this.addGameLogEntry('You receive ' + this.boCard_credit_value + ' credits from Business Offices');
-//				}
 				this.playerData.boCard_credit_value = 0;
 				this.gameData.turnOrder = this.gameData.turnOrder ? false : true;
 				if(this.playerData.abilities){
 					this.playerData.ability_available = true;
 				}
-/*	
-				if(this.playerData.player_race == 'zehuti' && this.playerData.abilities){
-					this.addGameLogEntry('Your credits are set to 13 (Zehuti ability)');
-				} else {
-					this.addGameLogEntry('You receive ' + this.playerData.player_currency_turn_increase + 'credits');
-				} 
-*/
+
 			} else {
 				
 			}
@@ -303,12 +307,15 @@ function generateDeck(noPlayers,bannedCards){
 	var basic_cards = cL.cardList.cards.basic_locations;
 	var special_cards = cL.cardList.cards.s_locations;
 	var specialCardsArray = [];
-	var cardListNames = []
+	var cardListNames = [];
+	var remainingSCards = [];
+	var remainingSCardsNames = [];
 
 	for(var i = 0; i < bannedCards.length; i++){
 		for(var j = special_cards.length - 1; j>=0; j--){
 			if(special_cards[j].cardId == bannedCards[i]){
-				special_cards = special_cards.splice(j,1);
+				special_cards.splice(j,1);
+				console.log("Banned Card Removed " + bannedCards[i])
 			}
 		}
 	}
@@ -322,14 +329,17 @@ function generateDeck(noPlayers,bannedCards){
 			basic_cards.forEach(function(i){cardsInGame.push(i)});
 		}
 		rF(specialCardsArray).slice(0,18).forEach(function(i){cardsInGame.push(i)});
+		remainingSCards = specialCardsArray.slice(18,specialCardsArray.length);
 	} else if (noPlayers == 2 || noPlayers == 4){
 		for(var i = 0; i<4; i++){
 			basic_cards.forEach(function(i){cardsInGame.push(i)});
 		}
 		rF(specialCardsArray).slice(0,24).forEach(function(i){cardsInGame.push(i)})
+		remainingSCards = specialCardsArray.slice(24,specialCardsArray.length);
 	}
 	cardListNames = cardsInGame.map(function(card){return card.cardId})
-	return	rF(cardListNames);	
+	remainingSCardsNames = remainingSCards.map(function(card){return card.cardId});
+	return	[rF(cardListNames),[rF(remainingSCardsNames)]];	
 }
 
 module.exports.generateDeck = generateDeck;

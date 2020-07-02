@@ -263,7 +263,7 @@ html {
 	overflow-y: auto;
 	justify-content: center;
 	align-content :flex-start;
-
+	height:calc(100vh - 50px);
 }
 
 .gameMat{
@@ -280,6 +280,7 @@ html {
 	flex-wrap:wrap;
 	overflow-y: auto;
 	justify-content: center;
+	height:calc(100vh - 50px);	
 }
 
 #gridReset{

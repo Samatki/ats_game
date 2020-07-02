@@ -194,12 +194,41 @@ function generateObjectives(noPlayers,bannedObjectives){
 	return	objectivesInGame;	
 }
 
+function generateQualeenObjectives(playerObjectives){
+	var qObjArray = [];
+	for(var i = 0; i < objectiveList.length; i++){
+		var objIncludedStatus = true;
+		for(var j = 0; j < playerObjectives.length; j++){
+			if(playerObjectives[j].Objective_ID == objectiveList[i].Objective_ID){
+				objIncludedStatus = false;
+				break;
+			}
+		}
+		if(objIncludedStatus){
+			qObjArray.push(objectiveList[i]);
+		}
+		if (qObjArray.length == 2){
+			break;
+		}
+	}
+	return qObjArray;
+}
 
+function checkQualeenObjective(playerObjs,playerIndex){
+	var secretPlayerObj = [playerObjs[k].playerData.secret_obj];
+	objectiveScorer(playerObjs,secretPlayerObj,[true,playerIndex]);
+	return null;
+}
+
+module.exports.checkQualeenObjective = checkQualeenObjective;
+module.exports.generateQualeenObjectives = generateQualeenObjectives;
 module.exports.generateObjectives = generateObjectives;
-
-function objectiveScorer(playerObjs, objectives){
+//Update all below to reflect qualeen check
+function objectiveScorer(playerObjs, objectives, qualeenCheck = [false,Infinity]){
 	for(var i = 0; i<playerObjs.length; i++){
-		playerObjs[i].playerData.obj_score = 0;
+		if(!qualeenCheck[0]){
+			playerObjs[i].playerData.obj_score = 0;
+		}
 	}
 	for(var i = 0; i <objectives.length; i++){
 		switch(objectives[i].Objective_ID){
